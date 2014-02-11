@@ -4,21 +4,18 @@
 ###コンパイル
 
     $ make  
+
+###インストール
+
     $ cp ./src/iperf /bin/  
 
 ###使い方
 
-    $ iperf -c 10.0.0.1 -w256k -i1 -t60 -----> iperf -s -w256k -i1   
+送信側 `iperf -c 10.0.0.1 -w256k -i1 -t60` 受信側 `iperf -s -w256k -i1`   
 
-###TOOD: simplize
+###TOOD
 
-    automakeとか不要ファイル削除  
-
-###TODO: カーネルモード動作  
-
-###TODO: rewrite by c
-
-###TODO: ToS
-
-
- 
+simplize automakeとか不要ファイル削除  
+カーネルモード動作   
+rewrite by c   
+ToS  (win)  
