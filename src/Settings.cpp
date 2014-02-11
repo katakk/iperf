@@ -749,7 +749,8 @@ void Settings_GenerateClientSettings( thread_Settings *server,
                                       thread_Settings **client,
                                       client_hdr *hdr ) {
     int flags = ntohl(hdr->flags);
-    if ( (flags & HEADER_VERSION1) != 0 ) {
+    if ( (flags & HEADER_VERSION1) != 0 &&
+         (flags & INVALID_DUAL_HDR) == 0 ) {
         *client = new thread_Settings;
         memcpy(*client, server, sizeof( thread_Settings ));
         setCompat( (*client) );
@@ -839,5 +840,7 @@ void Settings_GenerateClientHdr( thread_Settings *client, client_hdr *hdr ) {
     }
     if ( client->mMode == kTest_DualTest ) {
         hdr->flags |= htonl(RUN_NOW);
+        if ( isDummyDualHdr(client) )
+	    hdr->flags |= htonl(INVALID_DUAL_HDR);
     }
 }

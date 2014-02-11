@@ -154,12 +154,18 @@ void client_init( thread_Settings *clients ) {
     // For each of the needed threads create a copy of the
     // provided settings, unsetting the report flag and add
     // to the list of threads to start
+    if ( clients->mMode == kTest_DualTest && clients->mThreads > 1 )
+        setDummyDualHdr(clients);
+    else
+        unsetDummyDualHdr(clients);
     for (int i = 1; i < clients->mThreads; i++) {
         Settings_Copy( clients, &next );
         unsetReport( next );
         itr->runNow = next;
         itr = next;
     }
+    if ( clients->mMode == kTest_DualTest && clients->mThreads > 1 )
+        unsetDummyDualHdr(next);
 #ifndef HAVE_THREAD
     if ( next != NULL ) {
         // We don't have threads and we need to start a listener so
