@@ -114,12 +114,37 @@ void SetSocketOptions( thread_Settings *inSettings ) {
 		    (const void*) &val, (Socklen_t) sizeof(val));
 
 	    WARN_errno( rc == SOCKET_ERROR, "multicast ttl" );
+		if(isCustInterface ( inSettings ) ) {
+			int fd = socket(AF_INET, SOCK_DGRAM, 0);
+			struct ifreq ifr;
+			ifr.ifr_addr.sa_family = AF_INET;
+			strncpy(ifr.ifr_name, inSettings->mCustInterface, IFNAMSIZ-1);
+			if(ioctl(fd, SIOCGIFADDR, &ifr) != -1)
+			{
+				struct sockaddr_in *int_addr = (struct sockaddr_in *)&ifr.ifr_addr;
+				setsockopt(inSettings->mSock, IPPROTO_IP, IP_MULTICAST_IF, &int_addr->sin_addr, sizeof(int_addr->sin_addr));
+			}
+			close(fd);
+		}
 	}
 #ifdef HAVE_IPV6_MULTICAST
 	else {
 	    int rc = setsockopt( inSettings->mSock, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
 		    (const void*) &val, (Socklen_t) sizeof(val));
 	    WARN_errno( rc == SOCKET_ERROR, "multicast ttl" );
+		
+		if(isCustInterface ( inSettings ) ) {
+			int fd = socket(AF_INET6, SOCK_DGRAM, 0);
+			struct ifreq ifr;
+			ifr.ifr_addr.sa_family = AF_INET6;
+			strncpy(ifr.ifr_name, inSettings->mCustInterface, IFNAMSIZ-1);
+			if(ioctl(fd, SIOCGIFADDR, &ifr) == 0)
+			{
+				struct sockaddr_in6 *int_addr = (struct sockaddr_in6 *)&ifr.ifr_addr;
+				setsockopt(inSettings->mSock, IPPROTO_IPV6, IPV6_MULTICAST_IF, &int_addr->sin6_addr, sizeof(int_addr->sin6_addr));
+			}
+			close(fd);
+		}
 	}
 #endif
 #endif
