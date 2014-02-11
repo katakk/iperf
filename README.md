@@ -10,15 +10,15 @@
 
     $ iperf -c 10.0.0.1 -w256k -i1 -t60 -----> iperf -s -w256k -i1   
 
-##TODO
-
-###simplize
+###TOOD: simplize
 
     automakeとか不要ファイル削除  
 
-###rewrite by c
+###TODO: カーネルモード動作  
 
-###ToS
+###TODO: rewrite by c
+
+###TODO: ToS
 
 
  
