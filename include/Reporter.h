@@ -56,6 +56,8 @@
 #include "headers.h"
 #include "Mutex.h"
 
+#include "kernellist.h"
+
 struct thread_Settings;
 struct server_hdr;
 
@@ -117,6 +119,19 @@ typedef struct Connection_Info {
     Socklen_t size_local;
 } Connection_Info;
 
+/* tracking lost packet intervals and out of order packets */
+struct lost_packet_interval
+{
+	int from, to;
+	struct list_head list;
+};
+
+struct out_of_order_packet
+{
+	int packetID;
+	struct list_head list;
+};
+
 typedef struct ReporterData {
     char*  mHost;                   // -c
     char*  mLocalhost;              // -B
@@ -163,6 +178,8 @@ typedef struct ReporterData {
     struct timeval packetTime;
     struct timeval nextTime;
     struct timeval intervalTime;
+    struct list_head lost_packets;
+    struct list_head out_of_order_packets;
 } ReporterData;
 
 typedef struct MultiHeader {

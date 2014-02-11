@@ -54,6 +54,11 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+/* for direct file operations */
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include "Settings.hpp"
 #include "Timestamp.hpp"
 

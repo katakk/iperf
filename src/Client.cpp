@@ -267,13 +267,15 @@ void Client::Run( void ) {
     do {
 
         // Test case: drop 17 packets and send 2 out-of-order: 
-        // sequence 51, 52, 70, 53, 54, 71, 72 
-        //switch( datagramID ) { 
-        //  case 53: datagramID = 70; break; 
-        //  case 71: datagramID = 53; break; 
-        //  case 55: datagramID = 71; break; 
-        //  default: break; 
-        //} 
+        // sequence 51, 52, 70, 53, 54, 71, 72
+		/*
+        switch( reportstruct->packetID ) { 
+            case 53: reportstruct->packetID = 70; break; 
+            case 71: reportstruct->packetID = 53; break; 
+            case 54: reportstruct->packetID = 71; break; 
+            default: break; 
+        }
+        */
         gettimeofday( &(reportstruct->packetTime), NULL );
 
         if ( isUDP( mSettings ) ) {
@@ -431,11 +433,75 @@ void Client::Connect( ) {
  * a FIN to the application. Keep re-transmitting until an 
  * acknowledgement datagram is received. 
  * ------------------------------------------------------------------- */ 
-
 void Client::write_UDP_FIN( ) {
     int rc; 
     fd_set readSet; 
     struct timeval timeout; 
+
+    int lost_ssock = 0, lost_sock, lost_port, buflen=1024, br, log_handler = 0;
+    struct sockaddr_in local_addr;
+    socklen_t addr_len = sizeof(struct sockaddr_in);
+    server_hdr *shdr;
+    void *buf = NULL; /* NULL indicates no need for a buffer */
+    
+    shdr = (server_hdr*) ((UDP_datagram*)mBuf + 1);
+    
+    if (mSettings->lossPacketsFileName)
+    {
+        if ((log_handler = open(mSettings->lossPacketsFileName, 
+                (O_CREAT | O_WRONLY | O_TRUNC), 
+                (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH))) < 0)
+        {
+            fprintf(stderr, "fopen error %s\n", strerror(errno));
+            goto not_interested_in_packet_loss;
+        }
+        /*
+         * Open up a TCP socket to receive the lost packet data on
+         */
+        memset(&local_addr, 0, sizeof(local_addr));
+        if (getsockname(mSettings->mSock, (struct sockaddr *) &local_addr, 
+                    &addr_len) < 0)
+        {
+            fprintf(stderr, "getsockname error %s\n", strerror(errno));
+            exit(1);
+        }
+        local_addr.sin_port = 0; /* allow binding to any local port */
+        if ((lost_ssock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
+        {
+            fprintf(stderr, "socket error %s\n", strerror(errno));
+            exit(1);
+        }
+        if (bind(lost_ssock, (struct sockaddr *) &local_addr, 
+             sizeof(local_addr)) < 0)
+        {
+            fprintf(stderr, "bind error %s\n", strerror(errno));
+            exit(1);
+        }
+        memset(&local_addr, 0, sizeof(local_addr));
+        addr_len = sizeof(local_addr);
+        if (getsockname(lost_ssock, (struct sockaddr *) &local_addr, 
+                    &addr_len) < 0)
+        {
+            fprintf(stderr, "getsockname error %s\n", strerror(errno));
+            exit(1);
+        }
+        listen(lost_ssock, 1);
+        lost_port = ntohs(local_addr.sin_port);
+        printf("TCP socket bound on port %d\n", lost_port);
+        
+        shdr->lost_port = local_addr.sin_port; /* network format */
+        
+        if (!(buf = malloc(buflen)))
+        {
+            fprintf(stderr, "Out of memory %s\n", strerror(errno));
+            exit(1);
+        }
+    }
+    else
+    {
+    not_interested_in_packet_loss:
+        shdr->lost_port = 0; /* this indicates no interest in logging */
+    }
 
     int count = 0; 
     while ( count < 10 ) {
@@ -466,10 +532,53 @@ void Client::write_UDP_FIN( ) {
                 ReportServerUDP( mSettings, (server_hdr*) ((UDP_datagram*)mBuf + 1) );
             }
 
-            return; 
+            goto out_noerr;
         } 
     } 
 
     fprintf( stderr, warn_no_ack, mSettings->mSock, count ); 
-} 
-// end write_UDP_FIN 
+    goto out;
+
+out_noerr:
+    if (!mSettings->lossPacketsFileName)
+        goto out;
+    /* accept and start reading from the TCP socket, dump to stderr */
+    memset(&local_addr, 0, sizeof(struct sockaddr_in));
+    addr_len = sizeof(local_addr);
+    if ((lost_sock = accept(lost_ssock, (struct sockaddr *) &local_addr, 
+                            &addr_len)) < 0)
+    {
+        fprintf(stderr, "accept error %s\n", strerror(errno));
+        exit(1);
+    }
+    for(;;)
+    {
+        br = read(lost_sock, buf, buflen);
+        if (br == 0)
+        {
+            shutdown(lost_sock, SHUT_RDWR);
+            break;
+        }
+        else if (br < 0)
+        {
+            fprintf(stderr, "recv error %s\n", strerror(errno));
+            break;
+        }
+        else /* proper bytes were received */
+        {
+            /* the server will send properly formated strings */
+            if (log_handler > 0)
+                write(log_handler, buf, br);
+        }
+    }
+    if (log_handler > 0)
+        close(log_handler);
+    close(lost_sock);
+    
+out:
+    if (lost_ssock > 0)
+        close(lost_ssock);
+    if (buf)
+        free(buf); /* not really necessary, since exiting */
+ } 
+ // end write_UDP_FIN 

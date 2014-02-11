@@ -110,49 +110,36 @@ void Server::Run( void ) {
         do {
             // perform read 
             currLen = recv( mSettings->mSock, mBuf, mSettings->mBufLen, 0 ); 
-        
+
             if ( isUDP( mSettings ) ) {
                 // read the datagram ID and sentTime out of the buffer 
                 reportstruct->packetID = ntohl( mBuf_UDP->id ); 
                 reportstruct->sentTime.tv_sec = ntohl( mBuf_UDP->tv_sec  );
                 reportstruct->sentTime.tv_usec = ntohl( mBuf_UDP->tv_usec ); 
-		reportstruct->packetLen = currLen;
-		gettimeofday( &(reportstruct->packetTime), NULL );
+                reportstruct->packetLen = currLen;
+                gettimeofday( &(reportstruct->packetTime), NULL );
             } else {
-		totLen += currLen;
-	    }
-        
+                totLen += currLen;
+            }
+
             // terminate when datagram begins with negative index 
             // the datagram ID should be correct, just negated 
             if ( reportstruct->packetID < 0 ) {
                 reportstruct->packetID = -reportstruct->packetID;
                 currLen = -1; 
             }
-
-	    if ( isUDP (mSettings)) {
-		ReportPacket( mSettings->reporthdr, reportstruct );
-            } else if ( !isUDP (mSettings) && mSettings->mInterval > 0) {
-                reportstruct->packetLen = currLen;
-                gettimeofday( &(reportstruct->packetTime), NULL );
+            if ( isUDP (mSettings))
                 ReportPacket( mSettings->reporthdr, reportstruct );
-            }
-
-
-
         } while ( currLen > 0 ); 
-        
-        
+
         // stop timing 
         gettimeofday( &(reportstruct->packetTime), NULL );
-        
-	if ( !isUDP (mSettings)) {
-		if(0.0 == mSettings->mInterval) {
-                        reportstruct->packetLen = totLen;
-                }
-		ReportPacket( mSettings->reporthdr, reportstruct );
-	}
+        if ( !isUDP (mSettings)) {
+            reportstruct->packetLen = totLen;
+            ReportPacket( mSettings->reporthdr, reportstruct );
+        }
         CloseReport( mSettings->reporthdr, reportstruct );
-        
+
         // send a acknowledgement back only if we're NOT receiving multicast 
         if ( isUDP( mSettings ) && !isMulticast( mSettings ) ) {
             // send back an acknowledgement of the terminating datagram 
@@ -161,7 +148,6 @@ void Server::Run( void ) {
     } else {
         FAIL(1, "Out of memory! Closing server thread\n", mSettings);
     }
-
     Mutex_Lock( &clients_mutex );     
     Iperf_delete( &(mSettings->peer), &clients ); 
     Mutex_Unlock( &clients_mutex );
@@ -177,16 +163,77 @@ void Server::Run( void ) {
  * come in, probably our AckFIN was lost and they are re-transmitted 
  * termination datagrams, so re-transmit our AckFIN. 
  * ------------------------------------------------------------------- */ 
-
 void Server::write_UDP_AckFIN( ) {
 
     int rc; 
-
+    struct out_of_order_packet *oop, *otmp;
+    struct lost_packet_interval *lpi, *ltmp;
+    int lost_sock = 0, lost_port = 0, buflen=1024, bw, datagrams;
+    struct sockaddr_in local_addr, client_addr;
+    socklen_t addr_len = sizeof(struct sockaddr_in);
+    void *buf = NULL;
     fd_set readSet; 
     FD_ZERO( &readSet ); 
 
     struct timeval timeout; 
 
+    /* Report the list of lost packets, minus out of order packets */
+    list_for_each_entry_safe(lpi, ltmp, 
+            &mSettings->reporthdr->report.lost_packets, list)
+    {
+        list_for_each_entry_safe(oop, otmp,
+                &mSettings->reporthdr->report.out_of_order_packets, list)
+        {
+            if (oop->packetID >= lpi->from && oop->packetID <= lpi->to)
+            {
+                if (oop->packetID == lpi->from)
+                {
+                    if (lpi->from == lpi->to) /* garbage collect item */
+                    {
+                        list_del(&lpi->list);
+                        free(lpi);
+                    }
+                    else /* adjust the bounds */
+                    lpi->from = (oop->packetID + 1);
+                }
+                else if (oop->packetID == lpi->to)
+                {
+                    if (lpi->from == lpi->to) /* garbage collect item */
+                    {
+                        list_del(&lpi->list);
+                        free(lpi);
+                    }
+                    else /* adjust the bounds */
+                    lpi->to = (oop->packetID - 1);
+                }
+                else
+                {
+                    /* perform a split, by adding one more list item */
+                    if (!(ltmp = (struct lost_packet_interval *)
+                                    malloc(sizeof(struct lost_packet_interval))))
+                    {
+                        fprintf(stderr, "out of memory");
+                        exit(1);
+                    }
+                    ltmp->from = oop->packetID + 1;
+                    ltmp->to = lpi->to;
+                    lpi->to = oop->packetID - 1;
+                    /* list_add inserts the element AFTER the head (second param) */
+                    list_add(&ltmp->list, &lpi->list);
+                }
+                list_del(&oop->list);
+                free(oop);
+            }
+        }
+    }
+
+    /* do not leak memory, in case out of order packets are received but no loss occured */
+    list_for_each_entry_safe(oop, otmp, 
+            &mSettings->reporthdr->report.out_of_order_packets, list)
+    {
+        list_del(&oop->list);
+        free(oop);
+    }
     int count = 0; 
     while ( count < 10 ) {
         count++; 
@@ -197,23 +244,26 @@ void Server::write_UDP_AckFIN( ) {
         UDP_Hdr = (UDP_datagram*) mBuf;
 
         if ( mSettings->mBufLen > (int) ( sizeof( UDP_datagram )
-                                          + sizeof( server_hdr ) ) ) {
+                + sizeof( server_hdr ) ) ) {
             Transfer_Info *stats = GetReport( mSettings->reporthdr );
-            hdr = (server_hdr*) (UDP_Hdr+1);
 
+            hdr = (server_hdr*) (UDP_Hdr+1);
+            lost_port = ntohs(hdr->lost_port);
+            
             hdr->flags        = htonl( HEADER_VERSION1 );
             hdr->total_len1   = htonl( (long) (stats->TotalLen >> 32) );
             hdr->total_len2   = htonl( (long) (stats->TotalLen & 0xFFFFFFFF) );
             hdr->stop_sec     = htonl( (long) stats->endTime );
             hdr->stop_usec    = htonl( (long)((stats->endTime - (long)stats->endTime)
-                                              * rMillion));
+                    * rMillion));
             hdr->error_cnt    = htonl( stats->cntError );
             hdr->outorder_cnt = htonl( stats->cntOutofOrder );
             hdr->datagrams    = htonl( stats->cntDatagrams );
             hdr->jitter1      = htonl( (long) stats->jitter );
             hdr->jitter2      = htonl( (long) ((stats->jitter - (long)stats->jitter) 
-                                               * rMillion) );
-
+                    * rMillion) );
+            
+            datagrams = ntohl(hdr->datagrams);
         }
 
         // write data 
@@ -229,7 +279,7 @@ void Server::write_UDP_AckFIN( ) {
 
         if ( rc == 0 ) {
             // select timed out 
-            return; 
+            goto out_noerr; 
         } else {
             // socket ready to read 
             rc = read( mSettings->mSock, mBuf, mSettings->mBufLen ); 
@@ -237,12 +287,85 @@ void Server::write_UDP_AckFIN( ) {
             if ( rc <= 0 ) {
                 // Connection closed or errored
                 // Stop using it.
-                return;
+                goto out_noerr;
             }
-        } 
-    } 
+        }
+    }
 
-    fprintf( stderr, warn_ack_failed, mSettings->mSock, count ); 
-} 
-// end write_UDP_AckFIN 
+    fprintf( stderr, warn_ack_failed, mSettings->mSock, count );
+    goto out;
+
+out_noerr:
+    if (lost_port == 0)
+        goto out;
+    memset(&local_addr, 0, sizeof(local_addr));
+    if (getsockname(mSettings->mSock, (struct sockaddr *) &local_addr, 
+                    &addr_len) < 0)
+    {
+        fprintf(stderr, "getsockname error %s\n", strerror(errno));
+        goto out;
+    }
+    memset(&client_addr, 0, sizeof(client_addr));
+    addr_len = sizeof(client_addr);
+    if (getpeername(mSettings->mSock, (struct sockaddr *) &client_addr, 
+                    &addr_len) < 0)
+    {
+        fprintf(stderr, "getpeername error %s\n", strerror(errno));
+        goto out;
+    }
+    
+    local_addr.sin_port = 0; /* allow binding to any local port */
+    if ((lost_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
+    {
+        fprintf(stderr, "socket error %s\n", strerror(errno));
+        goto out;
+    }
+    if (bind(lost_sock, (struct sockaddr *) &local_addr, 
+             sizeof(local_addr)) < 0)
+    {
+        fprintf(stderr, "bind error %s\n", strerror(errno));
+        goto out;
+    }
+    if (!(buf = malloc(buflen)))
+    {
+        fprintf(stderr, "Out of memory %s\n", strerror(errno));
+        goto out;
+    }
+    
+    client_addr.sin_port = htons(lost_port);
+    if (connect(lost_sock, (struct sockaddr *) &client_addr, 
+                sizeof(client_addr)) < 0)
+    {
+        fprintf(stderr, "connect error, %s\n", strerror(errno));
+        goto out;
+    }
+    sprintf((char *) buf, "LOST_GAPS DATAGRAMS_TOTAL %d\n", datagrams);
+    bw = write(lost_sock, (char *) buf, strlen((char *)buf));
+    list_for_each_entry_safe(lpi, ltmp, 
+            &mSettings->reporthdr->report.lost_packets, list)
+    {
+        list_del(&lpi->list);
+        sprintf((char *)buf, "LOST_GAPS %d %d\n", lpi->from, lpi->to);
+        bw = write(lost_sock, (char *) buf, strlen((char *)buf));
+        if (bw < 0)
+            fprintf(stderr, "send error %s\n", strerror(errno));
+        /* printf("Sent %s", (char *) buf, strlen((char *) buf)); */
+        free(lpi);
+    }
+    shutdown(lost_sock, SHUT_WR);
+    
+out:
+    if (lost_sock > 0)
+        close(lost_sock);
+    /* do not leak memory */
+    list_for_each_entry_safe(lpi, ltmp, 
+        &mSettings->reporthdr->report.lost_packets, list)
+    {
+        list_del(&lpi->list);
+        free(lpi);
+    }
+    if (buf)
+        free(buf);
+}
+ // end write_UDP_AckFIN 
 

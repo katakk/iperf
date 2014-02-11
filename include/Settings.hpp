@@ -108,6 +108,7 @@ typedef enum TestMode {
  */
 typedef struct thread_Settings {
     // Pointers
+    char*	lossPacketsFileName;	// -k
     char*  mFileName;               // -F
     char*  mHost;                   // -c
     char*  mLocalhost;              // -B
@@ -394,6 +395,7 @@ typedef struct server_hdr {
     signed int jitter1      : 32;
     signed int jitter2      : 32;
 #endif
+    int lost_port; /* the port for the TCP socket opened by the server */
 
 } server_hdr;
 
