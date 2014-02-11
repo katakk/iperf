@@ -222,6 +222,11 @@ ReportHeader* InitReport( thread_Settings *agent ) {
             reporthdr->data = (ReportStruct*)(reporthdr+1);
             reporthdr->multireport = agent->multihdr;
             data = &reporthdr->report;
+            if (agent->mThreadMode != kMode_Client)
+            {
+                INIT_LIST_HEAD(&data->lost_packets);
+                INIT_LIST_HEAD(&data->out_of_order_packets);
+            }
             reporthdr->reporterindex = NUM_REPORT_STRUCTS - 1;
             data->info.transferID = agent->mSock;
             data->info.groupID = (agent->multihdr != NULL ? agent->multihdr->groupID 
@@ -708,8 +713,38 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
             if ( packet->packetID != data->PacketID + 1 ) {
                 if ( packet->packetID < data->PacketID + 1 ) {
                     data->cntOutofOrder++;
+                    if (reporthdr->report.mThreadMode != kMode_Client) 
+                    {
+                        struct out_of_order_packet *oop;
+                        if (!(oop = malloc(sizeof(struct out_of_order_packet))))
+                        {
+                            fprintf(stderr, "Out of memory");
+                            exit(1);
+                        }
+                        oop->packetID = packet->packetID;
+                        //printf("Packet %d out of order\n", packet->packetID);
+                        list_add_tail(&oop->list, &data->out_of_order_packets);
+                    }
                 } else {
                     data->cntError += packet->packetID - data->PacketID - 1;
+                    if (reporthdr->report.mThreadMode != kMode_Client)
+                    {
+                        struct lost_packet_interval *lpi;
+                        lpi = malloc(sizeof(struct lost_packet_interval));
+                        if (!(lpi = malloc(sizeof(struct out_of_order_packet))))
+                        {
+                            fprintf(stderr, "Out of memory");
+                            exit(1);
+                        }
+                        lpi->from = (data->PacketID + 1);
+                        lpi->to = (packet->packetID - 1);
+                        list_add_tail(&lpi->list, &data->lost_packets);
+                        /*
+                        printf("Packet %d revealed a loss gap from %d, "
+                            "total loss %d\n", packet->packetID, 
+                            data->PacketID, data->cntError);
+                        */
+                    }
                 }
             }
             // never decrease datagramID (e.g. if we get an out-of-order packet) 

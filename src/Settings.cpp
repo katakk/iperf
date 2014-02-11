@@ -90,6 +90,7 @@ const struct option long_options[] =
 {"format",     required_argument, NULL, 'f'},
 {"help",             no_argument, NULL, 'h'},
 {"interval",   required_argument, NULL, 'i'},
+{"losspacketslog", required_argument, NULL, 'k'},
 {"len",        required_argument, NULL, 'l'},
 {"print_mss",        no_argument, NULL, 'm'},
 {"num",        required_argument, NULL, 'n'},
@@ -136,6 +137,7 @@ const struct option env_options[] =
 {"IPERF_FORMAT",     required_argument, NULL, 'f'},
 // skip help
 {"IPERF_INTERVAL",   required_argument, NULL, 'i'},
+{"IPERF_LOSS_PACKET_LOG", required_argument, NULL, 'k'},
 {"IPERF_LEN",        required_argument, NULL, 'l'},
 {"IPERF_PRINT_MSS",        no_argument, NULL, 'm'},
 {"IPERF_NUM",        required_argument, NULL, 'n'},
@@ -171,7 +173,7 @@ const struct option env_options[] =
 
 #define SHORT_OPTIONS()
 
-const char short_options[] = "1b:c:df:hi:l:mn:o:p:rst:uvw:x:y:B:CDF:IL:M:NP:RS:T:UVWZ:E";
+const char short_options[] = "1b:c:df:hi:k:l:mn:o:p:rst:uvw:x:y:B:CDF:IL:M:NP:RS:T:UVWZ:E";
 
 /* -------------------------------------------------------------------
  * defaults
@@ -388,6 +390,20 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
                 fprintf (stderr, report_interval_small, mExtSettings->mInterval);
                 mExtSettings->mInterval = 0.5;
             }
+            break;
+
+        case 'k' : /* filename for logging packet loss */
+            if ( !isUDP( mExtSettings ) ) {
+                fprintf( stderr, warn_implied_udp, option );
+            }
+            
+            if ( mExtSettings->mThreadMode != kMode_Client ) {
+                fprintf( stderr, warn_invalid_server_option, option );
+                break;
+            }
+            
+            mExtSettings->lossPacketsFileName = new char[strlen(optarg)+1];
+            strcpy( mExtSettings->lossPacketsFileName, optarg);
             break;
 
         case 'l': // length of each buffer

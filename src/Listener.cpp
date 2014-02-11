@@ -490,7 +490,7 @@ void Listener::UDPSingleServer( ) {
     do {
         // Get next packet
         while ( sInterupted == 0) {
-            server->size_peer = sizeof( iperf_sockaddr );
+			server->size_peer = sizeof( iperf_sockaddr );
             rc = recvfrom( mSettings->mSock, mBuf, mSettings->mBufLen, 0, 
                            (struct sockaddr*) &server->peer, &server->size_peer );
             WARN_errno( rc == SOCKET_ERROR, "recvfrom" );
@@ -524,7 +524,7 @@ void Listener::UDPSingleServer( ) {
                     break;
                 }
             } else {
-                if ( exist != NULL ) {
+				if ( exist != NULL ) {
                     // read the datagram ID and sentTime out of the buffer 
                     reportstruct->packetID = -datagramID; 
                     reportstruct->sentTime.tv_sec = ntohl( ((UDP_datagram*) mBuf)->tv_sec  );
