@@ -58,11 +58,3 @@ http://sourceforge.net/p/iperf/patches/
 * `21`    Windows binary 2.0.5                                           2012-01-06  2012-01-06  
 * `23`    Android build scripts                                          2012-06-08  2013-07-10  
 
-##まだやってない けど入れたい機能とか
-
-####カーネルモード動作   
-
-####rewrite by c   
-
-####ToS  (win)  
-
