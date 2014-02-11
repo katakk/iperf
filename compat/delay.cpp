@@ -101,7 +101,9 @@ void delay_loop( unsigned long usec ) {
     long diff;
     while ( (diff = end.subUsec(now)) > 0 ) {
         if (diff >= nanosleep_threshold) {
-            timespec req = { 0, usec * 1000 };
+/* convert to seconds; nanosleep requires 0 <= tv_nsec <= 999999999 */
+            timespec req = { usec / 1000000UL,
+                            (usec % 1000000UL) * 1000UL };
             nanosleep(&req, NULL);
         } else {
             sched_yield();
