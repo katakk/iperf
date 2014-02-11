@@ -687,7 +687,7 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
         data->TotalLen += packet->packetLen;
         if ( packet->packetID != 0 ) {
             // UDP packet
-            double transit;
+            double transit = 0.0;
             double deltaTransit;
             
             // from RFC 1889, Real Time Protocol (RTP) 
@@ -699,6 +699,8 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
                     deltaTransit = -deltaTransit;
                 }
                 stats->jitter += (deltaTransit - stats->jitter) / (16.0);
+				stats->delay+=transit*1000; // Andrea Detti
+				stats->delay_total+=transit*1000; // Andrea Detti
             }
             data->lastTransit = transit;
     

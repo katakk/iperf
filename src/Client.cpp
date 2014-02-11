@@ -261,7 +261,9 @@ void Client::Run( void ) {
     reportstruct->packetID = 0;
 
     lastPacketTime.setnow();
-    
+
+    if (isPoisson(mSettings)) srand(lastPacketTime.getUsecs());
+   
     do {
 
         // Test case: drop 17 packets and send 2 out-of-order: 
@@ -284,7 +286,8 @@ void Client::Run( void ) {
             // make an adjustment for how long the last loop iteration took 
             // TODO this doesn't work well in certain cases, like 2 parallel streams 
             adjust = delay_target + lastPacketTime.subUsec( reportstruct->packetTime ); 
-            lastPacketTime.set( reportstruct->packetTime.tv_sec, 
+            if (isPoisson(mSettings)) adjust = delay + lastPacketTime.subUsec( reportstruct->packetTime ); // Andrea Detti patch Poisson
+			lastPacketTime.set( reportstruct->packetTime.tv_sec, 
                                 reportstruct->packetTime.tv_usec ); 
 
             if ( adjust > 0  ||  delay > 0 ) {
@@ -310,7 +313,9 @@ void Client::Run( void ) {
         // report packets 
         reportstruct->packetLen = currLen;
         ReportPacket( mSettings->reporthdr, reportstruct );
-        
+
+        if (isPoisson(mSettings)) delay=(-1.0*delay_target*log(1.0-1.0*rand()/((double)RAND_MAX)))+adjust; // Andrea Detti Patch Poisson
+ 
         if ( delay > 0 ) {
             delay_loop( delay ); 
         }

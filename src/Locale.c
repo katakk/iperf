@@ -115,6 +115,7 @@ Client specific:\n\
   -P, --parallel  #        number of parallel client threads to run\n\
   -T, --ttl       #        time-to-live, for multicast (default 1)\n\
   -Z, --linux-congestion <algo>  set TCP congestion control algorithm (Linux only)\n\
+  -E, --poisson   #        Poisson interarrival times, for udp (default 0)\n\
 \n\
 Miscellaneous:\n\
   -x, --reportexclude [CDMSV]   exclude C(connection) D(data) M(multicast) S(settings) V(server) reports\n\
@@ -207,6 +208,9 @@ Datagrams\n";
 
 const char report_bw_jitter_loss_format[] =
 "[%3d] %4.1f-%4.1f sec  %ss  %ss/sec  %6.3f ms %4d/%5d (%.2g%%)\n";
+
+const char report_bw_delay_jitter_loss_format[] =
+"[%3d] %4.1f-%4.1f sec  %ss  %ss/sec  %5.3f ms %5.3f ms %4d/%5d (%.2g%%)\n";		// Andrea Detti Patch for delay
 
 const char report_sum_bw_jitter_loss_format[] =
 "[SUM] %4.1f-%4.1f sec  %ss  %ss/sec  %6.3f ms %4d/%5d (%.2g%%)\n";

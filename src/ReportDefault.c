@@ -85,16 +85,25 @@ void reporter_printstats( Transfer_Info *stats ) {
                 stats->startTime, stats->endTime, 
                 buffer, &buffer[sizeof(buffer)/2] );
     } else {
+        double average_delay;
         // UDP Reporting
         if( !header_printed ) {
             printf( report_bw_jitter_loss_header);
             header_printed = 1;
         }
-        printf( report_bw_jitter_loss_format, stats->transferID, 
-                stats->startTime, stats->endTime, 
-                buffer, &buffer[sizeof(buffer)/2],
+        // UDP Reporting (Andrea Detti patched to compute delay)
+        if (stats->startTime!=0) {
+            average_delay=1.0*stats->delay/(stats->cntDatagrams-stats->cntError);
+        } else {
+            average_delay=1.0*stats->delay_total/(stats->cntDatagrams-stats->cntError);
+        }
+        printf( report_bw_delay_jitter_loss_format, stats->transferID,
+            stats->startTime, stats->endTime, 
+            buffer, &buffer[sizeof(buffer)/2],
+            average_delay,
                 stats->jitter*1000.0, stats->cntError, stats->cntDatagrams,
                 (100.0 * stats->cntError) / stats->cntDatagrams );
+        stats->delay=0;
         if ( stats->cntOutofOrder > 0 ) {
             printf( report_outoforder,
                     stats->transferID, stats->startTime, 
