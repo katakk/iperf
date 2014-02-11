@@ -112,6 +112,7 @@ const struct option long_options[] =
 {"stdin_input",      no_argument, NULL, 'I'},
 {"mss",        required_argument, NULL, 'M'},
 {"nodelay",          no_argument, NULL, 'N'},
+{"interface",  required_argument, NULL, 'O'},
 {"listenport", required_argument, NULL, 'L'},
 {"parallel",   required_argument, NULL, 'P'},
 {"remove",           no_argument, NULL, 'R'},
@@ -156,6 +157,7 @@ const struct option env_options[] =
 {"IPERF_STDIN_INPUT",      no_argument, NULL, 'I'},
 {"IPERF_MSS",        required_argument, NULL, 'M'},
 {"IPERF_NODELAY",          no_argument, NULL, 'N'},
+{"IPERF_INTERFACE",  required_argument, NULL, 'O'},
 {"IPERF_LISTENPORT", required_argument, NULL, 'L'},
 {"IPERF_PARALLEL",   required_argument, NULL, 'P'},
 {"IPERF_TOS",        required_argument, NULL, 'S'},
@@ -169,7 +171,7 @@ const struct option env_options[] =
 
 #define SHORT_OPTIONS()
 
-const char short_options[] = "1b:c:df:hi:l:mn:o:p:rst:uvw:x:y:B:CDF:IL:M:NP:RS:T:UVWZ:";
+const char short_options[] = "1b:c:df:hi:l:mn:o:p:rst:uvw:x:y:B:CDF:IL:M:N:O:P:RS:T:UVWZ:";
 
 /* -------------------------------------------------------------------
  * defaults
@@ -605,6 +607,15 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 'N': // specify TCP nodelay option (disable Jacobson's Algorithm)
             setNoDelay( mExtSettings );
             break;
+			
+		case 'O': // specify interface to bind to (multicast)
+			if(strlen(outarg) < IFNAMSIZ) {
+				setCustInterface ( mExtSettings );
+				mExtSettings->mCustInterface = new char[strlen(optarg)+1];
+				strcpy(mExtSettings->mCustInterface, optarg);
+			} else
+				fprintf( stderr, warn_interface_invalid_ignored, option);
+			break;
 
         case 'P': // number of client threads
 #ifdef HAVE_THREAD
