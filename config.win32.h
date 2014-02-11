@@ -2,23 +2,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-/* ===================================================================
- * config.h
- *
- * config.h is derived from config.h.in -- do not edit config.h
- *
- * This contains variables that the configure script checks and
- * then defines or undefines. The source code checks for these
- * variables to know if certain features are present.
- * 
- * by Mark Gates <mgates@nlanr.net>
- *
- * Copyright  1999  The Board of Trustees of the University of Illinois
- * All rights reserved.  See doc/license.txt for complete text.
- *
- * $Id: config.win32.h,v 1.1.1.1 2004/05/18 01:50:44 kgibbs Exp $
- * =================================================================== */
-
 /* Define if threads exist (using pthreads or Win32 threads) */
 /* #undef HAVE_POSIX_THREAD */
 #define HAVE_WIN32_THREAD 1
@@ -78,5 +61,5 @@
 
 /* Define if Debugging of sockets is desired */
 /* #undef DBG_MJZ */
- 
+
 #endif /* CONFIG_H */
