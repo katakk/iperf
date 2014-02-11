@@ -15,7 +15,11 @@
 
 ###TOOD
 
-simplize automakeとか不要ファイル削除  消しまったのでオリジナル欲しい人は`remotes/origin/original`
+simplize automakeとか不要ファイル削除  
+-消しまっくたのでオリジナル欲しい人は`remotes/origin/original`
+
 カーネルモード動作   
+
 rewrite by c   
+
 ToS  (win)  
