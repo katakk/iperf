@@ -117,7 +117,11 @@ void SockAddr_localAddr( thread_Settings *inSettings ) {
     }
         inSettings->size_local = sizeof( struct sockaddr_in );
 #endif
-    SockAddr_setPort( &inSettings->local, inSettings->mPort );
+	if ((inSettings->mLocalhost != NULL) && (inSettings->mHost != NULL))
+		// enable -B -P, let the source port be chosen by the lower level for each thread / connection
+		SockAddr_setPort( &inSettings->local, 0 );
+	else
+		SockAddr_setPort( &inSettings->local, inSettings->mPort );
 }
 // end SocketAddr
 
