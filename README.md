@@ -11,13 +11,15 @@
 
 ###使い方
 
-送信側 `iperf -c 10.0.0.1 -w256k -i1 -t60` 受信側 `iperf -s -w256k -i1`   
+送信側 `iperf -c 10.0.0.1 -w256k -i1 -t60`   
+受信側 `iperf -s -w256k -i1`   
 
 ##TOOD
 ###simplize
 
-automakeとか不要ファイル削除  
-消しまっくたのでオリジナル欲しい人は`remotes/origin/original`   
+* automakeとか不要ファイル削除  
+
+* 消しまっくたのでオリジナル欲しい人は`remotes/origin/original`   
 
 ### パッチあて状況
 
@@ -48,7 +50,8 @@ o ` 8` poisson traffic and measure delay patch                           2008-11
 o ` 9` Fix iperf to work with -B -P                                      2009-01-03  2009-01-03  
 o ` 5` Fix for iperf -d extra connections (bug# 1903811)                 2008-04-25  2008-04-25  
 
-以下はバイナリ提供とか範囲外 バイナリは一緒に入れといた
+以下はバイナリ提供とか範囲外 バイナリは一緒に入れといた  
+
 o `16`    Jperf usability fixes                                          2010-10-03  2010-10-03  
 o `21`    Windows binary 2.0.5                                           2012-01-06  2012-01-06  
 o `23`    Android build scripts                                          2012-06-08  2013-07-10  
