@@ -114,6 +114,8 @@ extern const char report_bw_jitter_loss_header[];
 
 extern const char report_bw_jitter_loss_format[];
 
+extern const char report_bw_delay_jitter_loss_format[];	// Andrea Detti patch to compute delay
+
 extern const char report_sum_bw_jitter_loss_format[];
 
 extern const char report_outoforder[];

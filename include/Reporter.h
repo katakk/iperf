@@ -98,6 +98,8 @@ typedef struct Transfer_Info {
     int cntDatagrams;
     // Hopefully int64_t's
     max_size_t TotalLen;
+    double delay;		// Andrea Detti added to compute delay
+    double delay_total; // Andrea Detti added to compute delay
     double jitter;
     double startTime;
     double endTime;
