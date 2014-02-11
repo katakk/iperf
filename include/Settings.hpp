@@ -113,6 +113,7 @@ typedef struct thread_Settings {
     char*  mHost;                   // -c
     char*  mLocalhost;              // -B
     char*  mOutputFileName;         // -o
+    char*  mCustInterface;          // -O
     FILE*  Extractor_file;
     ReportHeader*  reporthdr;
     MultiHeader*   multihdr;
@@ -215,6 +216,7 @@ typedef struct thread_Settings {
 #define FLAG_CONGESTION     0x00400000
 #define FLAG_POISSON        0x00800000		// Andrea Detti patch for Poisson
 #define FLAG_DUMMYDUALHDR   0x01000000
+#define FLAG_INTERFACE      0x02000000
 
 #define isBuflenSet(settings)      ((settings->flags & FLAG_BUFLENSET) != 0)
 #define isCompat(settings)         ((settings->flags & FLAG_COMPAT) != 0)
@@ -231,6 +233,7 @@ typedef struct thread_Settings {
 #define isModeTime(settings)       ((settings->flags & FLAG_MODETIME) != 0)
 #define isReport(settings)         ((settings->flags & FLAG_REPORTSETTINGS) != 0)
 #define isMulticast(settings)      ((settings->flags & FLAG_MULTICAST) != 0)
+#define isCustInterface(settings)  ((settings->flags & FLAG_INTERFACE) != 0)
 // Active Low for Reports
 #define isSettingsReport(settings) ((settings->flags & FLAG_NOSETTREPORT) == 0)
 #define isConnectionReport(settings)  ((settings->flags & FLAG_NOCONNREPORT) == 0)
@@ -266,6 +269,7 @@ typedef struct thread_Settings {
 #define setNoMultReport(settings)  settings->flags |= FLAG_NOMULTREPORT
 #define setSingleClient(settings)  settings->flags |= FLAG_SINGLECLIENT
 #define setSingleUDP(settings)     settings->flags |= FLAG_SINGLEUDP
+#define setCustInterface(settings) settings->flags |= FLAG_INTERFACE
 #define setCongestionControl(settings) settings->flags |= FLAG_CONGESTION
 #define setPoisson(settings)       settings->flags |= FLAG_POISSON	// Andrea Detti patch for Poisson
 #define setDummyDualHdr(settings)  settings->flags |= FLAG_DUMMYDUALHDR
@@ -293,6 +297,7 @@ typedef struct thread_Settings {
 #define unsetSingleClient(settings)   settings->flags &= ~FLAG_SINGLECLIENT
 #define unsetSingleUDP(settings)      settings->flags &= ~FLAG_SINGLEUDP
 #define unsetPoisson(settings)        settings->flags &= ~FLAG_POISSON	// Andrea Detti patch for Poisson
+#define unsetCustInterface(settings)  settings->flags &= ~FLAG_INTERFACE
 #define unsetCongestionControl(settings) settings->flags &= ~FLAG_CONGESTION
 #define unsetDummyDualHdr(settings)  settings->flags &= ~FLAG_DUMMYDUALHDR
 

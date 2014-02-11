@@ -131,6 +131,7 @@
 /* unix headers */
     #include <sys/types.h>
     #include <sys/socket.h>
+    #include <sys/ioctl.h>
     #include <sys/time.h>
     #include <signal.h>
     #include <unistd.h>
@@ -146,6 +147,7 @@ SPECIAL_OSF1_EXTERN_C_STOP
 
 SPECIAL_OSF1_EXTERN_C_START
     #include <arpa/inet.h>   /* netinet/in.h must be before this on SunOS */
+    #include <net/if.h>
 SPECIAL_OSF1_EXTERN_C_STOP
 
     #ifdef HAVE_POSIX_THREAD
