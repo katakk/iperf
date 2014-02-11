@@ -204,6 +204,7 @@ void Client::RunTCP( void ) {
 void Client::Run( void ) {
     struct UDP_datagram* mBuf_UDP = (struct UDP_datagram*) mBuf; 
     unsigned long currLen = 0; 
+    unsigned int burstcount = 0;
 
     int delay_target = 0; 
     int delay = 0; 
@@ -317,8 +318,15 @@ void Client::Run( void ) {
         ReportPacket( mSettings->reporthdr, reportstruct );
 
         if (isPoisson(mSettings)) delay=(-1.0*delay_target*log(1.0-1.0*rand()/((double)RAND_MAX)))+adjust; // Andrea Detti Patch Poisson
- 
-        if ( delay > 0 ) {
+
+        if (mSettings->mBurstRate) {
+            if ((++burstcount >= mSettings->mBurstRate) && (delay > 0))
+            {
+                 delay_loop( delay * mSettings->mBurstRate); 
+            }
+            burstcount %= mSettings->mBurstRate;
+        }
+        else if ( delay > 0 ) {
             delay_loop( delay ); 
         }
         if ( !mMode_Time ) {

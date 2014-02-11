@@ -159,6 +159,7 @@ typedef struct thread_Settings {
     // Hopefully int64_t's
     max_size_t mUDPRate;            // -b or -u
     max_size_t mAmount;             // -n or -t
+    max_size_t mBurstRate;          // -E
     // doubles
     double mInterval;               // -i
     // shorts

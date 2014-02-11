@@ -117,6 +117,7 @@ const struct option long_options[] =
 {"listenport", required_argument, NULL, 'L'},
 {"parallel",   required_argument, NULL, 'P'},
 {"remove",           no_argument, NULL, 'R'},
+{"burstrate",  required_argument, NULL, 'X'},
 {"tos",        required_argument, NULL, 'S'},
 {"ttl",        required_argument, NULL, 'T'},
 {"single_udp",       no_argument, NULL, 'U'},
@@ -163,6 +164,7 @@ const struct option env_options[] =
 {"IPERF_INTERFACE",  required_argument, NULL, 'O'},
 {"IPERF_LISTENPORT", required_argument, NULL, 'L'},
 {"IPERF_PARALLEL",   required_argument, NULL, 'P'},
+{"IPERF_BURSTRATE",  required_argument, NULL, 'X'},
 {"IPERF_TOS",        required_argument, NULL, 'S'},
 {"IPERF_TTL",        required_argument, NULL, 'T'},
 {"IPERF_SINGLE_UDP",       no_argument, NULL, 'U'},
@@ -175,7 +177,7 @@ const struct option env_options[] =
 
 #define SHORT_OPTIONS()
 
-const char short_options[] = "1b:c:df:hi:k:l:mn:o:p:rst:uvw:x:y:B:CDF:IL:M:N:O:P:RS:T:UVWZ:E";
+const char short_options[] = "1b:c:df:hi:k:l:mn:o:p:rst:uvw:x:y:B:CDF:IL:M:N:O:P:RS:T:UVWZ:EX:";
 
 /* -------------------------------------------------------------------
  * defaults
@@ -321,6 +323,9 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
     switch ( option ) {
         case '1': // Single Client
             setSingleClient( mExtSettings );
+            break;
+        case 'X':
+            mExtSettings->mBurstRate = atoi(optarg);
             break;
         case 'b': // UDP bandwidth
             if ( !isUDP( mExtSettings ) ) {
