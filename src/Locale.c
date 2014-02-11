@@ -88,6 +88,7 @@ Client/Server:\n\
   -C, --compatibility      for use with older versions does not sent extra msgs\n\
   -M, --mss       #        set TCP maximum segment size (MTU - 40 bytes)\n\
   -N, --nodelay            set TCP no delay, disabling Nagle's Algorithm\n\
+  -O, --interface <int>    specify an interface to bind to for multicast\n\
   -V, --IPv6Version        Set the domain to IPv6\n\
 \n\
 Server specific:\n\
@@ -305,6 +306,9 @@ const char report_interval_small[] =
 
 const char warn_invalid_server_option[] =
 "WARNING: option -%c is not valid for server mode\n";
+
+const char warn_interface_invalid_ignored[] =
+"WARNING: interface name is too long to be valid, iperf will ignore it\n";
 
 const char warn_invalid_client_option[] =
 "WARNING: option -%c is not valid for client mode\n";

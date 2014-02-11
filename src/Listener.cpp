@@ -363,6 +363,19 @@ void Listener::McastJoin( ) {
                 sizeof(mreq.imr_multiaddr));
 
         mreq.imr_interface.s_addr = htonl( INADDR_ANY );
+		
+		if(isCustInterface ( mSettings ) ) {
+			int fd = socket(AF_INET, SOCK_DGRAM, 0);
+			struct ifreq ifr;
+			ifr.ifr_addr.sa_family = AF_INET;
+			strncpy(ifr.ifr_name, mSettings->mCustInterface, IFNAMSIZ-1);
+			if(ioctl(fd, SIOCGIFADDR, &ifr) != -1)
+			{
+				struct sockaddr_in *int_addr = (struct sockaddr_in *)&ifr.ifr_addr;
+				mreq.imr_interface = int_addr->sin_addr;
+			}
+			close(fd);
+		}
 
         int rc = setsockopt( mSettings->mSock, IPPROTO_IP, IP_ADD_MEMBERSHIP,
                              (char*) &mreq, sizeof(mreq));
@@ -375,7 +388,10 @@ void Listener::McastJoin( ) {
         memcpy( &mreq.ipv6mr_multiaddr, SockAddr_get_in6_addr( &mSettings->local ), 
                 sizeof(mreq.ipv6mr_multiaddr));
 
-        mreq.ipv6mr_interface = 0;
+		if(isCustInterface ( mSettings ) )
+			mreq.ipv6mr_interface = if_nametoindex(mSettings->mCustInterface);
+		else
+			mreq.ipv6mr_interface = 0;
 
         int rc = setsockopt( mSettings->mSock, IPPROTO_IPV6, IPV6_ADD_MEMBERSHIP,
                              (char*) &mreq, sizeof(mreq));

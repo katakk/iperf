@@ -164,6 +164,8 @@ extern const char report_interval_small[];
 
 extern const char warn_invalid_server_option[];
 
+extern const char warn_interface_invalid_ignored[];
+
 extern const char warn_invalid_client_option[];
 
 extern const char warn_invalid_compatibility_option[];
