@@ -1,27 +1,12 @@
 ##iperf 2.0.5 my local copy
-速度測定用のツール。`iperf 2.0.5` のローカルコピー  
 
-###コンパイル
+速度測定用のツール。`iperf 2.0.5` のローカルコピー   
+simplizeした不要ファイル削除  　 消しまっくたのでオリジナル欲しい人は`remotes/origin/original`    
+コンパイルは `$ make  ` インストールは ` $ cp ./src/iperf /bin/  `  
+使い方はサーバ(送信側) `iperf -c 10.0.0.1 -w256k -i1 -t60`   と  
+クライアント(受信側) `iperf -s -w256k -i1` でデーターやりとりして速度をみる   
 
-    $ make  
-
-###インストール
-
-    $ cp ./src/iperf /bin/  
-
-###使い方
-
-送信側 `iperf -c 10.0.0.1 -w256k -i1 -t60`   
-受信側 `iperf -s -w256k -i1`   
-
-##TOOD
-###simplize
-
-* automakeとか不要ファイル削除  
-
-* 消しまっくたのでオリジナル欲しい人は`remotes/origin/original`   
-
-### パッチあて状況
+#### パッチあて状況
 
 http://sourceforge.net/p/iperf/patches/  
 
