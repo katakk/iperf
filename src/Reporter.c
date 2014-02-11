@@ -344,7 +344,7 @@ void ReportPacket( ReportHeader* agent, ReportStruct *packet ) {
             // item
             while ( index == 0 ) {
                 Condition_Signal( &ReportCond );
-                Condition_Wait( &ReportDoneCond );
+                Condition_Wait_Event( &ReportDoneCond );
                 index = agent->reporterindex;
             }
             agent->agentindex = 0;
@@ -352,7 +352,7 @@ void ReportPacket( ReportHeader* agent, ReportStruct *packet ) {
         // Need to make sure that reporter is not about to be "lapped"
         while ( index - 1 == agent->agentindex ) {
             Condition_Signal( &ReportCond );
-            Condition_Wait( &ReportDoneCond );
+            Condition_Wait_Event( &ReportDoneCond );
             index = agent->reporterindex;
         }
 
@@ -384,6 +384,7 @@ void CloseReport( ReportHeader *agent, ReportStruct *packet ) {
         packet->packetLen = 0;
         ReportPacket( agent, packet );
         packet->packetID = agent->report.cntDatagrams;
+
     }
 }
 
@@ -396,7 +397,7 @@ void EndReport( ReportHeader *agent ) {
     if ( agent != NULL ) {
         int index = agent->reporterindex;
         while ( index != -1 ) {
-            thread_rest();
+            Condition_Wait_Event( &ReportDoneCond );
             index = agent->reporterindex;
         }
         agent->agentindex = -1;
@@ -417,7 +418,7 @@ void EndReport( ReportHeader *agent ) {
 Transfer_Info *GetReport( ReportHeader *agent ) {
     int index = agent->reporterindex;
     while ( index != -1 ) {
-        thread_rest();
+        Condition_Wait_Event( &ReportDoneCond );
         index = agent->reporterindex;
     }
     return &agent->report.info;
@@ -586,7 +587,7 @@ again:
                 if (ReportRoot)
                     goto again;
             }
-            Condition_Signal( &ReportDoneCond );
+	        Condition_Signal( &ReportDoneCond );
             usleep(10000);
         } else {
             //Condition_Unlock ( ReportCond );

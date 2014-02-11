@@ -115,12 +115,21 @@ typedef struct Condition {
     // sleep this thread, waiting for condition signal
 #if   defined( HAVE_POSIX_THREAD )
     #define Condition_Wait( Cond ) pthread_cond_wait( &(Cond)->mCondition, &(Cond)->mMutex )
+    #define Condition_Wait_Event( Cond ) do { \
+        Mutex_Lock( &(Cond)->mMutex ); \
+        pthread_cond_wait( &(Cond)->mCondition, &(Cond)->mMutex ); \
+        Mutex_Unlock( &(Cond)->mMutex ); \
+    } while( 0 )
 #elif defined( HAVE_WIN32_THREAD )
     // atomically release mutex and wait on condition,                      
     // then re-acquire the mutex
     #define Condition_Wait( Cond ) do {                                         \
         SignalObjectAndWait( (Cond)->mMutex, (Cond)->mCondition, INFINITE, false ); \
         Mutex_Lock( &(Cond)->mMutex );                          \
+    } while ( 0 )
+    #define Condition_Wait_Event( Cond ) do { \
+        Mutex_Lock( &(Cond)->mMutex );                          \
+        SignalObjectAndWait( (Cond)->mMutex, (Cond)->mCondition, INFINITE, false ); \
     } while ( 0 )
 #else
     #define Condition_Wait( Cond )
