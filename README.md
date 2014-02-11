@@ -16,7 +16,7 @@
 ###TOOD
 
 simplize automakeとか不要ファイル削除  
--消しまっくたのでオリジナル欲しい人は`remotes/origin/original`
+消しまっくたのでオリジナル欲しい人は`remotes/origin/original`   
 
 カーネルモード動作   
 
