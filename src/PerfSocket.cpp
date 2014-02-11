@@ -130,12 +130,24 @@ void SetSocketOptions( thread_Settings *inSettings ) {
 
     // set IP TOS (type-of-service) field
     if ( inSettings->mTOS > 0 ) {
-        int  tos = inSettings->mTOS;
-        Socklen_t len = sizeof(tos);
-        int rc = setsockopt( inSettings->mSock, IPPROTO_IP, IP_TOS,
-                             (char*) &tos, len );
-        WARN_errno( rc == SOCKET_ERROR, "setsockopt IP_TOS" );
+       int  tos = inSettings->mTOS;
+       Socklen_t len = sizeof(tos);
+       if ( !isIPV6( inSettings ) )
+       {
+          // for IPv4
+          int rc = setsockopt( inSettings->mSock, IPPROTO_IP, IP_TOS,
+                               (char*) &tos, len );
+          WARN_errno( rc == SOCKET_ERROR, "setsockopt IP_TOS" );
+       }
+       else
+       {
+          // for IPv6 (traffic class)
+          int rc = setsockopt( inSettings->mSock, IPPROTO_IPV6, IPV6_TCLASS,
+                               (char*) &tos, len );
+          WARN_errno( rc == SOCKET_ERROR, "setsockopt IPV6_TCLASS" );
+       }
     }
+
 #endif
 
     if ( !isUDP( inSettings ) ) {
