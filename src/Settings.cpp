@@ -245,7 +245,7 @@ const struct option env_options[] =
 
 #define SHORT_OPTIONS()
 
-const char short_options[] = "1b:c:df:hi:k:l:mn:o:p:rst:uvw:x:y:B:CDF:IL:M:N:O:P:RS:T:UVWZ:EX:Q:";
+const char short_options[] = "1b:c:df:hi:k:l:mn:o:p:rst:uvw:x:y:B:CDEF:IL:M:NO:P:Q:RS:T:UVWX:Z:";
 
 /* -------------------------------------------------------------------
  * defaults
