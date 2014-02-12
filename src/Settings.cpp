@@ -113,6 +113,7 @@ const struct option long_options[] =
 {"mss",        required_argument, NULL, 'M'},
 {"nodelay",          no_argument, NULL, 'N'},
 {"listenport", required_argument, NULL, 'L'},
+{"priority",   required_argument, NULL, 'Q'},
 {"parallel",   required_argument, NULL, 'P'},
 {"remove",           no_argument, NULL, 'R'},
 {"tos",        required_argument, NULL, 'S'},
@@ -157,6 +158,7 @@ const struct option env_options[] =
 {"IPERF_MSS",        required_argument, NULL, 'M'},
 {"IPERF_NODELAY",          no_argument, NULL, 'N'},
 {"IPERF_LISTENPORT", required_argument, NULL, 'L'},
+{"IPERF_PRIORITY",   required_argument, NULL, 'Q'},
 {"IPERF_PARALLEL",   required_argument, NULL, 'P'},
 {"IPERF_TOS",        required_argument, NULL, 'S'},
 {"IPERF_TTL",        required_argument, NULL, 'T'},
@@ -169,7 +171,7 @@ const struct option env_options[] =
 
 #define SHORT_OPTIONS()
 
-const char short_options[] = "1b:c:df:hi:l:mn:o:p:rst:uvw:x:y:B:CDF:IL:M:NP:RS:T:UVWZ:";
+const char short_options[] = "1b:c:df:hi:l:mn:o:p:rst:uvw:x:y:B:CDF:IL:M:NP:Q:RS:T:UVWZ:";
 
 /* -------------------------------------------------------------------
  * defaults
@@ -627,6 +629,12 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             // the zero base here allows the user to specify
             // "0x#" hex, "0#" octal, and "#" decimal numbers
             mExtSettings->mTOS = strtol( optarg, NULL, 0 );
+            break;
+
+        case 'Q': // protocol-defined priority
+            // the zero base here allows the user to specify
+            // "0x#" hex, "0#" octal, and "#" decimal numbers
+            mExtSettings->mPriority = strtol( optarg, NULL, 0 );
             break;
 
         case 'T': // time-to-live for multicast
