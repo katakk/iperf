@@ -116,7 +116,7 @@ const double kSecs_to_usecs = 1e6;
 const int    kBytes_to_Bits = 8; 
 
 void Client::RunTCP( void ) {
-    unsigned long currLen = 0; 
+    long currLen;
     struct itimerval it;
     max_size_t totLen = 0;
 
@@ -316,8 +316,8 @@ void Client::Run( void ) {
         }
         if ( !mMode_Time ) {
             /* mAmount may be unsigned, so don't let it underflow! */
-            if( mSettings->mAmount >= currLen ) {
-                mSettings->mAmount -= currLen;
+            if( mSettings->mAmount >= (unsigned long) currLen ) {
+                mSettings->mAmount -= (unsigned long) currLen;
             } else {
                 mSettings->mAmount = 0;
             }
