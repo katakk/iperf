@@ -14,9 +14,6 @@ http://sourceforge.net/p/iperf/patches/
 
 してパッチ当てる
 
-####not yet patchd
-
-
 ####patchd
 
 * `27` Patch to allow burst traffic in UDP mode                          2013-04-17  2013-04-17  
