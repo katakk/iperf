@@ -161,13 +161,13 @@ void Client::RunTCP( void ) {
             WARN_errno( currLen < 0, "write2" ); 
             break; 
         }
-	totLen += currLen;
+        totLen += currLen;
 
-	if(mSettings->mInterval > 0) {
-    	    gettimeofday( &(reportstruct->packetTime), NULL );
+        if(mSettings->mInterval > 0) {
+            gettimeofday( &(reportstruct->packetTime), NULL );
             reportstruct->packetLen = currLen;
             ReportPacket( mSettings->reporthdr, reportstruct );
-        }	
+        }   
 
         if ( !mMode_Time ) {
             /* mAmount may be unsigned, so don't let it underflow! */
@@ -214,8 +214,8 @@ void Client::Run( void ) {
 
 #if HAVE_THREAD
     if ( !isUDP( mSettings ) ) {
-	RunTCP();
-	return;
+        RunTCP();
+        return;
     }
 #endif
     
@@ -534,7 +534,7 @@ void Client::write_UDP_FIN( ) {
             // socket ready to read 
             rc = read( mSettings->mSock, mBuf, mSettings->mBufLen ); 
             WARN_errno( rc < 0, "read" );
-    	    if ( rc < 0 ) {
+            if ( rc < 0 ) {
                 break;
             } else if ( rc >= (int) (sizeof(UDP_datagram) + sizeof(server_hdr)) ) {
                 ReportServerUDP( mSettings, (server_hdr*) ((UDP_datagram*)mBuf + 1) );
