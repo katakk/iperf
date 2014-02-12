@@ -54,7 +54,7 @@
 
 #include "delay.hpp"
 
-
+#ifndef WIN32
 /* -------------------------------------------------------------------
  * determine the timer resolution of nanosleep
  * ------------------------------------------------------------------- */
@@ -111,3 +111,19 @@ void delay_loop( unsigned long usec ) {
         now.setnow();
     }
 }
+#else
+void delay_loop( unsigned long usec ) {
+
+	LARGE_INTEGER freq, start, now;
+
+	if (!QueryPerformanceFrequency(&freq))
+	{
+		printf("qpfreq err\n");//xxx
+	}
+	QueryPerformanceCounter(&start);
+	for(;;) {
+		QueryPerformanceCounter((LARGE_INTEGER*) &now);
+		if( ((double)(now.QuadPart - start.QuadPart) / (double)freq.QuadPart)  * 1000000 > usec ) break;
+	}
+}
+#endif
