@@ -1,3 +1,4 @@
+.SUFFIXES: .cpp .c .o
 include ../make.env
 
 OUT=libcompat.a
