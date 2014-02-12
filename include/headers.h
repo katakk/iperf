@@ -182,7 +182,11 @@ typedef struct sockaddr_in iperf_sockaddr;
 // from the gnu archive
 
 #include <iperf-int.h>
+#ifdef WIN32
+typedef u_int32_t max_size_t;
+#else
 typedef uint64_t max_size_t;
+#endif
 
 /* in case the OS doesn't have these, we provide our own implementations */
 #include "gettimeofday.h"
