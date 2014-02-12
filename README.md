@@ -16,13 +16,13 @@ http://sourceforge.net/p/iperf/patches/
 
 ####not yet patchd
 
+
+####patchd
+
 * `24` Option --priority allows user to set SO_PRIORITY                  2012-09-19  2012-09-19  
 * `20` Eliminate some compiler warnings                                  2011-12-08  2011-12-08  
 * `19` Update usage and comments to reflect new default buf size         2011-12-08  2011-12-08  
 * `18` iperf TCP client cannot detect write errors                       2011-12-08  2011-12-08  
-
-####patchd
-
 * `27` Patch to allow burst traffic in UDP mode                          2013-04-17  2013-04-17  
 * `26` Support specifying interface for Multicast                        2013-01-11  2013-01-11  
 * `25` IPv6 traffic class support                                        2012-10-02  2012-10-02  
