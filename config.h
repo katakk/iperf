@@ -52,7 +52,9 @@
 #define HAVE_IPV6 1
 
 /* Define if IPv6 multicast support exists */
+#ifdef IPV6_ADD_MEMBERSHIP
 #define HAVE_IPV6_MULTICAST 1
+#endif
 
 /* Define if Debugging of sockets is desired */
 /* #undef DBG_MJZ */
