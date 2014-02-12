@@ -16,10 +16,10 @@ clean:
 	-rm -f $(OBJS)
 
 .c.o:
-	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<;
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
 .cpp.o:
-	$(CXX) $(INCLUDES) $(CFLAGS) -c -o $@ $<;
+	$(CXX) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
 $(EXE): $(OBJS)
 	$(CXX) $(CFLAGS) -o $(EXE) $(OBJS)
