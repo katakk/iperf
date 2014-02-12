@@ -171,7 +171,7 @@ const struct option env_options[] =
 {"IPERF_TTL",        required_argument, NULL, 'T'},
 {"IPERF_SINGLE_UDP",       no_argument, NULL, 'U'},
 {"IPERF_IPV6_DOMAIN",      no_argument, NULL, 'V'},
-{"IPERF_SUGGEST_WIN_SIZE", required_argument, NULL, 'W'},
+{"IPERF_SUGGEST_WIN_SIZE", no_argument, NULL, 'W'},
 {"IPERF_POISSON", no_argument, NULL, 'E'},
 {"IPERF_CONGESTION_CONTROL",  required_argument, NULL, 'Z'},
 {0, 0, 0, 0}
