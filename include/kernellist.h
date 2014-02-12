@@ -11,6 +11,12 @@
 #define NULL ((void *)0)
 #endif
 
+#ifdef WIN32
+#define INLINE __inline
+#else
+#define INLINE inline
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,7 +25,7 @@ extern "C" {
 #define offsetof(TYPE, MEMBER) ((unsigned long) &((TYPE *)0)->MEMBER)
 #endif
 
-static inline void prefetch(const void *x)
+static INLINE void prefetch(const void *x)
 {
     /* NOOP, instead of using arch dependent assembly */
 }
@@ -41,27 +47,27 @@ struct list_head
 #define DEFINE_LIST_HEAD(name) \
         struct list_head name = LIST_HEAD_INIT(name)
 
-static inline void INIT_LIST_HEAD(struct list_head *list)
+static INLINE void INIT_LIST_HEAD(struct list_head *list)
 {
     list->next = list;
     list->prev = list;
 }
 
-static inline void __list_del(struct list_head * prev, 
+static INLINE void __list_del(struct list_head * prev, 
         struct list_head * next)
 {
     next->prev = prev;
     prev->next = next;
 }
 
-static inline void list_del(struct list_head *entry)
+static INLINE void list_del(struct list_head *entry)
 {
     __list_del(entry->prev, entry->next);
     entry->next = NULL;
     entry->prev = NULL;
 }
 
-static inline void __list_add(struct list_head *new_,
+static INLINE void __list_add(struct list_head *new_,
         struct list_head *prev,
         struct list_head *next)
  {
@@ -71,30 +77,30 @@ static inline void __list_add(struct list_head *new_,
     prev->next = new_;
  }
 
-static inline void list_add(struct list_head *new_, 
+static INLINE void list_add(struct list_head *new_, 
         struct list_head *head)
 {
     __list_add(new_, head, head->next);
 }
 
-static inline void list_add_tail(struct list_head *new_, 
+static INLINE void list_add_tail(struct list_head *new_, 
         struct list_head *head)
 {
     __list_add(new_, head->prev, head);
 }
 
-static inline int list_empty(const struct list_head *head)
+static INLINE int list_empty(const struct list_head *head)
 {
     return head->next == head;
 }
 
-static inline int list_is_last(const struct list_head *list, 
+static INLINE int list_is_last(const struct list_head *list, 
         const struct list_head *head)
 {
     return list->next == head;
 }
 
-static inline void list_replace(struct list_head *old, 
+static INLINE void list_replace(struct list_head *old, 
         struct list_head *new_)
 {
     new_->next = old->next;
@@ -103,7 +109,7 @@ static inline void list_replace(struct list_head *old,
     new_->prev->next = new_;
 }
 
-static inline void __list_splice(struct list_head *list, 
+static INLINE void __list_splice(struct list_head *list, 
         struct list_head *head)
 {
     struct list_head *first = list->next;
@@ -123,7 +129,7 @@ static inline void __list_splice(struct list_head *list,
  *          not be part of the result list.
  * @head: the place to add it in the first list (after this element).
  */
-static inline void list_splice(struct list_head *list, 
+static INLINE void list_splice(struct list_head *list, 
         struct list_head *head)
 {
     if (!list_empty(list))
