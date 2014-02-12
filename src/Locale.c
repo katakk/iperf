@@ -79,7 +79,7 @@ Client/Server:\n\
   -f, --format    [kmKM]   format to report: Kbits, Mbits, KBytes, MBytes\n\
   -i, --interval  #        seconds between periodic bandwidth reports\n\
   -k, --losspacketslog <logfile> logging characterizing the loss pattern\n\
-  -l, --len       #[KM]    length of buffer to read or write (default 8 KB)\n\
+  -l, --len       #[KM]    length of buffer to read or write (default 128 KB)\n\
   -m, --print_mss          print TCP maximum segment size (MTU - TCP/IP header)\n\
   -o, --output    <filename> output the report or error message to this specified file\n\
   -p, --port      #        server port to listen on/connect to\n\
