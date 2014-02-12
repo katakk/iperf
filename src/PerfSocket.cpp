@@ -175,6 +175,23 @@ void SetSocketOptions( thread_Settings *inSettings ) {
 
 #endif
 
+#ifdef SO_PRIORITY
+    /* From socket(7): "Set the protocol-defined priority for all
+     * packets to be sent on this socket. Linux uses this value to order
+     * the networking queues: packets with a higher priority may be
+     * processed first depending on the selected device queueing
+     * discipline. For ip(7), this also sets the IP type-of-service (TOS)
+     * field for outgoing packets. Setting a priority outside the range 0
+     * to 6 requires the CAP_NET_ADMIN capability." */
+    if ( inSettings->mPriority > 0 ) {
+        int  priority = inSettings->mPriority;
+        Socklen_t len = sizeof(priority);
+        int rc = setsockopt( inSettings->mSock, SOL_SOCKET, SO_PRIORITY,
+                             (char*) &priority, len );
+        WARN_errno( rc == SOCKET_ERROR, "setsockopt SO_PRIORITY" );
+    }
+#endif
+
     if ( !isUDP( inSettings ) ) {
         // set the TCP maximum segment size
         setsock_tcp_mss( inSettings->mSock, inSettings->mMSS );
