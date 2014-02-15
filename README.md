@@ -51,4 +51,7 @@ http://sourceforge.net/p/iperf/patches/
 * `16`    Jperf usability fixes                                      `2010-10-03`  
 * `21`    Windows binary 2.0.5                                       `2012-01-06`  
 * `23`    Android build scripts                                      `2012-06-08`  バイナリは一緒に入れといた  
+ 
+
+#なつきちゃんセーフティモード
 
