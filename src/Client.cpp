@@ -322,7 +322,9 @@ void Client::Run( void ) {
         reportstruct->packetLen = currLen;
         ReportPacket( mSettings->reporthdr, reportstruct );
 
-        if (isPoisson(mSettings)) delay=(-1.0*delay_target*log(1.0-1.0*rand()/((double)RAND_MAX)))+adjust; // Andrea Detti Patch Poisson
+		if (isPoisson(mSettings)) {
+			delay = (int)(-1.0*(double)delay_target*log((double)1.0-1.0*rand()/((double)RAND_MAX))) + adjust;
+		}
 
         if (mSettings->mBurstRate) {
             if ((++burstcount >= mSettings->mBurstRate) && (delay > 0))
