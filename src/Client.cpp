@@ -313,7 +313,7 @@ void Client::Run( void ) {
 
         // perform write 
         currLen = write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
-        if ( currLen < 0 && errno != -ENOBUFS ) {
+        if ( currLen < 0 && currLen != -ENOBUFS ) {
             WARN_errno( currLen < 0, "write2" ); 
             break; 
         }

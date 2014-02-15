@@ -137,7 +137,7 @@ ssize_t readn( int inSock, void *outBuf, size_t inLen ) {
     while ( nleft > 0 ) {
         nread = read( inSock, ptr, nleft );
         if ( nread < 0 ) {
-            if ( errno == EINTR )
+            if ( nread == -EINTR )
                 nread = 0;  /* interupted, call read again */
             else
                 return -1;  /* error */
@@ -174,7 +174,7 @@ ssize_t writen( int inSock, const void *inBuf, size_t inLen ) {
     while ( nleft > 0 ) {
         nwritten = write( inSock, ptr, nleft );
         if ( nwritten <= 0 ) {
-            if ( errno == EINTR )
+            if ( nwritten == -EINTR )
                 nwritten = 0; /* interupted, call write again */
             else
                 return -1;    /* error */
