@@ -111,7 +111,7 @@ void SetSocketOptions( thread_Settings *inSettings ) {
 #ifdef HAVE_MULTICAST
 	if ( !SockAddr_isIPv6( &inSettings->local ) ) {
 	    int rc = setsockopt( inSettings->mSock, IPPROTO_IP, IP_MULTICAST_TTL,
-		    (const void*) &val, (Socklen_t) sizeof(val));
+		    (const char*) &val, (Socklen_t) sizeof(val));
 
 	    WARN_errno( rc == SOCKET_ERROR, "multicast ttl" );
 		if(isCustInterface ( inSettings ) ) {
