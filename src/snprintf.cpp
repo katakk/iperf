@@ -79,7 +79,7 @@ int snprintf(char *buf, size_t size, const char *fmt, ...) {
 
     va_start(ap, fmt);
     vsprintf(buf, fmt, ap); /* Sigh, some vsprintf's return ptr, not length */
-    n = strlen(buf);
+    n = (int) strlen(buf);
     va_end(ap);
 
     if ( n < 0 || n >= (int) size ) {
