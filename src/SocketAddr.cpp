@@ -52,13 +52,8 @@
 #define HEADERS()
 
 #include "headers.h"
-
 #include "SocketAddr.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 /* -------------------------------------------------------------------
  * Create a socket address. If inHostname is not null, resolve that
  * address and fill it in. Fill in the port number. Use IPv6 ADDR_ANY
@@ -422,6 +417,3 @@ int SockAddr_Hostare_Equal( struct sockaddr* first, struct sockaddr* second ) {
     return 0;
 
 }
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif

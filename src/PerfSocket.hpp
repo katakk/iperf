@@ -64,15 +64,8 @@
     // handle interupts
     void Sig_Interupt( int inSigno );
 
-#ifdef __cplusplus
-extern "C" {
-#endif
     extern int sInterupted;
     extern int groupID;
     extern Mutex groupCond;
-
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 
 #endif // PERFSOCKET_H

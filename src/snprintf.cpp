@@ -73,10 +73,6 @@
 
     #include "snprintf.h"
 
-    #ifdef __cplusplus
-extern "C" {
-#endif
-
 int snprintf(char *buf, size_t size, const char *fmt, ...) {
     int n;
     va_list ap;
@@ -86,16 +82,12 @@ int snprintf(char *buf, size_t size, const char *fmt, ...) {
     n = strlen(buf);
     va_end(ap);
 
-    if ( n >= size ) {
+    if ( n < 0 || n >= (int) size ) {
         fprintf( stderr, "snprintf: overflowed array\n" );
         exit(1);
     }
 
     return(n);
 }
-
-#ifdef __cplusplus
-} /* end extern "C" */
-    #endif
 
 #endif /* HAVE_SNPRINTF */

@@ -57,10 +57,6 @@
     #include "config.h"
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* -------------------------------------------------------------------
  * set/getsockopt wrappers for SO_RCVBUF and SO_SNDBUF; TCP_MAXSEG
  * socket.c
@@ -190,10 +186,6 @@ void redirect(const char *inOutputFileName);
       ptr = NULL;                               \
     }                                           \
   } while( false )
-
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 
 #endif /* UTIL_H */
 

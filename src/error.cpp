@@ -53,10 +53,6 @@
 #include "headers.h"
 #include "util.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef WIN32
 
 /* -------------------------------------------------------------------
@@ -205,6 +201,3 @@ void warn_errno( const char *inMessage, const char *inFile, int inLine ) {
 #endif
 } /* end warn_errno */
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif

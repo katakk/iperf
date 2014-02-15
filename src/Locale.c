@@ -60,9 +60,6 @@
 #endif
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /* -------------------------------------------------------------------
  * usage
  * ------------------------------------------------------------------- */
@@ -339,8 +336,6 @@ const char warn_invalid_report_style[] =
 "WARNING: unknown reporting style \"%s\", switching to default\n";
 
 const char warn_invalid_report[] =
-"WARNING: unknown reporting type \"%c\", ignored\n valid options are:\n\t exclude: C(connection) D(data) M(multicast) S(settings) V(server) report\n\n";
+"WARNING: unknown reporting type \"%c\", ignored\n valid options are:\n"
+"\t exclude: C(connection) D(data) M(multicast) S(settings) V(server) report\n\n";
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif

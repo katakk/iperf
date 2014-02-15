@@ -54,10 +54,6 @@
 #include "headers.h"
 #include "util.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 const long kKilo_to_Unit = 1024;
 const long kMega_to_Unit = 1024 * 1024;
 const long kGiga_to_Unit = 1024 * 1024 * 1024;
@@ -274,9 +270,4 @@ void redirect(const char *inOutputFileName) {
 
     return;
 }
-
-
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 

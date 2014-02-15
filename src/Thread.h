@@ -63,11 +63,6 @@
 #ifndef THREAD_H
 #define THREAD_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 #if   defined( HAVE_POSIX_THREAD )
 
 /* Definitions for Posix Threads (pthreads) */
@@ -153,7 +148,4 @@ typedef int nthread_t;
     // defined in reporter.c
     void reporter_spawn( struct thread_Settings* thread );
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 #endif // THREAD_H

@@ -69,9 +69,6 @@
 
 #ifndef HAVE_INET_NTOP
 
-    #ifdef __cplusplus
-extern "C" {
-#endif
 int inet_ntop(int af, const void *src, char *dst, size_t size);
 int inet_ntop4(const unsigned char *src, char *dst,
                       size_t size);
@@ -80,26 +77,14 @@ int inet_ntop6(const unsigned char *src, char *dst,
                       size_t size);
 #endif
 
-
-#ifdef __cplusplus
-} /* end extern "C" */
-    #endif
-
 #endif /* HAVE_INET_NTOP */
 #ifndef HAVE_INET_PTON
 
-    #ifdef __cplusplus
-extern "C" {
-#endif
 int inet_pton(int af, const char *src, void *dst);
 int inet_pton4(const char *src, unsigned char *dst);
 #ifdef HAVE_IPV6
 int inet_pton6(const char *src, unsigned char *dst);
 #endif
-
-#ifdef __cplusplus
-} /* end extern "C" */
-    #endif
 
 #endif /* HAVE_INET_PTON */
 #endif /* INET_ATON_H */

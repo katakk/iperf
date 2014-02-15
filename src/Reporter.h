@@ -66,10 +66,6 @@ struct server_hdr;
 #define NUM_REPORT_STRUCTS 700
 #define NUM_MULTI_SLOTS    5
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
  * This struct contains all important information from the sending or
  * recieving thread.
@@ -242,8 +238,4 @@ extern char buffer[64]; // Buffer for printing
                                     }                                   \
                                     left.tv_sec += right.tv_sec;        \
                                 } while ( 0 )
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
-
 #endif // REPORTER_H

@@ -17,10 +17,6 @@
 #define INLINE inline
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifndef offsetof
 #define offsetof(TYPE, MEMBER) ((unsigned long) &((TYPE *)0)->MEMBER)
 #endif
@@ -174,10 +170,5 @@ static INLINE void list_splice(struct list_head *list,
             n = list_entry(pos->member.prev, typeof(*pos), member); \
             &pos->member != (head);                                    \
             pos = n, n = list_entry(n->member.prev, typeof(*n), member))
-
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
-
 #endif //_LIST_H_
 

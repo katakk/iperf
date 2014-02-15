@@ -68,10 +68,6 @@
 #include <stdio.h>
 #include "Settings.hpp"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
     /**
      * Constructor
      * @arg fileName   Name of the file 
@@ -115,9 +111,6 @@ extern "C" {
      * Destructor
      */
     void Extractor_Destroy( thread_Settings *mSettings ); 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 
 #endif
 

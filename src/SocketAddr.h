@@ -56,10 +56,6 @@
 #include "headers.h"
 #include "Settings.hpp"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 /* ------------------------------------------------------------------- */
     void SockAddr_localAddr( thread_Settings *inSettings );
     void SockAddr_remoteAddr( thread_Settings *inSettings );
@@ -97,8 +93,5 @@ extern "C" {
     int SockAddr_Hostare_Equal( struct sockaddr *first, struct sockaddr *second );
 
     void SockAddr_zeroAddress( iperf_sockaddr *inSockAddr );
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 
 #endif /* SOCKET_ADDR_H */

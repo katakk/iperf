@@ -1,7 +1,4 @@
 #include "inet_aton.h"
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*
  * Copyright (C) 1996-2001  Internet Software Consortium.
@@ -176,8 +173,4 @@ inet_ntop6(const unsigned char *src, char *dst, size_t size) {
 }
 #endif /* HAVE_IPV6 */
 #endif /* HAVE_INET_NTOP */
-
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 

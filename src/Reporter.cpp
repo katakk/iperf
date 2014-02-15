@@ -58,10 +58,6 @@
 #include "PerfSocket.hpp"
 #include "SocketAddr.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
   The following 4 functions are provided for Reporting
   styles that do not have all the reporting formats. For
@@ -123,10 +119,10 @@ MultiHeader* InitMulti( thread_Settings *agent, int inID ) {
     MultiHeader *multihdr = NULL;
     if ( agent->mThreads > 1 || agent->mThreadMode == kMode_Server ) {
         if ( isMultipleReport( agent ) ) {
-            multihdr = malloc(sizeof(MultiHeader) +  sizeof(ReporterData) +
+            multihdr = (MultiHeader *) malloc(sizeof(MultiHeader) +  sizeof(ReporterData) +
                               NUM_MULTI_SLOTS * sizeof(Transfer_Info));
         } else {
-            multihdr = malloc(sizeof(MultiHeader));
+            multihdr = (MultiHeader *) malloc(sizeof(MultiHeader));
         }
         if ( multihdr != NULL ) {
             memset( multihdr, 0, sizeof(MultiHeader) );
@@ -214,7 +210,7 @@ ReportHeader* InitReport( thread_Settings *agent ) {
         /*
          * Create in one big chunk
          */
-        reporthdr = malloc( sizeof(ReportHeader) +
+        reporthdr = (ReportHeader *) malloc( sizeof(ReportHeader) +
                             NUM_REPORT_STRUCTS * sizeof(ReportStruct) );
         if ( reporthdr != NULL ) {
             // Only need to make sure the headers are clean
@@ -260,7 +256,7 @@ ReportHeader* InitReport( thread_Settings *agent ) {
             /*
              * Create in one big chunk
              */
-            reporthdr = malloc( sizeof(ReportHeader) );
+            reporthdr = (ReportHeader *) malloc( sizeof(ReportHeader) );
             if ( reporthdr != NULL ) {
                 // Only need to make sure the headers are clean
                 memset( reporthdr, 0, sizeof(ReportHeader));
@@ -433,7 +429,7 @@ void ReportSettings( thread_Settings *agent ) {
         /*
          * Create in one big chunk
          */
-        ReportHeader *reporthdr = malloc( sizeof(ReportHeader) );
+        ReportHeader *reporthdr = (ReportHeader *) malloc( sizeof(ReportHeader) );
     
         if ( reporthdr != NULL ) {
             ReporterData *data = &reporthdr->report;
@@ -492,7 +488,7 @@ void ReportServerUDP( thread_Settings *agent, server_hdr *server ) {
         /*
          * Create in one big chunk
          */
-        ReportHeader *reporthdr = malloc( sizeof(ReportHeader) );
+        ReportHeader *reporthdr = (ReportHeader *) malloc( sizeof(ReportHeader) );
         Transfer_Info *stats = &reporthdr->report.info;
 
         if ( reporthdr != NULL ) {
@@ -717,7 +713,7 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
                     if (reporthdr->report.mThreadMode != kMode_Client) 
                     {
                         struct out_of_order_packet *oop;
-                        if (!(oop = malloc(sizeof(struct out_of_order_packet))))
+                        if (!(oop = (struct out_of_order_packet *) malloc(sizeof(struct out_of_order_packet))))
                         {
                             fprintf(stderr, "Out of memory");
                             exit(1);
@@ -731,8 +727,8 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
                     if (reporthdr->report.mThreadMode != kMode_Client)
                     {
                         struct lost_packet_interval *lpi;
-                        lpi = malloc(sizeof(struct lost_packet_interval));
-                        if (!(lpi = malloc(sizeof(struct out_of_order_packet))))
+                        lpi = (struct lost_packet_interval *) malloc(sizeof(struct lost_packet_interval));
+                        //BUG if (!(lpi = malloc(sizeof(struct out_of_order_packet))))
                         {
                             fprintf(stderr, "Out of memory");
                             exit(1);
@@ -916,7 +912,7 @@ void PrintMSS( ReporterData *stats ) {
     if ( inMSS <= 0 ) {
         printf( report_mss_unsupported, stats->info.transferID );
     } else {
-        char* net;
+        const char* net;
         int mtu = 0;
 
         if ( checkMSS_MTU( inMSS, 1500 ) ) {
@@ -946,6 +942,3 @@ void PrintMSS( ReporterData *stats ) {
 }
 // end ReportMSS
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif

@@ -60,10 +60,6 @@
     #include "headers.h"
     #include "gettimeofday.h"
 
-    #ifdef __cplusplus
-extern "C" {
-#endif
-
 int gettimeofday( struct timeval* tv, void* timezone ) {
     FILETIME time;
     double   timed;
@@ -84,9 +80,5 @@ int gettimeofday( struct timeval* tv, void* timezone ) {
 
     return 0;
 }
-
-#ifdef __cplusplus
-} /* end extern "C" */
-    #endif
 
 #endif /* HAVE_GETTIMEOFDAY */
