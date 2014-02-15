@@ -476,7 +476,9 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
                 fprintf( stderr, warn_invalid_server_option, option );
                 break;
             }
-            
+#ifdef WIN32
+				fprintf( stderr, "not support at win32\n" );
+#endif
             mExtSettings->lossPacketsFileName = new char[strlen(optarg)+1];
             strcpy( mExtSettings->lossPacketsFileName, optarg);
             break;
