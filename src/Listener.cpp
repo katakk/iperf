@@ -692,7 +692,8 @@ void Listener::UDPSingleServer( ) {
 
 void Listener::runAsDaemon(const char *pname, int facility) {
 #ifndef WIN32 
-    pid_t pid; 
+    pid_t pid;
+	int ret;
 
     /* Create a child process & if successful, exit from the parent process */ 
     if ( (pid = fork()) == -1 ) {
@@ -718,7 +719,9 @@ void Listener::runAsDaemon(const char *pname, int facility) {
         exit(0); 
     }
 
-    chdir("."); 
+    ret = chdir(".");
+	WARN_errno( ret < 0, "chdir" );
+
     fprintf( stderr, "Running Iperf Server as a daemon\n"); 
     fprintf( stderr, "The Iperf daemon process ID : %d\n",((int)getpid())); 
     fflush(stderr); 

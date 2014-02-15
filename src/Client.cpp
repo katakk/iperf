@@ -171,8 +171,8 @@ void Client::RunTCP( void ) {
 
         if ( !mMode_Time ) {
             /* mAmount may be unsigned, so don't let it underflow! */
-            if( mSettings->mAmount >= currLen ) {
-                mSettings->mAmount -= currLen;
+            if( mSettings->mAmount >= (unsigned long) currLen ) {
+                mSettings->mAmount -= (unsigned long) currLen;
             } else {
                 mSettings->mAmount = 0;
             }
@@ -202,6 +202,7 @@ void Client::RunTCP( void ) {
  * ------------------------------------------------------------------- */ 
 
 void Client::Run( void ) {
+	int wc;
     struct UDP_datagram* mBuf_UDP = (struct UDP_datagram*) mBuf; 
     unsigned long currLen = 0; 
     unsigned int burstcount = 0;
@@ -358,7 +359,8 @@ void Client::Run( void ) {
         mBuf_UDP->tv_usec = htonl( reportstruct->packetTime.tv_usec ); 
 
         if ( isMulticast( mSettings ) ) {
-            write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+            wc = write( mSettings->mSock, mBuf, mSettings->mBufLen );
+			WARN_errno( wc < 0, "write Run" );
         } else {
             write_UDP_FIN( ); 
         }
@@ -442,7 +444,7 @@ void Client::Connect( ) {
  * acknowledgement datagram is received. 
  * ------------------------------------------------------------------- */ 
 void Client::write_UDP_FIN( ) {
-    int rc; 
+    int rc, wc; 
     fd_set readSet; 
     struct timeval timeout; 
 
@@ -516,7 +518,8 @@ void Client::write_UDP_FIN( ) {
         count++; 
 
         // write data 
-        write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+        wc = write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+		WARN_errno( wc < 0, "write_UDP_FIN" );
 
         // wait until the socket is readable, or our timeout expires 
         FD_ZERO( &readSet ); 
@@ -575,8 +578,10 @@ out_noerr:
         else /* proper bytes were received */
         {
             /* the server will send properly formated strings */
-            if (log_handler > 0)
-                write(log_handler, buf, br);
+            if (log_handler > 0) {
+                wc = write(log_handler, buf, br);
+				WARN_errno( wc < 0, "write_UDP_FIN out_noerr" );
+			}
         }
     }
     if (log_handler > 0)
