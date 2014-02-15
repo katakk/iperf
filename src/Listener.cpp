@@ -469,7 +469,7 @@ void Listener::Accept( thread_Settings *server ) {
             // accept a connection
             server->mSock = accept( mSettings->mSock, 
                                     (sockaddr*) &server->peer, &server->size_peer );
-            if ( server->mSock == INVALID_SOCKET &&  errno == EINTR ) {
+            if ( server->mSock == INVALID_SOCKET && server->mSock == -EINTR ) {
                 continue;
             }
         }
