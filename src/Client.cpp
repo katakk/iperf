@@ -139,15 +139,15 @@ void Client::RunTCP( void ) {
     lastPacketTime.setnow();
 #ifndef WIN32
     if ( mMode_Time ) {
-	memset (&it, 0, sizeof (it));
-	it.it_value.tv_sec = (int) (mSettings->mAmount / 100.0);
-	it.it_value.tv_usec = (int) 10000 * (mSettings->mAmount -
-	    it.it_value.tv_sec * 100.0);
-	err = setitimer( ITIMER_REAL, &it, NULL );
-	if ( err != 0 ) {
-	    perror("setitimer");
-	    exit(1);
-	}
+		memset (&it, 0, sizeof (it));
+		it.it_value.tv_sec = (int) (mSettings->mAmount / 100.0);
+		it.it_value.tv_usec = (int) 10000 * (mSettings->mAmount -
+		    it.it_value.tv_sec * 100.0);
+		err = setitimer( ITIMER_REAL, &it, NULL );
+		if ( err != 0 ) {
+		    perror("setitimer");
+		    exit(1);
+		}
     }
 #endif
     do {
