@@ -35,12 +35,9 @@
  */
 
 #ifdef WIN32
-#include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <process.h>
-#include <tchar.h>
 
+#include "Settings.hpp"
+#include "PerfSocket.hpp"
 #include "service.h"
 
 
@@ -221,7 +218,7 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
 VOID AddToMessageLog(LPTSTR lpszMsg) {
     TCHAR   szMsg[256];
     HANDLE  hEventSource;
-    LPTSTR  lpszStrings[2];
+    LPCTSTR  lpszStrings[2];
 
 
     dwErr = GetLastError();
@@ -312,7 +309,7 @@ void CmdInstallService(int argc, char **argv) {
             if ( QueryServiceStatus( schService, &ssStatus ) ) {
                 int rc;
                 if ( ssStatus.dwCurrentState == SERVICE_STOPPED ) {
-                    rc = StartService(schService, argc-1, argv+1);
+                    rc = StartService(schService, argc-1, (LPCSTR *) argv+1);
                 }
 
 
@@ -433,7 +430,7 @@ BOOL CmdStartService(int argc, char **argv) {
             if ( QueryServiceStatus( schService, &ssStatus ) ) {
                 int rc;
                 if ( ssStatus.dwCurrentState == SERVICE_STOPPED ) {
-                    rc = StartService(schService, argc-1, argv+1);
+                    rc = StartService(schService, argc-1, (LPCSTR *) argv+1);
                 }
 
 
