@@ -56,13 +56,31 @@
 #ifndef HEADERS_H
 #define HEADERS_H
 
-
 #ifdef HAVE_CONFIG_H
-    #include "config.h"
-#endif /* HAVE_CONFIG_H */
+#include "config.h"
+#endif
+
+#ifdef WIN32
+#include "config.h"
+
+#define _WIN32_WINNT 0x0400 /* use (at least) WinNT 4.0 API */
+#define WIN32_LEAN_AND_MEAN /* exclude unnecesary headers */
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <windows.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <process.h>
+#include <tchar.h>
+
+#endif
 
 /* turn off assert debugging */
+#ifndef NDEBUG
 #define NDEBUG
+#endif
 
 /* standard C headers */
 #include <stdlib.h>
@@ -75,16 +93,9 @@
 #include <math.h>
 
 #ifdef WIN32
-
-/* Windows config file */
-    #include "config.win32.h"
-
-/* Windows headers */
-    #define _WIN32_WINNT 0x0400 /* use (at least) WinNT 4.0 API */
-    #define WIN32_LEAN_AND_MEAN /* exclude unnecesary headers */
-    #include <windows.h>
-    #include <winsock2.h>
-    #include <ws2tcpip.h>
+	struct itimerval { struct timeval it_interval; struct timeval it_value; };
+	#define IFNAMSIZ 32
+	#define ENOBUFS 55
 
 /* define EINTR, just to help compile; it isn't useful */
     #ifndef EINTR
