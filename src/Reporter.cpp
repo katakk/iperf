@@ -57,6 +57,7 @@
 #include "Locale.h"
 #include "PerfSocket.hpp"
 #include "SocketAddr.h"
+#include "delay.hpp"
 
 /*
   The following 4 functions are provided for Reporting
@@ -586,7 +587,7 @@ again:
                     goto again;
             }
 	        Condition_Signal( &ReportDoneCond );
-            usleep(10000);
+            delay_loop(10000); //usleep ?
         } else {
             //Condition_Unlock ( ReportCond );
         }
