@@ -163,7 +163,7 @@ typedef struct sockaddr_in iperf_sockaddr;
 // Rationalize stdint definitions and sizeof, thanks to ac_create_stdint_h.m4
 // from the gnu archive
 
-#include <iperf-int.h>
+#include "iperf-int.h"
 #ifdef WIN32
 typedef u_int32_t max_size_t;
 #else
