@@ -801,7 +801,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 
 void Settings_GetUpperCaseArg(const char *inarg, char *outarg) {
 
-    int len = strlen(inarg);
+    int len = (int) strlen(inarg);
     strcpy(outarg,inarg);
 
     if ( (len > 0) && (inarg[len-1] >='a') 
@@ -811,7 +811,7 @@ void Settings_GetUpperCaseArg(const char *inarg, char *outarg) {
 
 void Settings_GetLowerCaseArg(const char *inarg, char *outarg) {
 
-    int len = strlen(inarg);
+    int len = (int) strlen(inarg);
     strcpy(outarg,inarg);
 
     if ( (len > 0) && (inarg[len-1] >='A') 
