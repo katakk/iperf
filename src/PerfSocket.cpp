@@ -166,6 +166,9 @@ void SetSocketOptions( thread_Settings *inSettings ) {
        }
        else
        {
+#ifndef IPV6_TCLASS
+#define IPV6_TCLASS 67
+#endif
           // for IPv6 (traffic class)
           int rc = setsockopt( inSettings->mSock, IPPROTO_IPV6, IPV6_TCLASS,
                                (char*) &tos, len );
