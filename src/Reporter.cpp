@@ -727,8 +727,7 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
                     if (reporthdr->report.mThreadMode != kMode_Client)
                     {
                         struct lost_packet_interval *lpi;
-                        lpi = (struct lost_packet_interval *) malloc(sizeof(struct lost_packet_interval));
-                        //BUG if (!(lpi = malloc(sizeof(struct out_of_order_packet))))
+                        if (!(lpi = (struct lost_packet_interval *) malloc(sizeof(struct lost_packet_interval))))
                         {
                             fprintf(stderr, "Out of memory");
                             exit(1);
