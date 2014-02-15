@@ -218,11 +218,13 @@ ReportHeader* InitReport( thread_Settings *agent ) {
             reporthdr->data = (ReportStruct*)(reporthdr+1);
             reporthdr->multireport = agent->multihdr;
             data = &reporthdr->report;
-            if (agent->mThreadMode != kMode_Client)
+#ifndef WIN32
+			if (agent->mThreadMode != kMode_Client)
             {
                 INIT_LIST_HEAD(&data->lost_packets);
                 INIT_LIST_HEAD(&data->out_of_order_packets);
             }
+#endif
             reporthdr->reporterindex = NUM_REPORT_STRUCTS - 1;
             data->info.transferID = agent->mSock;
             data->info.groupID = (agent->multihdr != NULL ? agent->multihdr->groupID 
@@ -719,8 +721,10 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
                             exit(1);
                         }
                         oop->packetID = packet->packetID;
+#ifndef WIN32
                         //printf("Packet %d out of order\n", packet->packetID);
                         list_add_tail(&oop->list, &data->out_of_order_packets);
+#endif
                     }
                 } else {
                     data->cntError += packet->packetID - data->PacketID - 1;
@@ -734,12 +738,14 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
                         }
                         lpi->from = (data->PacketID + 1);
                         lpi->to = (packet->packetID - 1);
+#ifndef WIN32
                         list_add_tail(&lpi->list, &data->lost_packets);
                         /*
                         printf("Packet %d revealed a loss gap from %d, "
                             "total loss %d\n", packet->packetID, 
                             data->PacketID, data->cntError);
                         */
+#endif
                     }
                 }
             }

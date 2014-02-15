@@ -177,6 +177,7 @@ void Server::write_UDP_AckFIN( ) {
 
     struct timeval timeout; 
 
+#ifndef WIN32 //hmm cannot complie this blob.
     /* Report the list of lost packets, minus out of order packets */
     list_for_each_entry_safe(lpi, ltmp, 
             &mSettings->reporthdr->report.lost_packets, list)
@@ -234,6 +235,7 @@ void Server::write_UDP_AckFIN( ) {
         list_del(&oop->list);
         free(oop);
     }
+#endif // WIN32
     int count = 0; 
     while ( count < 10 ) {
         count++; 
@@ -296,6 +298,11 @@ void Server::write_UDP_AckFIN( ) {
     fprintf( stderr, warn_ack_failed, mSettings->mSock, count );
     goto out;
 
+#ifdef WIN32 //hmm cannot complie this blob.
+out_noerr:
+out:
+	return;
+#else
 out_noerr:
     if (lost_port == 0)
         goto out;
@@ -367,6 +374,8 @@ out:
     }
     if (buf)
         free(buf);
+#endif // WIN32 //hmm cannot complie this blob.
+
 }
  // end write_UDP_AckFIN 
 

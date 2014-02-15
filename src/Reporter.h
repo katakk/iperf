@@ -174,8 +174,10 @@ typedef struct ReporterData {
     struct timeval packetTime;
     struct timeval nextTime;
     struct timeval intervalTime;
+#ifndef WIN32
     struct list_head lost_packets;
     struct list_head out_of_order_packets;
+#endif
 } ReporterData;
 
 typedef struct MultiHeader {
