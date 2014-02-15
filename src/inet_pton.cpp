@@ -38,10 +38,10 @@ inet_pton(int af,
           void *dst) {
     switch ( af ) {
         case AF_INET:
-            return(inet_pton4(src, dst));
+            return(inet_pton4(src, (unsigned char *) dst));
 #ifdef HAVE_IPV6
         case AF_INET6:
-            return(inet_pton6(src, dst));
+            return(inet_pton6(src, (unsigned char *) dst));
 #endif
         default:
             return 0;
@@ -59,10 +59,7 @@ inet_pton(int af,
  * author:
  *      Paul Vixie, 1996.
  */
-int
-inet_pton4(src, dst)
-const char *src;
-unsigned char *dst;
+int inet_pton4(const char *src, unsigned char *dst)
 {
     static const char digits[] = "0123456789";
     int saw_digit, octets, ch;
@@ -75,11 +72,11 @@ unsigned char *dst;
         const char *pch;
 
         if ( (pch = strchr(digits, ch)) != NULL ) {
-            unsigned int new = *tp * 10 + (pch - digits);
+            unsigned int n = *tp * 10 + (pch - digits);
 
-            if ( new > 255 )
+            if ( n > 255 )
                 return(0);
-            *tp = new;
+            *tp = n;
             if ( ! saw_digit ) {
                 if ( ++octets > 4 )
                     return(0);
@@ -113,10 +110,7 @@ unsigned char *dst;
  *      Paul Vixie, 1996.
  */
 #ifdef HAVE_IPV6
-int
-inet_pton6(src, dst)
-const char *src;
-unsigned char *dst;
+int inet_pton6(const char *src, unsigned char *dst)
 {
     static const char xdigits_l[] = "0123456789abcdef",
     xdigits_u[] = "0123456789ABCDEF";
