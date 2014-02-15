@@ -98,7 +98,7 @@ void *CSV_peer( Connection_Info *stats, int ID ) {
     // copy the inet_ntop into temp buffers, to avoid overwriting
     char local_addr[ REPORT_ADDRLEN ];
     char remote_addr[ REPORT_ADDRLEN ];
-    char *buf = malloc( REPORT_ADDRLEN*2 + 10 );
+    char *buf = (char *) malloc( REPORT_ADDRLEN*2 + 10 );
     struct sockaddr *local = ((struct sockaddr*)&stats->local);
     struct sockaddr *peer = ((struct sockaddr*)&stats->peer);
 

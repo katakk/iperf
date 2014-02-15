@@ -59,14 +59,11 @@
 #include "PerfSocket.hpp"
 #include "SocketAddr.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
  * Prints transfer reports in default style
  */
-void reporter_printstats( Transfer_Info *stats ) {
+void reporter_printstats( Transfer_Info *stats )
+{
     static char header_printed = 0;
 
     byte_snprintf( buffer, sizeof(buffer)/2, (double) stats->TotalLen,
@@ -277,7 +274,7 @@ void reporter_reportMSS( int inMSS, thread_Settings *inSettings ) {
     if ( inMSS <= 0 ) {
         printf( report_mss_unsupported, inSettings->mSock );
     } else {
-        char* net;
+        const char* net;
         int mtu = 0;
 
         if ( checkMSS_MTU( inMSS, 1500 ) ) {
@@ -307,6 +304,3 @@ void reporter_reportMSS( int inMSS, thread_Settings *inSettings ) {
 }
 // end ReportMSS
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif

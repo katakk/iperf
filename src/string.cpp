@@ -53,10 +53,6 @@
 #include "headers.h"
 #include "util.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* -------------------------------------------------------------------
  * pattern
  *
@@ -71,6 +67,3 @@ void pattern( char *outBuf, int inBytes ) {
     }
 } /* end pattern */
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif

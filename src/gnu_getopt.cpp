@@ -74,10 +74,6 @@
 
 #include "gnu_getopt.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* For communication from `gnu_getopt' to the caller.
    When `gnu_getopt' finds an option that takes an argument,
    the argument value is returned here.
@@ -743,16 +739,9 @@ gnu_getopt ( int argc,
                                  0);
 }
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
-
-
 #ifdef TEST
-
 /* Compile with -DTEST to make an executable for use in testing
    the above definition of `gnu_getopt'.  */
-
 int
 main (argc, argv)
 int argc;

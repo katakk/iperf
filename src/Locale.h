@@ -54,9 +54,6 @@
 #ifndef LOCALE_H
 #define LOCALE_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /* -------------------------------------------------------------------
  * usage
  * ------------------------------------------------------------------- */
@@ -184,17 +181,4 @@ extern const char warn_invalid_report_style[];
 
 extern const char warn_invalid_report[];
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 #endif // LOCALE_H
-
-
-
-
-
-
-
-
-
-

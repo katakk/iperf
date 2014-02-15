@@ -59,16 +59,6 @@
 
 #ifdef HAVE_CONFIG_H
     #include "config.h"
-
-/* OSF1 (at least the system I use) needs extern C
- * around the <netdb.h> and <arpa/inet.h> files. */
-    #if defined( SPECIAL_OSF1_EXTERN ) && defined( __cplusplus )
-        #define SPECIAL_OSF1_EXTERN_C_START extern "C" {
-        #define SPECIAL_OSF1_EXTERN_C_STOP  }
-    #else
-        #define SPECIAL_OSF1_EXTERN_C_START
-        #define SPECIAL_OSF1_EXTERN_C_STOP
-    #endif
 #endif /* HAVE_CONFIG_H */
 
 /* turn off assert debugging */
@@ -138,21 +128,15 @@
 
 /** Added for daemonizing the process */
     #include <syslog.h>
-
-SPECIAL_OSF1_EXTERN_C_START
     #include <netdb.h>
-SPECIAL_OSF1_EXTERN_C_STOP
     #include <netinet/in.h>
     #include <netinet/tcp.h>
-
-SPECIAL_OSF1_EXTERN_C_START
     #include <arpa/inet.h>   /* netinet/in.h must be before this on SunOS */
     #include <net/if.h>
-SPECIAL_OSF1_EXTERN_C_STOP
 
-    #ifdef HAVE_POSIX_THREAD
-        #include <pthread.h>
-    #endif // HAVE_POSIX_THREAD
+#ifdef HAVE_POSIX_THREAD
+    #include <pthread.h>
+#endif // HAVE_POSIX_THREAD
 
 /* used in Win32 for error checking,
  * rather than checking rc < 0 as unix usually does */
@@ -162,21 +146,19 @@ SPECIAL_OSF1_EXTERN_C_STOP
 #endif /* not defined WIN32 */
 
 #ifndef INET6_ADDRSTRLEN
-    #define INET6_ADDRSTRLEN 40
+#    define INET6_ADDRSTRLEN 40
 #endif
 #ifndef INET_ADDRSTRLEN
-    #define INET_ADDRSTRLEN 15
+#    define INET_ADDRSTRLEN 15
 #endif
 
-//#ifdef __cplusplus
-    #ifdef HAVE_IPV6
-        #define REPORT_ADDRLEN (INET6_ADDRSTRLEN + 1)
+#ifdef HAVE_IPV6
+#    define REPORT_ADDRLEN (INET6_ADDRSTRLEN + 1)
 typedef struct sockaddr_storage iperf_sockaddr;
-    #else
-        #define REPORT_ADDRLEN (INET_ADDRSTRLEN + 1)
+#else
+#    define REPORT_ADDRLEN (INET_ADDRSTRLEN + 1)
 typedef struct sockaddr_in iperf_sockaddr;
-    #endif
-//#endif
+#endif
 
 // Rationalize stdint definitions and sizeof, thanks to ac_create_stdint_h.m4
 // from the gnu archive

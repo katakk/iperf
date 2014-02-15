@@ -1,7 +1,4 @@
 #include "inet_aton.h"
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*
  * Copyright (C) 1996-2001  Internet Software Consortium.
@@ -204,6 +201,3 @@ unsigned char *dst;
 
 #endif /* HAVE_INET_PTON */
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif

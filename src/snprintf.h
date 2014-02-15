@@ -26,15 +26,7 @@
 
 #ifndef HAVE_SNPRINTF
 
-    #ifdef __cplusplus
-extern "C" {
-#endif
-
 int snprintf(char *buf, size_t size, const char *fmt, ...);
-
-#ifdef __cplusplus
-} /* end extern "C" */
-    #endif
 
 #endif /* HAVE_SNPRINTF */
 #endif /* SNPRINTF_H */

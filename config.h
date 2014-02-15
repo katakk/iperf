@@ -49,7 +49,7 @@
 #endif /* WIN32 */
 
 /* Define if you have these functions. */
-#define HAVE_SNPRINTF 1
+//#define HAVE_SNPRINTF 1
 #ifdef WIN32
 #define HAVE_USLEEP 1
 #else /* WIN32 */

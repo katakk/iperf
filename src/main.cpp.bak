@@ -84,18 +84,18 @@ void cleanup( void );
 /* -------------------------------------------------------------------
  * global variables
  * ------------------------------------------------------------------- */
-// Global flag to signal a user interrupt
-int sInterupted = 0;
-// Global ID that we increment to be used 
-// as identifier for SUM reports
-int groupID = 0;
-// Mutex to protect access to the above ID
-Mutex groupCond;
-// Condition used to signify advances of the current
-// records being accessed in a report and also to
-// serialize modification of the report list
-Condition ReportCond;
-Condition ReportDoneCond;
+    // Global flag to signal a user interrupt
+    int sInterupted = 0;
+    // Global ID that we increment to be used 
+    // as identifier for SUM reports
+    int groupID = 0;
+    // Mutex to protect access to the above ID
+    Mutex groupCond;
+    // Condition used to signify advances of the current
+    // records being accessed in a report and also to
+    // serialize modification of the report list
+    Condition ReportCond;
+    Condition ReportDoneCond;
 
 // global variables only accessed within this file
 

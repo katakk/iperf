@@ -54,10 +54,6 @@
 
 #include "util.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* -------------------------------------------------------------------
  * If inTCPWin > 0, set the TCP window size (via the socket buffer
  * sizes) for inSock. Otherwise leave it as the system default.
@@ -170,8 +166,4 @@ int getsock_tcp_windowsize( int inSock, int inSend ) {
 
     return theTCPWin;
 } /* end getsock_tcp_windowsize */
-
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 

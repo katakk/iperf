@@ -62,12 +62,6 @@
 #ifndef _SERVICE_H
 #define _SERVICE_H
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 //////////////////////////////////////////////////////////////////////////////
 //// todo: change to desired strings
 ////
@@ -149,11 +143,6 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState, DWORD dwWin32ExitCode, DWORD dwWa
 //
 void AddToMessageLog(LPTSTR lpszMsg);
 //////////////////////////////////////////////////////////////////////////////
-
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

@@ -65,10 +65,6 @@
 /* -------------------------------------------------------------------
  * constants
  * ------------------------------------------------------------------- */
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // server/client mode
 typedef enum ThreadMode {
     kMode_Unknown = 0,
@@ -437,9 +433,5 @@ typedef struct server_hdr {
 
     // generate client header for server
     void Settings_GenerateClientHdr( thread_Settings *client, client_hdr *hdr );
-
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 
 #endif // SETTINGS_H

@@ -53,10 +53,6 @@
 #include "headers.h"
 #include "util.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* -------------------------------------------------------------------
  * If inMSS > 0, set the TCP maximum segment size  for inSock.
  * Otherwise leave it as the system default.
@@ -191,6 +187,3 @@ ssize_t writen( int inSock, const void *inBuf, size_t inLen ) {
     return inLen;
 } /* end writen */
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif

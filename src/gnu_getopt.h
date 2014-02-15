@@ -33,10 +33,6 @@
 #ifndef _GETOPT_H
     #define _GETOPT_H 1
 
-    #ifdef	__cplusplus
-extern "C" {
-#endif
-
 /* For communication from `gnu_getopt' to the caller.
    When `gnu_getopt' finds an option that takes an argument,
    the argument value is returned here.
@@ -128,9 +124,5 @@ int _gnu_getopt_internal( int argc,
                           const struct option *longopts,
                           int *longind,
                           int long_only );
-
-#ifdef	__cplusplus
-} /* end extern "C" */
-    #endif
 
 #endif /* _GETOPT_H */

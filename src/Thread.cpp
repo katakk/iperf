@@ -74,10 +74,6 @@
 #include "Locale.h"
 #include "util.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* -------------------------------------------------------------------
  * define static variables.
  * ------------------------------------------------------------------- */
@@ -410,8 +406,4 @@ void thread_rest ( void ) {
 #endif
 #endif
 }
-
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
 

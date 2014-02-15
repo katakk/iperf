@@ -38,9 +38,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 int
 gnu_getopt_long( int argc,
@@ -65,11 +62,6 @@ gnu_getopt_long_only( int argc,
     return _gnu_getopt_internal (argc, argv, options, long_options, opt_index, 1);
 }
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
-
-
 #ifdef TEST
 
     #include <stdio.h>

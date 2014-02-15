@@ -53,10 +53,6 @@
 #include "headers.h"
 #include "util.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef WIN32
 
 /* list of signal handlers. _NSIG is number of signals defined. */
@@ -175,6 +171,3 @@ void sig_exit( int inSigno ) {
     }
 } /* end sig_exit */
 
-#ifdef __cplusplus
-} /* end extern "C" */
-#endif
