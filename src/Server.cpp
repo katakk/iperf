@@ -166,10 +166,13 @@ void Server::Run( void ) {
 void Server::write_UDP_AckFIN( ) {
 
     int rc, wc; 
+#ifndef WIN32 //hmm cannot complie this blob.
     struct out_of_order_packet *oop, *otmp;
     struct lost_packet_interval *lpi, *ltmp;
-    int lost_sock = 0, lost_port = 0, buflen=1024, bw, datagrams;
     struct sockaddr_in local_addr, client_addr;
+    int bw;
+#endif
+    int lost_sock = 0, lost_port = 0, buflen=1024, datagrams;
     socklen_t addr_len = sizeof(struct sockaddr_in);
     void *buf = NULL;
     fd_set readSet; 
@@ -277,7 +280,7 @@ void Server::write_UDP_AckFIN( ) {
         timeout.tv_sec  = 1; 
         timeout.tv_usec = 0; 
 
-        rc = select( mSettings->mSock+1, &readSet, NULL, NULL, &timeout ); 
+        rc = (int) select( mSettings->mSock+1, &readSet, NULL, NULL, &timeout ); 
         FAIL_errno( rc == SOCKET_ERROR, "select", mSettings ); 
 
         if ( rc == 0 ) {
