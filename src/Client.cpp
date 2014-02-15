@@ -117,10 +117,12 @@ const int    kBytes_to_Bits = 8;
 
 void Client::RunTCP( void ) {
     long currLen;
-    struct itimerval it;
     max_size_t totLen = 0;
 
+#ifndef WIN32
+    struct itimerval it;
     int err;
+#endif
 
     char* readAt = mBuf;
 
@@ -135,6 +137,7 @@ void Client::RunTCP( void ) {
     reportstruct->packetID = 0;
 
     lastPacketTime.setnow();
+#ifndef WIN32
     if ( mMode_Time ) {
 	memset (&it, 0, sizeof (it));
 	it.it_value.tv_sec = (int) (mSettings->mAmount / 100.0);
@@ -146,6 +149,7 @@ void Client::RunTCP( void ) {
 	    exit(1);
 	}
     }
+#endif
     do {
         // Read the next data block from 
         // the file if it's file input 
@@ -456,6 +460,7 @@ void Client::write_UDP_FIN( ) {
     
     shdr = (server_hdr*) ((UDP_datagram*)mBuf + 1);
     
+#ifndef WIN32
     if (mSettings->lossPacketsFileName)
     {
         if ((log_handler = open(mSettings->lossPacketsFileName, 
@@ -508,6 +513,7 @@ void Client::write_UDP_FIN( ) {
         }
     }
     else
+#endif /* WIN32 */
     {
     not_interested_in_packet_loss:
         shdr->lost_port = 0; /* this indicates no interest in logging */
