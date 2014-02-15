@@ -165,7 +165,7 @@ void Server::Run( void ) {
  * ------------------------------------------------------------------- */ 
 void Server::write_UDP_AckFIN( ) {
 
-    int rc; 
+    int rc, wc; 
     struct out_of_order_packet *oop, *otmp;
     struct lost_packet_interval *lpi, *ltmp;
     int lost_sock = 0, lost_port = 0, buflen=1024, bw, datagrams;
@@ -267,7 +267,8 @@ void Server::write_UDP_AckFIN( ) {
         }
 
         // write data 
-        write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+        wc = write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+		WARN_errno( wc < 0, "write_UDP_AckFIN" );
 
         // wait until the socket is readable, or our timeout expires 
         FD_SET( mSettings->mSock, &readSet ); 
