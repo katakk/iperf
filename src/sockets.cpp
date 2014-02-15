@@ -124,7 +124,7 @@ int getsock_tcp_mss( int inSock ) {
 
 ssize_t readn( int inSock, void *outBuf, size_t inLen ) {
     size_t  nleft;
-    ssize_t nread;
+    int     nread;
     char *ptr;
 
     assert( inSock >= 0 );
@@ -135,7 +135,7 @@ ssize_t readn( int inSock, void *outBuf, size_t inLen ) {
     nleft = inLen;
 
     while ( nleft > 0 ) {
-        nread = read( inSock, ptr, nleft );
+        nread = (int) read( inSock, ptr, (int) nleft );
         if ( nread < 0 ) {
             if ( nread == -EINTR )
                 nread = 0;  /* interupted, call read again */
@@ -148,7 +148,7 @@ ssize_t readn( int inSock, void *outBuf, size_t inLen ) {
         ptr   += nread;
     }
 
-    return(inLen - nleft);
+    return (int) (inLen - nleft);
 } /* end readn */
 
 /* -------------------------------------------------------------------
@@ -161,7 +161,7 @@ ssize_t readn( int inSock, void *outBuf, size_t inLen ) {
 
 ssize_t writen( int inSock, const void *inBuf, size_t inLen ) {
     size_t  nleft;
-    ssize_t nwritten;
+    int     nwritten;
     const char *ptr;
 
     assert( inSock >= 0 );
@@ -172,7 +172,7 @@ ssize_t writen( int inSock, const void *inBuf, size_t inLen ) {
     nleft = inLen;
 
     while ( nleft > 0 ) {
-        nwritten = write( inSock, ptr, nleft );
+        nwritten = (int) write( inSock, ptr, (int) nleft );
         if ( nwritten <= 0 ) {
             if ( nwritten == -EINTR )
                 nwritten = 0; /* interupted, call write again */
@@ -184,6 +184,6 @@ ssize_t writen( int inSock, const void *inBuf, size_t inLen ) {
         ptr   += nwritten;
     }
 
-    return inLen;
+    return (int) inLen;
 } /* end writen */
 
