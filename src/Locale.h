@@ -54,131 +54,283 @@
 #ifndef LOCALE_H
 #define LOCALE_H
 
-/* -------------------------------------------------------------------
- * usage
- * ------------------------------------------------------------------- */
+#include "version.h"
 
-extern const char usage_short[];
+const char usage_short[] = "\
+Usage: %s [-s|-c host] [options]\n\
+Try `%s --help' for more information.\n";
 
-extern const char usage_long1[];
-extern const char usage_long2[];
+const char usage_long1[] = "\
+Usage: iperf [-s|-c host] [options]\n\
+       iperf [-h|--help] [-v|--version]\n\
+\n\
+Client/Server:\n\
+  -f, --format    [kmKM]   format to report: Kbits, Mbits, KBytes, MBytes\n\
+  -i, --interval  #        seconds between periodic bandwidth reports\n\
+  -k, --losspacketslog <logfile> logging characterizing the loss pattern\n\
+  -l, --len       #[KM]    length of buffer to read or write (default 128 KB)\n\
+  -m, --print_mss          print TCP maximum segment size (MTU - TCP/IP header)\n\
+  -o, --output    <filename> output the report or error message to this specified file\n\
+  -p, --port      #        server port to listen on/connect to\n\
+  -u, --udp                use UDP rather than TCP\n\
+  -w, --window    #[KM]    TCP window size (socket buffer size)\n\
+  -B, --bind      <host>   bind to <host>, an interface or multicast address\n\
+  -C, --compatibility      for use with older versions does not sent extra msgs\n\
+  -M, --mss       #        set TCP maximum segment size (MTU - 40 bytes)\n\
+  -N, --nodelay            set TCP no delay, disabling Nagle's Algorithm\n\
+  -O, --interface <int>    specify an interface to bind to for multicast\n\
+  -Q, --priority           set protocol-defined priority i.e. skb_priority\n\
+  -V, --IPv6Version        Set the domain to IPv6\n\
+\n\
+Server specific:\n\
+  -s, --server             run in server mode\n\
+  -U, --single_udp         run in single threaded UDP mode\n\
+  -D, --daemon             run the server as a daemon\n"
+#ifdef WIN32
+"  -R, --remove             remove service in win32\n"
+#endif
+;
 
-extern const char version[];
+const char usage_long2[] = "\
+\n\
+Client specific:\n\
+  -b, --bandwidth #[KM]    for UDP, bandwidth to send at in bits/sec\n\
+                           (default 1 Mbit/sec, implies -u)\n\
+  -c, --client    <host>   run in client mode, connecting to <host>\n\
+  -d, --dualtest           Do a bidirectional test simultaneously\n\
+  -n, --num       #[KM]    number of bytes to transmit (instead of -t)\n\
+  -r, --tradeoff           Do a bidirectional test individually\n\
+  -t, --time      #        time in seconds to transmit for (default 10 secs)\n\
+  -F, --fileinput <name>   input the data to be transmitted from a file\n\
+  -I, --stdin              input the data to be transmitted from stdin\n\
+  -L, --listenport #       port to receive bidirectional tests back on\n\
+  -P, --parallel  #        number of parallel client threads to run\n\
+  -T, --ttl       #        time-to-live, for multicast (default 1)\n\
+  -Z, --linux-congestion <algo>  set TCP congestion control algorithm (Linux only)\n\
+  -E, --poisson   #        Poisson interarrival times, for udp (default 0)\n\
+  -X, --burstrate #        specify number of datagrams to be sent consecutively\n\
+\n\
+Miscellaneous:\n\
+  -x, --reportexclude [CDMSV]   exclude C(connection) D(data) M(multicast) S(settings) V(server) reports\n\
+  -y, --reportstyle C      report as a Comma-Separated Values\n\
+  -h, --help               print this message and quit\n\
+  -v, --version            print version information and quit\n\
+\n\
+[KM] Indicates options that support a K or M suffix for kilo- or mega-\n\
+\n\
+The TCP window size option can be set by the environment variable\n\
+TCP_WINDOW_SIZE. Most other options can be set by an environment variable\n\
+IPERF_<long option name>, such as IPERF_BANDWIDTH.\n\
+\n\
+Report bugs to <iperf-users@lists.sourceforge.net>\n";
+
+// include a description of the threading in the version
+#if   defined( HAVE_POSIX_THREAD )
+    #define IPERF_THREADS "pthreads"
+#elif defined( HAVE_WIN32_THREAD )
+    #define IPERF_THREADS "win32 threads"
+#else
+    #define IPERF_THREADS "single threaded"
+#endif
+
+const char version[] =
+"iperf version " IPERF_VERSION " (" IPERF_VERSION_DATE ") " IPERF_THREADS "\n";
 
 /* -------------------------------------------------------------------
  * settings
  * ------------------------------------------------------------------- */
 
-extern const char separator_line[];
+const char separator_line[] =
+"------------------------------------------------------------\n";
 
-extern const char server_port[];
+const char server_port[] =
+"Server listening on %s port %d\n";
 
-extern const char client_port[];
+const char client_port[] =
+"Client connecting to %s, %s port %d\n";
 
-extern const char bind_address[];
+const char bind_address[] =
+"Binding to local address %s\n";
 
-extern const char multicast_ttl[];
+const char multicast_ttl[] =
+"Setting multicast TTL to %d\n";
 
-extern const char join_multicast[];
+const char join_multicast[] =
+"Joining multicast group  %s\n";
 
-extern const char client_datagram_size[];
+const char client_datagram_size[] =
+"Sending %d byte datagrams\n";
 
-extern const char server_datagram_size[];
+const char server_datagram_size[] =
+"Receiving %d byte datagrams\n";
 
-extern const char tcp_window_size[];
+const char tcp_window_size[] =
+"TCP window size";
 
-extern const char udp_buffer_size[];
+const char udp_buffer_size[] =
+"UDP buffer size";
 
-extern const char window_default[];
+const char window_default[] =
+"(default)";
 
-extern const char wait_server_threads[];
+const char wait_server_threads[] =
+"Waiting for server threads to complete. Interrupt again to force quit.\n";
 
 /* -------------------------------------------------------------------
  * reports
  * ------------------------------------------------------------------- */
 
-extern const char report_read_lengths[];
+const char report_read_lengths[] =
+"[%3d] Read lengths occurring in more than 5%% of reads:\n";
 
-extern const char report_read_length_times[];
+const char report_read_length_times[] =
+"[%3d] %5d bytes read %5d times (%.3g%%)\n";
 
-extern const char report_bw_header[];
+const char report_bw_header[] =
+"[ ID] Interval       Transfer     Bandwidth\n";
 
-extern const char report_bw_format[];
+const char report_bw_format[] =
+"[%3d] %4.1f-%4.1f sec  %ss  %ss/sec\n";
 
-extern const char report_sum_bw_format[];
+const char report_sum_bw_format[] =
+"[SUM] %4.1f-%4.1f sec  %ss  %ss/sec\n";
 
-extern const char report_bw_jitter_loss_header[];
+const char report_bw_jitter_loss_header[] =
+"[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total \
+Datagrams\n";
 
-extern const char report_bw_jitter_loss_format[];
+const char report_bw_jitter_loss_format[] =
+"[%3d] %4.1f-%4.1f sec  %ss  %ss/sec  %6.3f ms %4d/%5d (%.2g%%)\n";
 
-extern const char report_bw_delay_jitter_loss_format[];	// Andrea Detti patch to compute delay
+const char report_bw_delay_jitter_loss_format[] =
+"[%3d] %4.1f-%4.1f sec  %ss  %ss/sec  %5.3f ms %5.3f ms %4d/%5d (%.2g%%)\n";		// Andrea Detti Patch for delay
 
-extern const char report_sum_bw_jitter_loss_format[];
+const char report_sum_bw_jitter_loss_format[] =
+"[SUM] %4.1f-%4.1f sec  %ss  %ss/sec  %6.3f ms %4d/%5d (%.2g%%)\n";
 
-extern const char report_outoforder[];
+const char report_outoforder[] =
+"[%3d] %4.1f-%4.1f sec  %d datagrams received out-of-order\n";
 
-extern const char report_sum_outoforder[];
+const char report_sum_outoforder[] =
+"[SUM] %4.1f-%4.1f sec  %d datagrams received out-of-order\n";
 
-extern const char report_peer[];
+const char report_peer[] =
+"[%3d] local %s port %u connected with %s port %u\n";
 
-extern const char report_mss_unsupported[];
+const char report_mss_unsupported[] =
+"[%3d] MSS and MTU size unknown (TCP_MAXSEG not supported by OS?)\n";
 
-extern const char report_mss[];
+const char report_mss[] =
+"[%3d] MSS size %d bytes (MTU %d bytes, %s)\n";
 
-extern const char report_datagrams[];
+const char report_datagrams[] =
+"[%3d] Sent %d datagrams\n";
 
-extern const char report_sum_datagrams[];
+const char report_sum_datagrams[] =
+"[SUM] Sent %d datagrams\n";
 
-extern const char server_reporting[];
+const char server_reporting[] =
+"[%3d] Server Report:\n";
 
-extern const char reportCSV_peer[];
+const char reportCSV_peer[] =
+"%s,%u,%s,%u";
 
-extern const char reportCSV_bw_format[];
+#ifdef HAVE_QUAD_SUPPORT
+#ifdef HAVE_PRINTF_QD
+const char reportCSV_bw_format[] =
+"%s,%s,%d,%.1f-%.1f,%qd,%qd\n";
 
-extern const char reportCSV_bw_jitter_loss_format[];
+const char reportCSV_bw_jitter_loss_format[] =
+"%s,%s,%d,%.1f-%.1f,%qd,%qd,%.3f,%d,%d,%.3f,%d\n";
+#else // HAVE_PRINTF_QD
+const char reportCSV_bw_format[] =
+"%s,%s,%d,%.1f-%.1f,%lld,%lld\n";
 
+const char reportCSV_bw_jitter_loss_format[] =
+"%s,%s,%d,%.1f-%.1f,%lld,%lld,%.3f,%d,%d,%.3f,%d\n";
+#endif // HAVE_PRINTF_QD
+#else // HAVE_QUAD_SUPPORT
+#ifdef WIN32
+const char reportCSV_bw_format[] =
+"%s,%s,%d,%.1f-%.1f,%I64d,%I64d\n";
+
+const char reportCSV_bw_jitter_loss_format[] =
+"%s,%s,%d,%.1f-%.1f,%I64d,%I64d,%.3f,%d,%d,%.3f,%d\n";
+#else
+const char reportCSV_bw_format[] =
+"%s,%s,%d,%.1f-%.1f,%d,%d\n";
+
+const char reportCSV_bw_jitter_loss_format[] =
+"%s,%s,%d,%.1f-%.1f,%d,%d,%.3f,%d,%d,%.3f,%d\n";
+#endif //WIN32
+#endif //HAVE_QUAD_SUPPORT
 /* -------------------------------------------------------------------
  * warnings
  * ------------------------------------------------------------------- */
 
-extern const char warn_window_requested[];
+const char warn_window_requested[] =
+" (WARNING: requested %s)";
 
-extern const char warn_window_small[];
+const char warn_window_small[] = "\
+WARNING: TCP window size set to %d bytes. A small window size\n\
+will give poor performance. See the Iperf documentation.\n";
 
-extern const char warn_delay_large[];
+const char warn_delay_large[] =
+"WARNING: delay too large, reducing from %.1f to 1.0 seconds.\n";
 
-extern const char warn_no_pathmtu[];
+const char warn_no_pathmtu[] =
+"WARNING: Path MTU Discovery may not be enabled.\n";
 
-extern const char warn_no_ack[];
+const char warn_no_ack[]=
+"[%3d] WARNING: did not receive ack of last datagram after %d tries.\n";
 
-extern const char warn_ack_failed[];
+const char warn_ack_failed[]=
+"[%3d] WARNING: ack of last datagram failed after %d tries.\n";
 
-extern const char warn_fileopen_failed[];
+const char warn_fileopen_failed[]=
+"WARNING: Unable to open file stream for transfer\n\
+Using default data stream. \n";
 
-extern const char unable_to_change_win[];
+const char unable_to_change_win[]=
+"WARNING: Unable to change the window size\n";
 
-extern const char opt_estimate[];
+const char opt_estimate[]=
+"Optimal Estimate\n";
 
-extern const char report_interval_small[];
+const char report_interval_small[] =
+"WARNING: interval too small, increasing from %3.2f to 0.5 seconds.\n";
 
-extern const char warn_invalid_server_option[];
+const char warn_invalid_server_option[] =
+"WARNING: option -%c is not valid for server mode\n";
 
-extern const char warn_interface_invalid_ignored[];
+const char warn_interface_invalid_ignored[] =
+"WARNING: interface name is too long to be valid, iperf will ignore it\n";
 
-extern const char warn_invalid_client_option[];
+const char warn_invalid_client_option[] =
+"WARNING: option -%c is not valid for client mode\n";
 
-extern const char warn_invalid_compatibility_option[];
+const char warn_invalid_compatibility_option[] =
+"WARNING: option -%c is not valid in compatibility mode\n";
 
-extern const char warn_implied_udp[];
+const char warn_implied_udp[] =
+"WARNING: option -%c implies udp testing\n";
 
-extern const char warn_implied_compatibility[];
+const char warn_implied_compatibility[] =
+"WARNING: option -%c has implied compatibility mode\n";
 
-extern const char warn_buffer_too_small[];
+const char warn_buffer_too_small[] =
+"WARNING: the UDP buffer was increased to %d for proper operation\n";
 
-extern const char warn_invalid_single_threaded[];
+const char warn_invalid_single_threaded[] =
+"WARNING: option -%c is not valid in single threaded versions\n";
 
-extern const char warn_invalid_report_style[];
+const char warn_invalid_report_style[] =
+"WARNING: unknown reporting style \"%s\", switching to default\n";
 
-extern const char warn_invalid_report[];
+const char warn_invalid_report[] =
+"WARNING: unknown reporting type \"%c\", ignored\n valid options are:\n"
+"\t exclude: C(connection) D(data) M(multicast) S(settings) V(server) report\n\n";
+
+
 
 #endif // LOCALE_H
