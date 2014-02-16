@@ -513,8 +513,6 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv) {
 
     // Initialize settings to defaults
     Settings_Initialize( ext_gSettings );
-    // read settings from environment variables
-    Settings_ParseEnvironment( ext_gSettings );
     // read settings from command-line parameters
     Settings_ParseCommandLine( dwArgc, lpszArgv, ext_gSettings );
 

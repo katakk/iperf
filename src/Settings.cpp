@@ -13,7 +13,7 @@
 
 #include "util.h"
 
-#include "gnu_getopt.h"
+#include "getopt.h"
 
 void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtSettings );
 
@@ -82,112 +82,6 @@ X:     burstrate        IPERF_BURSTRATE          required_argument
 Y*                                               <empty>
 Z:     linux-congestion IPERF_CONGESTION_CONTROL required_argument
 *******************************************************************/
-
-/* -------------------------------------------------------------------
- * command line options
- *
- * The option struct essentially maps a long option name (--foobar)
- * or environment variable ($FOOBAR) to its short option char (f).
- * ------------------------------------------------------------------- */
-#define LONG_OPTIONS()
-
-const struct option long_options[] =
-{
-{"singleclient",     no_argument, NULL, '1'},
-{"bandwidth",  required_argument, NULL, 'b'},
-{"client",     required_argument, NULL, 'c'},
-{"dualtest",         no_argument, NULL, 'd'},
-{"format",     required_argument, NULL, 'f'},
-{"help",             no_argument, NULL, 'h'},
-{"interval",   required_argument, NULL, 'i'},
-{"losspacketslog", required_argument, NULL, 'k'},
-{"len",        required_argument, NULL, 'l'},
-{"print_mss",        no_argument, NULL, 'm'},
-{"num",        required_argument, NULL, 'n'},
-{"output",     required_argument, NULL, 'o'},
-{"port",       required_argument, NULL, 'p'},
-{"tradeoff",         no_argument, NULL, 'r'},
-{"server",           no_argument, NULL, 's'},
-{"time",       required_argument, NULL, 't'},
-{"udp",              no_argument, NULL, 'u'},
-{"version",          no_argument, NULL, 'v'},
-{"window",     required_argument, NULL, 'w'},
-{"reportexclude", required_argument, NULL, 'x'},
-{"reportstyle",required_argument, NULL, 'y'},
-
-// more esoteric options
-{"bind",       required_argument, NULL, 'B'},
-{"compatibility",    no_argument, NULL, 'C'},
-{"daemon",           no_argument, NULL, 'D'},
-{"file_input", required_argument, NULL, 'F'},
-{"stdin_input",      no_argument, NULL, 'I'},
-{"mss",        required_argument, NULL, 'M'},
-{"nodelay",          no_argument, NULL, 'N'},
-{"interface",  required_argument, NULL, 'O'},
-{"listenport", required_argument, NULL, 'L'},
-{"priority",   required_argument, NULL, 'Q'},
-{"parallel",   required_argument, NULL, 'P'},
-{"remove",           no_argument, NULL, 'R'},
-{"burstrate",  required_argument, NULL, 'X'},
-{"tos",        required_argument, NULL, 'S'},
-{"ttl",        required_argument, NULL, 'T'},
-{"single_udp",       no_argument, NULL, 'U'},
-{"ipv6_domain",      no_argument, NULL, 'V'},
-{"suggest_win_size", no_argument, NULL, 'W'},
-{"poisson", no_argument, NULL, 'E'},
-{"linux-congestion", required_argument, NULL, 'Z'},
-{0, 0, 0, 0}
-};
-
-#define ENV_OPTIONS()
-
-const struct option env_options[] =
-{
-{"IPERF_SINGLECLIENT",     no_argument, NULL, '1'},
-{"IPERF_BANDWIDTH",  required_argument, NULL, 'b'},
-{"IPERF_CLIENT",     required_argument, NULL, 'c'},
-{"IPERF_DUALTEST",         no_argument, NULL, 'd'},
-{"IPERF_FORMAT",     required_argument, NULL, 'f'},
-// skip help
-{"IPERF_INTERVAL",   required_argument, NULL, 'i'},
-{"IPERF_LOSS_PACKET_LOG", required_argument, NULL, 'k'},
-{"IPERF_LEN",        required_argument, NULL, 'l'},
-{"IPERF_PRINT_MSS",        no_argument, NULL, 'm'},
-{"IPERF_NUM",        required_argument, NULL, 'n'},
-{"IPERF_PORT",       required_argument, NULL, 'p'},
-{"IPERF_TRADEOFF",         no_argument, NULL, 'r'},
-{"IPERF_SERVER",           no_argument, NULL, 's'},
-{"IPERF_TIME",       required_argument, NULL, 't'},
-{"IPERF_UDP",              no_argument, NULL, 'u'},
-// skip version
-{"TCP_WINDOW_SIZE",  required_argument, NULL, 'w'},
-{"IPERF_REPORTEXCLUDE", required_argument, NULL, 'x'},
-{"IPERF_REPORTSTYLE",required_argument, NULL, 'y'},
-
-// more esoteric options
-{"IPERF_BIND",       required_argument, NULL, 'B'},
-{"IPERF_COMPAT",           no_argument, NULL, 'C'},
-{"IPERF_DAEMON",           no_argument, NULL, 'D'},
-{"IPERF_FILE_INPUT", required_argument, NULL, 'F'},
-{"IPERF_STDIN_INPUT",      no_argument, NULL, 'I'},
-{"IPERF_MSS",        required_argument, NULL, 'M'},
-{"IPERF_NODELAY",          no_argument, NULL, 'N'},
-{"IPERF_INTERFACE",  required_argument, NULL, 'O'},
-{"IPERF_LISTENPORT", required_argument, NULL, 'L'},
-{"IPERF_PRIORITY",   required_argument, NULL, 'Q'},
-{"IPERF_PARALLEL",   required_argument, NULL, 'P'},
-{"IPERF_BURSTRATE",  required_argument, NULL, 'X'},
-{"IPERF_TOS",        required_argument, NULL, 'S'},
-{"IPERF_TTL",        required_argument, NULL, 'T'},
-{"IPERF_SINGLE_UDP",       no_argument, NULL, 'U'},
-{"IPERF_IPV6_DOMAIN",      no_argument, NULL, 'V'},
-{"IPERF_SUGGEST_WIN_SIZE", no_argument, NULL, 'W'},
-{"IPERF_POISSON", no_argument, NULL, 'E'},
-{"IPERF_CONGESTION_CONTROL",  required_argument, NULL, 'Z'},
-{0, 0, 0, 0}
-};
-
-#define SHORT_OPTIONS()
 
 const char short_options[] = "1b:c:df:hi:k:l:mn:o:p:rst:uvw:x:y:B:CDEF:IL:M:NO:P:Q:RS:T:UVWX:Z:";
 
@@ -292,34 +186,17 @@ void Settings_Destroy( thread_Settings *mSettings) {
 } // end ~Settings
 
 /* -------------------------------------------------------------------
- * Parses settings from user's environment variables.
- * ------------------------------------------------------------------- */
-void Settings_ParseEnvironment( thread_Settings *mSettings ) {
-    char *theVariable;
-
-    int i = 0;
-    while ( env_options[i].name != NULL ) {
-        theVariable = getenv( env_options[i].name );
-        if ( theVariable != NULL ) {
-            Settings_Interpret( env_options[i].val, theVariable, mSettings );
-        }
-        i++;
-    }
-} // end ParseEnvironment
-
-/* -------------------------------------------------------------------
  * Parse settings from app's command line.
  * ------------------------------------------------------------------- */
 
 void Settings_ParseCommandLine( int argc, char **argv, thread_Settings *mSettings ) {
     int option;
     while ( (option =
-             gnu_getopt_long( argc, argv, short_options,
-                              long_options, NULL )) != EOF ) {
-        Settings_Interpret( option, gnu_optarg, mSettings );
+             getopt( argc, argv, (char *) short_options )) != EOF ) {
+        Settings_Interpret( option, optarg, mSettings );
     }
 
-    for ( int i = gnu_optind; i < argc; i++ ) {
+    for ( int i = optind; i < argc; i++ ) {
         fprintf( stderr, "%s: ignoring extra argument -- %s\n", argv[0], argv[i] );
     }
 } // end ParseCommandLine
