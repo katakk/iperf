@@ -138,11 +138,9 @@ void Server::write_UDP_AckFIN( ) {
 
 #ifndef WIN32 //hmm cannot complie this blob.
     /* Report the list of lost packets, minus out of order packets */
-    list_for_each_entry_safe(lpi, ltmp,
-            &mSettings->reporthdr->report.lost_packets, list)
+    LIST_FOREACH_SAFE(lpi, &mSettings->reporthdr->report.lost_packets, list, ltmp)
     {
-        list_for_each_entry_safe(oop, otmp,
-                &mSettings->reporthdr->report.out_of_order_packets, list)
+        LIST_FOREACH_SAFE(oop, &mSettings->reporthdr->report.out_of_order_packets, list, otmp)
         {
             if (oop->packetID >= lpi->from && oop->packetID <= lpi->to)
             {
@@ -150,7 +148,7 @@ void Server::write_UDP_AckFIN( ) {
                 {
                     if (lpi->from == lpi->to) /* garbage collect item */
                     {
-                        list_del(&lpi->list);
+                        LIST_REMOVE(lpi, list);
                         free(lpi);
                     }
                     else /* adjust the bounds */
@@ -160,7 +158,7 @@ void Server::write_UDP_AckFIN( ) {
                 {
                     if (lpi->from == lpi->to) /* garbage collect item */
                     {
-                        list_del(&lpi->list);
+                        LIST_REMOVE(lpi, list);
                         free(lpi);
                     }
                     else /* adjust the bounds */
@@ -179,19 +177,18 @@ void Server::write_UDP_AckFIN( ) {
                     ltmp->to = lpi->to;
                     lpi->to = oop->packetID - 1;
                     /* list_add inserts the element AFTER the head (second param) */
-                    list_add(&ltmp->list, &lpi->list);
+                    LIST_INSERT_AFTER(lpi, ltmp, list);
                 }
-                list_del(&oop->list);
+				LIST_REMOVE(oop, list);
                 free(oop);
             }
         }
     }
 
     /* do not leak memory, in case out of order packets are received but no loss occured */
-    list_for_each_entry_safe(oop, otmp,
-            &mSettings->reporthdr->report.out_of_order_packets, list)
+    LIST_FOREACH_SAFE(oop, &mSettings->reporthdr->report.out_of_order_packets, list, otmp)
     {
-        list_del(&oop->list);
+        LIST_REMOVE(oop, list);
         free(oop);
     }
 #endif // WIN32
@@ -308,10 +305,9 @@ out_noerr:
     }
     sprintf((char *) buf, "LOST_GAPS DATAGRAMS_TOTAL %d\n", datagrams);
     bw = write(lost_sock, (char *) buf, strlen((char *)buf));
-    list_for_each_entry_safe(lpi, ltmp,
-            &mSettings->reporthdr->report.lost_packets, list)
+    LIST_FOREACH_SAFE(lpi, &mSettings->reporthdr->report.lost_packets, list, ltmp)
     {
-        list_del(&lpi->list);
+        LIST_REMOVE(lpi, list);
         sprintf((char *)buf, "LOST_GAPS %d %d\n", lpi->from, lpi->to);
         bw = write(lost_sock, (char *) buf, strlen((char *)buf));
         if (bw < 0)
@@ -325,10 +321,9 @@ out:
     if (lost_sock > 0)
         close(lost_sock);
     /* do not leak memory */
-    list_for_each_entry_safe(lpi, ltmp,
-        &mSettings->reporthdr->report.lost_packets, list)
+    LIST_FOREACH_SAFE(lpi, &mSettings->reporthdr->report.lost_packets, list, ltmp)
     {
-        list_del(&lpi->list);
+        LIST_REMOVE(lpi, list);
         free(lpi);
     }
     if (buf)
