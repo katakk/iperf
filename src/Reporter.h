@@ -44,8 +44,8 @@ typedef struct Transfer_Info {
     int cntDatagrams;
     // Hopefully int64_t's
     max_size_t TotalLen;
-    double delay;		// Andrea Detti added to compute delay
-    double delay_total; // Andrea Detti added to compute delay
+    double delay;       // compute delay
+    double delay_total; // compute delay
     double jitter;
     double startTime;
     double endTime;
@@ -66,14 +66,14 @@ typedef struct Connection_Info {
 /* tracking lost packet intervals and out of order packets */
 struct lost_packet_interval
 {
-	int from, to;
-	struct list_head list;
+    int from, to;
+    struct list_head list;
 };
 
 struct out_of_order_packet
 {
-	int packetID;
-	struct list_head list;
+    int packetID;
+    struct list_head list;
 };
 
 typedef struct ReporterData {

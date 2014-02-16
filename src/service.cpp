@@ -265,7 +265,7 @@ VOID AddToMessageLog(LPTSTR lpszMsg) {
 //
 //  PARAMETERS:
 //    argc: number of arguments
-//	argv: all of the arguments including the program's name
+//    argv: all of the arguments including the program's name
 //
 //  RETURN VALUE:
 //    none
@@ -344,7 +344,7 @@ void CmdInstallService(int argc, char **argv) {
 //
 //  RETURN VALUE:
 //    TRUE: service exists and is removed
-//	FALSE: service doesn't exist
+//    FALSE: service doesn't exist
 //
 //  COMMENTS:
 //
@@ -407,11 +407,11 @@ BOOL CmdRemoveService() {
 //
 //  PARAMETERS:
 //    argc: number of arguments
-//	argv: arguments including program's name
+//    argv: arguments including program's name
 //
 //  RETURN VALUE:
 //    TRUE: service exists and is started
-//	FALSE: service doesn't exist
+//    FALSE: service doesn't exist
 //
 //  COMMENTS:
 //

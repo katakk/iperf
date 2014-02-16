@@ -15,27 +15,27 @@
  * ------------------------------------------------------------------- */
 static long measure_nanosleep_threshold()
 {
-	timespec req = {0, 1000};
-	Timestamp bg, ed;
-	bg.setnow();
-	for (int i = 0; i < 20; ++i) {
-		nanosleep(&req, NULL);
-	}
-	ed.setnow();
-	long diff = ed.subUsec(bg) / 20;
-	if (diff <= 20) {
-		diff = 10;
-	} else if (diff <= 200 ) {
-		diff = 10 * ( (diff+5) / 10 ) - 5;
-	} else if (diff <= 600 ) {
-		diff = 50 * ( (diff+25) / 50 ) - 50;
-	} else if (diff <= 2000 ) {
-		diff = 100 * ( (diff+50) / 100 ) - 50;
-	} else {
-		diff = 500 * ( (diff+250) / 500 ) - 50;
-	}
-	//printf("thr %ld\n", diff);
-	return diff;
+    timespec req = {0, 1000};
+    Timestamp bg, ed;
+    bg.setnow();
+    for (int i = 0; i < 20; ++i) {
+        nanosleep(&req, NULL);
+    }
+    ed.setnow();
+    long diff = ed.subUsec(bg) / 20;
+    if (diff <= 20) {
+        diff = 10;
+    } else if (diff <= 200 ) {
+        diff = 10 * ( (diff+5) / 10 ) - 5;
+    } else if (diff <= 600 ) {
+        diff = 50 * ( (diff+25) / 50 ) - 50;
+    } else if (diff <= 2000 ) {
+        diff = 100 * ( (diff+50) / 100 ) - 50;
+    } else {
+        diff = 500 * ( (diff+250) / 500 ) - 50;
+    }
+    //printf("thr %ld\n", diff);
+    return diff;
 }
 static long nanosleep_threshold = measure_nanosleep_threshold();
 
@@ -69,16 +69,16 @@ void delay_loop( unsigned long usec ) {
 #else
 void delay_loop( unsigned long usec ) {
 
-	LARGE_INTEGER freq, start, now;
+    LARGE_INTEGER freq, start, now;
 
-	if (!QueryPerformanceFrequency(&freq))
-	{
-		printf("qpfreq err\n");//xxx
-	}
-	QueryPerformanceCounter(&start);
-	for(;;) {
-		QueryPerformanceCounter((LARGE_INTEGER*) &now);
-		if( ((double)(now.QuadPart - start.QuadPart) / (double)freq.QuadPart)  * 1000000 > usec ) break;
-	}
+    if (!QueryPerformanceFrequency(&freq))
+    {
+        printf("qpfreq err\n");//xxx
+    }
+    QueryPerformanceCounter(&start);
+    for(;;) {
+        QueryPerformanceCounter((LARGE_INTEGER*) &now);
+        if( ((double)(now.QuadPart - start.QuadPart) / (double)freq.QuadPart)  * 1000000 > usec ) break;
+    }
 }
 #endif

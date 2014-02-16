@@ -77,8 +77,8 @@ int main( int argc, char **argv ) {
     WSADATA wsaData;
     int rc = WSAStartup( 0x202, &wsaData );
     WARN_errno( rc == SOCKET_ERROR, "WSAStartup" );
-	if (rc == SOCKET_ERROR)
-		return 0;
+    if (rc == SOCKET_ERROR)
+        return 0;
 
     // Tell windows we want to handle our own signals
     SetConsoleCtrlHandler( sig_dispatcher, true );

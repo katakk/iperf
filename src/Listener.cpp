@@ -299,19 +299,19 @@ void Listener::McastJoin( ) {
                 sizeof(mreq.imr_multiaddr));
 
         mreq.imr_interface.s_addr = htonl( INADDR_ANY );
-		
-		if(isCustInterface ( mSettings ) ) {
-			int fd = socket(AF_INET, SOCK_DGRAM, 0);
-			struct ifreq ifr;
-			ifr.ifr_addr.sa_family = AF_INET;
-			strncpy(ifr.ifr_name, mSettings->mCustInterface, IFNAMSIZ-1);
-			if(ioctl(fd, SIOCGIFADDR, &ifr) != -1)
-			{
-				struct sockaddr_in *int_addr = (struct sockaddr_in *)&ifr.ifr_addr;
-				mreq.imr_interface = int_addr->sin_addr;
-			}
-			close(fd);
-		}
+        
+        if(isCustInterface ( mSettings ) ) {
+            int fd = socket(AF_INET, SOCK_DGRAM, 0);
+            struct ifreq ifr;
+            ifr.ifr_addr.sa_family = AF_INET;
+            strncpy(ifr.ifr_name, mSettings->mCustInterface, IFNAMSIZ-1);
+            if(ioctl(fd, SIOCGIFADDR, &ifr) != -1)
+            {
+                struct sockaddr_in *int_addr = (struct sockaddr_in *)&ifr.ifr_addr;
+                mreq.imr_interface = int_addr->sin_addr;
+            }
+            close(fd);
+        }
 
         int rc = setsockopt( mSettings->mSock, IPPROTO_IP, IP_ADD_MEMBERSHIP,
                              (char*) &mreq, sizeof(mreq));
@@ -324,10 +324,10 @@ void Listener::McastJoin( ) {
         memcpy( &mreq.ipv6mr_multiaddr, SockAddr_get_in6_addr( &mSettings->local ),
                 sizeof(mreq.ipv6mr_multiaddr));
 
-		if(isCustInterface ( mSettings ) )
-			mreq.ipv6mr_interface = if_nametoindex(mSettings->mCustInterface);
-		else
-			mreq.ipv6mr_interface = 0;
+        if(isCustInterface ( mSettings ) )
+            mreq.ipv6mr_interface = if_nametoindex(mSettings->mCustInterface);
+        else
+            mreq.ipv6mr_interface = 0;
 
         int rc = setsockopt( mSettings->mSock, IPPROTO_IPV6, IPV6_ADD_MEMBERSHIP,
                              (char*) &mreq, sizeof(mreq));
@@ -442,7 +442,7 @@ void Listener::UDPSingleServer( ) {
     do {
         // Get next packet
         while ( sInterupted == 0) {
-			server->size_peer = sizeof( iperf_sockaddr );
+            server->size_peer = sizeof( iperf_sockaddr );
             rc = recvfrom( mSettings->mSock, mBuf, mSettings->mBufLen, 0,
                            (struct sockaddr*) &server->peer, &server->size_peer );
             WARN_errno( rc == SOCKET_ERROR, "recvfrom" );
@@ -476,7 +476,7 @@ void Listener::UDPSingleServer( ) {
                     break;
                 }
             } else {
-				if ( exist != NULL ) {
+                if ( exist != NULL ) {
                     // read the datagram ID and sentTime out of the buffer
                     reportstruct->packetID = -datagramID;
                     reportstruct->sentTime.tv_sec = ntohl( ((UDP_datagram*) mBuf)->tv_sec  );
@@ -629,7 +629,7 @@ void Listener::UDPSingleServer( ) {
 void Listener::runAsDaemon(const char *pname, int facility) {
 #ifndef WIN32
     pid_t pid;
-	int ret;
+    int ret;
 
     /* Create a child process & if successful, exit from the parent process */
     if ( (pid = fork()) == -1 ) {
@@ -656,7 +656,7 @@ void Listener::runAsDaemon(const char *pname, int facility) {
     }
 
     ret = chdir(".");
-	WARN_errno( ret < 0, "chdir" );
+    WARN_errno( ret < 0, "chdir" );
 
     fprintf( stderr, "Running Iperf Server as a daemon\n");
     fprintf( stderr, "The Iperf daemon process ID : %d\n",((int)getpid()));

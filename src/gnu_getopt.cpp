@@ -49,9 +49,9 @@
    When compiling libc, the _ macro is predefined.  */
     #ifdef HAVE_LIBINTL_H
         #include <libintl.h>
-        #define _(msgid)	gettext (msgid)
+        #define _(msgid)    gettext (msgid)
     #else
-        #define _(msgid)	(msgid)
+        #define _(msgid)    (msgid)
     #endif
 #endif
 

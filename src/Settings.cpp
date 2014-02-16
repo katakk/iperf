@@ -33,7 +33,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 a*                                               <empty>
 b:     bandwidth        IPERF_BANDWIDTH          required_argument
 c:     client           IPERF_CLIENT             required_argument
-d      dualtest         IPERF_DUALTEST           no_argument 	
+d      dualtest         IPERF_DUALTEST           no_argument
 e*                                               <empty>
 f:     format           IPERF_FORMAT             required_argument
 g*                                               <empty>
@@ -221,7 +221,7 @@ void Settings_Initialize( thread_Settings *main ) {
     main->mMode         = kTest_Normal;  // -d,  mMode == kTest_DualTest
     main->mFormat       = 'a';           // -f,  adaptive bits
     // skip help                         // -h,
-    //main->mBufLenSet  = false;         // -l,	
+    //main->mBufLenSet  = false;         // -l,
     main->mBufLen       = 128 * 1024;      // -l,  128 Kbyte
     //main->mInterval     = 0;           // -i,  ie. no periodic bw reports
     //main->mPrintMSS   = false;         // -m,  don't print MSS
@@ -421,7 +421,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
                 break;
             }
 #ifdef WIN32
-				fprintf( stderr, "not support at win32\n" );
+            fprintf( stderr, "not support at win32\n" );
 #endif
             mExtSettings->lossPacketsFileName = new char[strlen(optarg)+1];
             strcpy( mExtSettings->lossPacketsFileName, optarg);
@@ -644,15 +644,15 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 'N': // specify TCP nodelay option (disable Jacobson's Algorithm)
             setNoDelay( mExtSettings );
             break;
-			
-		case 'O': // specify interface to bind to (multicast)
-			if(strlen(outarg) < IFNAMSIZ) {
-				setCustInterface ( mExtSettings );
-				mExtSettings->mCustInterface = new char[strlen(optarg)+1];
-				strcpy(mExtSettings->mCustInterface, optarg);
-			} else
-				fprintf( stderr, warn_interface_invalid_ignored, option);
-			break;
+            
+        case 'O': // specify interface to bind to (multicast)
+            if(strlen(outarg) < IFNAMSIZ) {
+                setCustInterface ( mExtSettings );
+                mExtSettings->mCustInterface = new char[strlen(optarg)+1];
+                strcpy(mExtSettings->mCustInterface, optarg);
+            } else
+                fprintf( stderr, warn_interface_invalid_ignored, option);
+            break;
 
         case 'P': // number of client threads
 #ifdef HAVE_THREAD
@@ -716,27 +716,27 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             fprintf( stderr, "The -W option is not available in this release\n");
             break;
 
-        case 'E' :	// Andrea Detti
-			            if ( !isUDP( mExtSettings ) ) {
-			                fprintf( stderr, warn_implied_udp, option );
-			            }
-			
-			            if ( mExtSettings->mThreadMode != kMode_Client ) {
-			                fprintf( stderr, warn_invalid_server_option, option );
-			                break;
-			            }
-			            setPoisson( mExtSettings );
-			            break;
+        case 'E' :
+            if ( !isUDP( mExtSettings ) ) {
+                fprintf( stderr, warn_implied_udp, option );
+            }
+
+            if ( mExtSettings->mThreadMode != kMode_Client ) {
+                fprintf( stderr, warn_invalid_server_option, option );
+                break;
+            }
+            setPoisson( mExtSettings );
+            break;
 
         case 'Z':
 #ifdef TCP_CONGESTION
-	    setCongestionControl( mExtSettings );
-	    mExtSettings->mCongestion = new char[strlen(optarg)+1];
-	    strcpy( mExtSettings->mCongestion, optarg);
+            setCongestionControl( mExtSettings );
+            mExtSettings->mCongestion = new char[strlen(optarg)+1];
+            strcpy( mExtSettings->mCongestion, optarg);
 #else
             fprintf( stderr, "The -Z option is not available on this operating system\n");
 #endif
-	    break;
+        break;
 
         default: // ignore unknown
             break;
@@ -841,8 +841,7 @@ void Settings_GenerateClientSettings( thread_Settings *server,
 #else
             (*client)->mAmount |= 0xFFFFFFFF00000000;
 #endif
-//bug       (*client)->mAmount = -(*client)->mAmount;
-			(*client)->mAmount = (~(*client)->mAmount) + 1;
+            (*client)->mAmount = (~(*client)->mAmount) + 1;
         }
         (*client)->mFileName   = NULL;
         (*client)->mHost       = NULL;
@@ -907,7 +906,8 @@ void Settings_GenerateClientHdr( thread_Settings *client, client_hdr *hdr ) {
     }
     if ( client->mMode == kTest_DualTest ) {
         hdr->flags |= htonl(RUN_NOW);
-        if ( isDummyDualHdr(client) )
-	    hdr->flags |= htonl(INVALID_DUAL_HDR);
+        if ( isDummyDualHdr(client) ) {
+            hdr->flags |= htonl(INVALID_DUAL_HDR);
+        }
     }
 }
