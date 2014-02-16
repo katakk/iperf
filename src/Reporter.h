@@ -4,7 +4,7 @@
 #include "headers.h"
 #include "Mutex.h"
 
-#include "kernellist.h"
+#include "queue.h"
 
 struct thread_Settings;
 struct server_hdr;
@@ -67,13 +67,13 @@ typedef struct Connection_Info {
 struct lost_packet_interval
 {
     int from, to;
-    struct list_head list;
+    LIST_ENTRY(lost_packet_interval) list;
 };
 
 struct out_of_order_packet
 {
     int packetID;
-    struct list_head list;
+    LIST_ENTRY(out_of_order_packet) list;
 };
 
 typedef struct ReporterData {
@@ -123,8 +123,8 @@ typedef struct ReporterData {
     struct timeval nextTime;
     struct timeval intervalTime;
 #ifndef WIN32
-    struct list_head lost_packets;
-    struct list_head out_of_order_packets;
+    LIST_HEAD(head_lost_packet,lost_packet_interval) lost_packets;
+    LIST_HEAD(head_out_of_order_packet,out_of_order_packet) out_of_order_packets;
 #endif
 } ReporterData;
 
