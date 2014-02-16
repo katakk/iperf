@@ -127,10 +127,7 @@
 				RelativePath=".\src\gettimeofday.cpp">
 			</File>
 			<File
-				RelativePath=".\src\gnu_getopt.cpp">
-			</File>
-			<File
-				RelativePath=".\src\gnu_getopt_long.cpp">
+				RelativePath=".\src\getopt.cpp">
 			</File>
 			<File
 				RelativePath=".\src\inet_ntop.cpp">
@@ -222,7 +219,7 @@
 				RelativePath=".\src\gettimeofday.h">
 			</File>
 			<File
-				RelativePath=".\src\gnu_getopt.h">
+				RelativePath=".\src\getopt.h">
 			</File>
 			<File
 				RelativePath=".\src\headers.h">
