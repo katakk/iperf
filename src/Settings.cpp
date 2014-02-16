@@ -18,69 +18,69 @@
 void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtSettings );
 
 /*******************************************************************
- arg?  long_options     env_options              args
---------------------------------------------------------------------
-1      singleclient     IPERF_SINGLECLIENT       no_argument
-2*                                               <empty>
-3*                                               <empty>
-4*                                               <empty>
-5*                                               <empty>
-6*                                               <empty>
-7*                                               <empty>
-8*                                               <empty>
-9*                                               <empty>
-0*                                               <empty>
-a*                                               <empty>
-b:     bandwidth        IPERF_BANDWIDTH          required_argument
-c:     client           IPERF_CLIENT             required_argument
-d      dualtest         IPERF_DUALTEST           no_argument
-e*                                               <empty>
-f:     format           IPERF_FORMAT             required_argument
-g*                                               <empty>
-h      help                                      no_argument
-i:     interval         IPERF_INTERVAL           required_argument
-j*                                               <empty>
-k:     losspacketslog   IPERF_LOSS_PACKET_LOG    required_argument
-l:     len              IPERF_LEN                required_argument
-m      print_mss        IPERF_PRINT_MSS          no_argument
-n:     num              IPERF_NUM                required_argument
-o:     output                                    required_argument
-p:     port             IPERF_PORT               required_argument
-r      tradeoff         IPERF_TRADEOFF           no_argument
-s      server           IPERF_SERVER             no_argument
-t:     time             IPERF_TIME               required_argument
-u      udp              IPERF_UDP                no_argument
-v      version                                   no_argument
-w:     window           TCP_WINDOW_SIZE          required_argument
-x:     reportexclude    IPERF_REPORTEXCLUDE      required_argument
-y:     reportstyle      IPERF_REPORTSTYLE        required_argument
-z*                                               <empty>
-A*                                               <empty>
-B:     bind             IPERF_BIND               required_argument
-C      compatibility    IPERF_COMPAT             no_argument
-D      daemon           IPERF_DAEMON             no_argument
-E      poisson          IPERF_POISSON            no_argument
-F:     file_input       IPERF_FILE_INPUT         required_argument
-G*                                               <empty>
-H*                                               <empty>
-I      stdin_input      IPERF_STDIN_INPUT        no_argument
-J*                                               <empty>
-K*                                               <empty>
-L:     listenport       IPERF_LISTENPORT         required_argument
-M:     mss              IPERF_MSS                required_argument
-N      nodelay          IPERF_NODELAY            no_argument
-O:     interface        IPERF_INTERFACE          required_argument
-P:     parallel         IPERF_PARALLEL           required_argument
-Q:     priority         IPERF_PRIORITY           required_argument
-R      remove                                    no_argument
-S:     tos              IPERF_TOS                required_argument
-T:     ttl              IPERF_TTL                required_argument
-U      single_udp       IPERF_SINGLE_UDP         no_argument
-V      ipv6_domain      IPERF_IPV6_DOMAIN        no_argument
-W      suggest_win_size IPERF_SUGGEST_WIN_SIZE   no_argument
-X:     burstrate        IPERF_BURSTRATE          required_argument
-Y*                                               <empty>
-Z:     linux-congestion IPERF_CONGESTION_CONTROL required_argument
+ arg?  args                 (long_sample)    (env_sample)
+--------------------------  --------------------------------------
+1      no_argument          singleclient     IPERF_SINGLECLIENT
+2*     <empty>
+3*     <empty>
+4*     <empty>
+5*     <empty>
+6*     <empty>
+7*     <empty>
+8*     <empty>
+9*     <empty>
+0*     <empty>
+a*     <empty>
+b:     required_argument    bandwidth        IPERF_BANDWIDTH
+c:     required_argument    client           IPERF_CLIENT
+d      no_argument          dualtest         IPERF_DUALTEST
+e*     <empty>
+f:     required_argument    format           IPERF_FORMAT
+g*     <empty>
+h      no_argument          help
+i:     required_argument    interval         IPERF_INTERVAL
+j*     <empty>
+k:     required_argument    losspacketslog   IPERF_LOSS_PACKET_LOG
+l:     required_argument    len              IPERF_LEN
+m      no_argument          print_mss        IPERF_PRINT_MSS
+n:     required_argument    num              IPERF_NUM
+o:     required_argument    output
+p:     required_argument    port             IPERF_PORT
+r      no_argument          tradeoff         IPERF_TRADEOFF
+s      no_argument          server           IPERF_SERVER
+t:     required_argument    time             IPERF_TIME
+u      no_argument          udp              IPERF_UDP
+v      no_argument          version
+w:     required_argument    window           TCP_WINDOW_SIZE
+x:     required_argument    reportexclude    IPERF_REPORTEXCLUDE
+y:     required_argument    reportstyle      IPERF_REPORTSTYLE
+z*     <empty>
+A*     <empty>
+B:     required_argument    bind             IPERF_BIND
+C      no_argument          compatibility    IPERF_COMPAT
+D      no_argument          daemon           IPERF_DAEMON
+E      no_argument          poisson          IPERF_POISSON
+F:     required_argument    file_input       IPERF_FILE_INPUT
+G*     <empty>
+H*     <empty>
+I      no_argument          stdin_input      IPERF_STDIN_INPUT
+J*     <empty>
+K*     <empty>
+L:     required_argument    listenport       IPERF_LISTENPORT
+M:     required_argument    mss              IPERF_MSS
+N      no_argument          nodelay          IPERF_NODELAY
+O:     required_argument    interface        IPERF_INTERFACE
+P:     required_argument    parallel         IPERF_PARALLEL
+Q:     required_argument    priority         IPERF_PRIORITY
+R      no_argument          remove
+S:     required_argument    tos              IPERF_TOS
+T:     required_argument    ttl              IPERF_TTL
+U      no_argument          single_udp       IPERF_SINGLE_UDP
+V      no_argument          ipv6_domain      IPERF_IPV6_DOMAIN
+W      no_argument          suggest_win_size IPERF_SUGGEST_WIN_SIZE
+X:     required_argument    burstrate        IPERF_BURSTRATE
+Y*     <empty>
+Z:     required_argument    linux-congestion IPERF_CONGESTION_CONTROL
 *******************************************************************/
 
 const char short_options[] =
