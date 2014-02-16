@@ -18,6 +18,8 @@
 #include "Reporter.h"
 #include "Locale.h"
 
+#include "queue.h"
+
 /* -------------------------------------------------------------------
  * Stores connected socket and socket info.
  * ------------------------------------------------------------------- */
@@ -122,12 +124,10 @@ void Server::Run( void ) {
 void Server::write_UDP_AckFIN( ) {
 
     int rc, wc;
-#ifndef WIN32 //hmm cannot complie this blob.
     struct out_of_order_packet *oop, *otmp;
     struct lost_packet_interval *lpi, *ltmp;
     struct sockaddr_in local_addr, client_addr;
     int bw;
-#endif
     int lost_sock = 0, lost_port = 0, buflen=1024, datagrams = 0;
     socklen_t addr_len = sizeof(struct sockaddr_in);
     void *buf = NULL;
@@ -136,7 +136,6 @@ void Server::write_UDP_AckFIN( ) {
 
     struct timeval timeout;
 
-#ifndef WIN32 //hmm cannot complie this blob.
     /* Report the list of lost packets, minus out of order packets */
     LIST_FOREACH_SAFE(lpi, &mSettings->reporthdr->report.lost_packets, list, ltmp)
     {
@@ -191,8 +190,8 @@ void Server::write_UDP_AckFIN( ) {
         LIST_REMOVE(oop, list);
         free(oop);
     }
-#endif // WIN32
-    int count = 0;
+
+	int count = 0;
     while ( count < 10 ) {
         count++;
 
@@ -254,11 +253,6 @@ void Server::write_UDP_AckFIN( ) {
     fprintf( stderr, warn_ack_failed, mSettings->mSock, count );
     goto out;
 
-#ifdef WIN32 //hmm cannot complie this blob.
-out_noerr:
-out:
-    return;
-#else
 out_noerr:
     if (lost_port == 0)
         goto out;
@@ -328,7 +322,6 @@ out:
     }
     if (buf)
         free(buf);
-#endif // WIN32 //hmm cannot complie this blob.
 
 }
  // end write_UDP_AckFIN
