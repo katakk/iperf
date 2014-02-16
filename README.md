@@ -1,4 +1,4 @@
-##iperf 2.0.5 my local copy
+#iperf 2.0.5 なつきちゃんセーフティモード
 
 速度測定用のツール。`iperf 2.0.5` のローカルコピー   
 
@@ -53,5 +53,5 @@ http://sourceforge.net/p/iperf/patches/
 * `23`    Android build scripts                                      `2012-06-08`  バイナリは一緒に入れといた  
  
 
-#なつきちゃんセーフティモード
+
 
