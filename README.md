@@ -1,19 +1,19 @@
 ##iperf 2.0.5 那月ちゃんセーフティモード
 
 速度測定用のツール。`iperf 2.0.5` のローカルコピー   
+コンパイルは `$ make  ` インストールは ` $ cp ./src/iperf  /usr/local/bin/iperf ` きゅん    
 
 ####simplizeした不要ファイル削除
 
 オリジナル欲しい人は`remotes/origin/original` きゅん   
-コンパイルは `$ make  ` インストールは ` $ cp ./src/iperf  /usr/local/bin/iperf ` きゅん    
 
 ####ライセンス問題
 
-getoptがGPL感染しておりましたきゅん  
-FreeGetOpt http://freegetopt.sourceforge.net に変えましたきゅん  BSDL  
+* getoptがGPL感染しておりましたきゅん  
+** FreeGetOpt http://freegetopt.sourceforge.net に変えましたきゅん  BSDL  
 
-ライセンスが曖昧
-kernellist.h -> sys/queue.h に変更したきゅん BSDL  
+* ライセンスが曖昧
+** kernellist.h -> sys/queue.h に変更したきゅん BSDL  
 
 ####VC++2005でビルド通したきゅん
 
