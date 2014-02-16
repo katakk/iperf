@@ -360,9 +360,6 @@ typedef struct server_hdr {
     // free associated memory
     void Settings_Destroy( thread_Settings *mSettings );
 
-    // parse settings from user's environment variables
-    void Settings_ParseEnvironment( thread_Settings *mSettings );
-
     // parse settings from app's command line
     void Settings_ParseCommandLine( int argc, char **argv, thread_Settings *mSettings );
 

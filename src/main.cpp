@@ -104,8 +104,6 @@ int main( int argc, char **argv ) {
 
     // Initialize settings to defaults
     Settings_Initialize( ext_gSettings );
-    // read settings from environment variables
-    Settings_ParseEnvironment( ext_gSettings );
     // read settings from command-line parameters
     Settings_ParseCommandLine( argc, argv, ext_gSettings );
 
