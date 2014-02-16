@@ -122,7 +122,7 @@ int main( int argc, char **argv ) {
     // Set SIGTERM and SIGINT to call our user interrupt function
     my_signal( SIGTERM, Sig_Interupt );
     my_signal( SIGINT,  Sig_Interupt );
-#ifndef WIN32
+#ifndef WIN32 // SIGALRM=14, _NSIG=3...
     my_signal( SIGALRM,  Sig_Interupt );
 
     // Ignore broken pipes
