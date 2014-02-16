@@ -137,7 +137,8 @@ void Client::RunTCP( void ) {
     reportstruct->packetID = 0;
 
     lastPacketTime.setnow();
-#ifndef WIN32
+#ifdef WIN32
+#else
     if ( mMode_Time ) {
 		memset (&it, 0, sizeof (it));
 		it.it_value.tv_sec = (int) ((double)mSettings->mAmount / 100.0);
