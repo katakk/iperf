@@ -7,6 +7,13 @@
 オリジナル欲しい人は`remotes/origin/original` きゅん   
 コンパイルは `$ make  ` インストールは ` $ cp ./src/iperf /bin/  ` きゅん    
 
+####ライセンス問題
+
+getoptがGPL感染しておりましたきゅん  
+FreeGetOpt http://freegetopt.sourceforge.net に変えましたきゅん  
+
+kernellist.h
+
 ####VC++2005でビルド通したきゅん
 
 * プロジェ`iperf.vcproj`, `iperf.sln` バイナリ `iperf.exe` 
