@@ -5,7 +5,7 @@
 ####simplizeした不要ファイル削除
 
 オリジナル欲しい人は`remotes/origin/original` きゅん   
-コンパイルは `$ make  ` インストールは ` $ cp ./src/iperf ``which`` ` きゅん    
+コンパイルは `$ make  ` インストールは ` $ cp ./src/iperf  /usr/local/bin/iperf ` きゅん    
 
 ####ライセンス問題
 
