@@ -9,6 +9,8 @@
 
 ####VC++2005でビルド通したきゅん
 
+* プロジェ`iperf.vcproj`, `iperf.sln` バイナリ `iperf.exe` 
+
 ####使い方
 
 * サーバ(送信側) `iperf -c 10.0.0.1 -w256k -i1 -t60` 
