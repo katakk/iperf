@@ -79,7 +79,7 @@ static long measure_nanosleep_threshold()
 	} else {
 		diff = 500 * ( (diff+250) / 500 ) - 50;
 	}
-	printf("thr %ld\n", diff);
+	//printf("thr %ld\n", diff);
 	return diff;
 }
 static long nanosleep_threshold = measure_nanosleep_threshold();
