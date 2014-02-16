@@ -228,9 +228,6 @@
 				RelativePath=".\src\headers.h">
 			</File>
 			<File
-				RelativePath=".\src\headers_slim.h">
-			</File>
-			<File
 				RelativePath=".\src\inet_aton.h">
 			</File>
 			<File
