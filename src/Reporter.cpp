@@ -1,4 +1,7 @@
+#define HEADERS()
+
 #include "headers.h"
+
 #include "Settings.hpp"
 #include "util.h"
 #include "Reporter.h"

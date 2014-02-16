@@ -2,7 +2,10 @@
  * input and output numbers, converting with kilo, mega, giga
  * ------------------------------------------------------------------- */
 
+#define HEADERS()
+
 #include "headers.h"
+
 #include "util.h"
 
 const long kKilo_to_Unit = 1024;

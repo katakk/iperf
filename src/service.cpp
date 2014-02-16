@@ -34,8 +34,11 @@
  * $Id: service.c,v 1.1.1.1 2004/05/18 01:50:44 kgibbs Exp $
  */
 
-#ifdef WIN32
+#define HEADERS()
 
+#include "headers.h"
+
+#ifdef WIN32
 #include "Settings.hpp"
 #include "PerfSocket.hpp"
 #include "service.h"

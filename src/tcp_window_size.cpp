@@ -2,6 +2,8 @@
  * set/getsockopt
  * ------------------------------------------------------------------- */
 
+#define HEADERS()
+
 #include "headers.h"
 
 #include "util.h"

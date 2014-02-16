@@ -1,12 +1,5 @@
 /*---------------------------------------------------------------
- * Author: Mark Gates
- *
  * snprintf.c
- *
- * This is from
- * W. Richard Stevens, 'UNIX Network Programming', Vol 1, 2nd Edition,
- *   Prentice Hall, 1998.
- *
  *
  * Throughout the book I use snprintf() because it's safer than sprintf().
  * But as of the time of this writing, not all systems provide this
@@ -14,11 +7,11 @@
  * that do not provide a real snprintf().
  * The function below just acts like sprintf(); it is not safe, but it
  * tries to detect overflow.
- * ________________________________________________________________ */
+ * ------------------------------------------------------------------- */
 
-#ifdef HAVE_CONFIG_H
-    #include "config.h"
-#endif
+#define HEADERS()
+
+#include "headers.h"
 
 #ifndef HAVE_SNPRINTF
 

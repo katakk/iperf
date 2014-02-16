@@ -2,7 +2,10 @@
  * set/getsockopt and read/write wrappers
  * ------------------------------------------------------------------- */
 
+#define HEADERS()
+
 #include "headers.h"
+
 #include "util.h"
 
 /* -------------------------------------------------------------------
