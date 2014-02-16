@@ -5,7 +5,10 @@
  * in C and does not need a special launching function.
  * ------------------------------------------------------------------- */
 
+#define HEADERS()
+
 #include "headers.h"
+
 #include "Thread.h"
 #include "Settings.hpp"
 #include "Client.hpp"

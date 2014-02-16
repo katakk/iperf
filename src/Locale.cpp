@@ -2,15 +2,9 @@
  * Strings and other stuff that is locale specific.
  * ------------------------------------------------------------------- */
 
-#include "version.h"
+#define HEADERS()
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifdef WIN32
-#include "config.h"
-#endif
+#include "headers.h"
 
 /* -------------------------------------------------------------------
  * usage

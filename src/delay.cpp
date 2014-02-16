@@ -2,6 +2,10 @@
  * accurate microsecond delay
  * ------------------------------------------------------------------- */
 
+#define HEADERS()
+
+#include "headers.h"
+
 #include "Timestamp.hpp"
 #include "delay.hpp"
 

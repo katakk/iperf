@@ -3,6 +3,9 @@
  * Since I send sec/usec in UDP packets, this made the most sense.
  * ------------------------------------------------------------------- */
 
+#define HEADERS()
+#include "headers.h"
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

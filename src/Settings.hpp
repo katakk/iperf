@@ -5,7 +5,10 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#define HEADERS()
+
 #include "headers.h"
+
 #include "Thread.h"
 
 /* -------------------------------------------------------------------

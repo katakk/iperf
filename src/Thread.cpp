@@ -8,6 +8,8 @@
  * start a thread simply pass one such structure into thread_start.
  * ------------------------------------------------------------------- */
 
+#define HEADERS()
+
 #include "headers.h"
 
 #include "Thread.h"

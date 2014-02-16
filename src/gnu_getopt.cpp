@@ -37,8 +37,6 @@
  * $Id: gnu_getopt.c,v 1.1.1.1 2004/05/18 01:50:44 kgibbs Exp $
  */
 
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef _MSC_VER /* Visual C++ doesn't have unistd.h */

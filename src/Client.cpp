@@ -3,7 +3,10 @@
  * sending and receiving data, then closes the socket.
  * ------------------------------------------------------------------- */
 
+#define HEADERS()
+
 #include "headers.h"
+
 #include "Client.hpp"
 #include "Thread.h"
 #include "SocketAddr.h"

@@ -1,17 +1,6 @@
 /*---------------------------------------------------------------
- * Settings.cpp
- * by Mark Gates <mgates@nlanr.net>
- * & Ajay Tirumala <tirumala@ncsa.uiuc.edu>
- * -------------------------------------------------------------------
+
  * Stores and parses the initial values for all the global variables.
- * -------------------------------------------------------------------
- * headers
- * uses
- *   <stdlib.h>
- *   <stdio.h>
- *   <string.h>
- *
- *   <unistd.h>
  * ------------------------------------------------------------------- */
 
 #define HEADERS()

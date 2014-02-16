@@ -8,6 +8,8 @@
 #ifndef HEADERS_H
 #define HEADERS_H
 
+#include "version.h"
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

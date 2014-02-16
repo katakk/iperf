@@ -14,6 +14,9 @@
  * -------------------------------------------------------------------
  */
 
+#define HEADERS()
+#include "headers.h"
+
 #include "Extractor.h"
 
 /**

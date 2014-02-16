@@ -2,7 +2,10 @@
  * error handlers
  * ------------------------------------------------------------------- */
 
+#define HEADERS()
+
 #include "headers.h"
+
 #include "util.h"
 
 #ifdef WIN32
