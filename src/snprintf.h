@@ -1,19 +1,10 @@
+/*---------------------------------------------------------------
+ * snprintf.h
+ * to use this prototype, make sure HAVE_SNPRINTF is not defined
+ * ------------------------------------------------------------------- */
+
 #ifndef SNPRINTF_H
 #define SNPRINTF_H
-
-/* ===================================================================
- * snprintf.h
- *
- * This is from
- * W. Richard Stevens, 'UNIX Network Programming', Vol 1, 2nd Edition,
- *   Prentice Hall, 1998.
- *
- * Mark Gates <mgates@nlanr.net>
- * July 1998
- *
- * to use this prototype, make sure HAVE_SNPRINTF is not defined
- *
- * =================================================================== */
 
 /*
  * Throughout the book I use snprintf() because it's safer than sprintf().
