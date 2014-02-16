@@ -40,7 +40,6 @@ void reporter_printstats( Transfer_Info *stats )
             printf("%s", report_bw_jitter_loss_header);
             header_printed = 1;
         }
-        // UDP Reporting (Andrea Detti patched to compute delay)
         if (stats->startTime!=0) {
             average_delay=1.0*stats->delay/(stats->cntDatagrams-stats->cntError);
         } else {

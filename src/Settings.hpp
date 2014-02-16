@@ -53,7 +53,7 @@ typedef enum TestMode {
  */
 typedef struct thread_Settings {
     // Pointers
-    char*	lossPacketsFileName;	// -k
+    char*   lossPacketsFileName;    // -k
     char*  mFileName;               // -F
     char*  mHost;                   // -c
     char*  mLocalhost;              // -B
@@ -95,7 +95,7 @@ typedef struct thread_Settings {
         bool   mNoServerReport;         // -x
         bool   mNoMultReport;           // -x m
         bool   mSinlgeClient;           // -1
-        bool   mPoisson;                // Andrea Detti Patch Poisson
+        bool   mPoisson;                // -E
     */
     int flags;
     // enums (which should be special int's)
@@ -161,7 +161,7 @@ typedef struct thread_Settings {
 #define FLAG_SINGLECLIENT   0x00100000
 #define FLAG_SINGLEUDP      0x00200000
 #define FLAG_CONGESTION     0x00400000
-#define FLAG_POISSON        0x00800000		// Andrea Detti patch for Poisson
+#define FLAG_POISSON        0x00800000
 #define FLAG_DUMMYDUALHDR   0x01000000
 #define FLAG_INTERFACE      0x02000000
 
@@ -190,7 +190,7 @@ typedef struct thread_Settings {
 // end Active Low
 #define isSingleClient(settings)   ((settings->flags & FLAG_SINGLECLIENT) != 0)
 #define isSingleUDP(settings)      ((settings->flags & FLAG_SINGLEUDP) != 0)
-#define isPoisson(settings)      ((settings->flags & FLAG_POISSON) != 0)	// Andrea Detti patch for Poisson
+#define isPoisson(settings)      ((settings->flags & FLAG_POISSON) != 0)
 #define isCongestionControl(settings) ((settings->flags & FLAG_CONGESTION) != 0)
 #define isDummyDualHdr(settings)   ((settings->flags & FLAG_DUMMYDUALHDR) != 0)
 
@@ -218,7 +218,7 @@ typedef struct thread_Settings {
 #define setSingleUDP(settings)     settings->flags |= FLAG_SINGLEUDP
 #define setCustInterface(settings) settings->flags |= FLAG_INTERFACE
 #define setCongestionControl(settings) settings->flags |= FLAG_CONGESTION
-#define setPoisson(settings)       settings->flags |= FLAG_POISSON	// Andrea Detti patch for Poisson
+#define setPoisson(settings)       settings->flags |= FLAG_POISSON
 #define setDummyDualHdr(settings)  settings->flags |= FLAG_DUMMYDUALHDR
 
 #define unsetBuflenSet(settings)   settings->flags &= ~FLAG_BUFLENSET
@@ -243,7 +243,7 @@ typedef struct thread_Settings {
 #define unsetNoMultReport(settings)   settings->flags &= ~FLAG_NOMULTREPORT
 #define unsetSingleClient(settings)   settings->flags &= ~FLAG_SINGLECLIENT
 #define unsetSingleUDP(settings)      settings->flags &= ~FLAG_SINGLEUDP
-#define unsetPoisson(settings)        settings->flags &= ~FLAG_POISSON	// Andrea Detti patch for Poisson
+#define unsetPoisson(settings)        settings->flags &= ~FLAG_POISSON
 #define unsetCustInterface(settings)  settings->flags &= ~FLAG_INTERFACE
 #define unsetCongestionControl(settings) settings->flags &= ~FLAG_CONGESTION
 #define unsetDummyDualHdr(settings)  settings->flags &= ~FLAG_DUMMYDUALHDR

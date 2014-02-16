@@ -172,8 +172,7 @@ ReportHeader* InitReport( thread_Settings *agent ) {
             reporthdr->multireport = agent->multihdr;
             data = &reporthdr->report;
 #ifndef WIN32
-			if (agent->mThreadMode != kMode_Client)
-            {
+            if (agent->mThreadMode != kMode_Client) {
                 INIT_LIST_HEAD(&data->lost_packets);
                 INIT_LIST_HEAD(&data->out_of_order_packets);
             }
@@ -538,7 +537,7 @@ again:
                 if (ReportRoot)
                     goto again;
             }
-	        Condition_Signal( &ReportDoneCond );
+            Condition_Signal( &ReportDoneCond );
             delay_loop(10000); //usleep ?
         } else {
             //Condition_Unlock ( ReportCond );
@@ -656,8 +655,8 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
                     deltaTransit = -deltaTransit;
                 }
                 stats->jitter += (deltaTransit - stats->jitter) / (16.0);
-				stats->delay+=transit*1000; // Andrea Detti
-				stats->delay_total+=transit*1000; // Andrea Detti
+                stats->delay += transit*1000;
+                stats->delay_total += transit*1000;
             }
             data->lastTransit = transit;
 

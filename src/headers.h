@@ -47,9 +47,9 @@
 #include <math.h>
 
 #ifdef WIN32
-	struct itimerval { struct timeval it_interval; struct timeval it_value; };
-	#define IFNAMSIZ 32
-	#define ENOBUFS 55
+    struct itimerval { struct timeval it_interval; struct timeval it_value; };
+    #define IFNAMSIZ 32
+    #define ENOBUFS 55
 
 /* define EINTR, just to help compile; it isn't useful */
     #ifndef EINTR

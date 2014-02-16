@@ -93,19 +93,19 @@ void Client::RunTCP( void ) {
 
     lastPacketTime.setnow();
 #ifdef WIN32
-	int mmtimer;
-	mmtimer = timeSetEvent(mSettings->mAmount * 10, 50, (LPTIMECALLBACK)Sig_Interupt, 0, TIME_ONESHOT);
+    int mmtimer;
+    mmtimer = timeSetEvent(mSettings->mAmount * 10, 50, (LPTIMECALLBACK)Sig_Interupt, 0, TIME_ONESHOT);
 #else
     if ( mMode_Time ) {
-		memset (&it, 0, sizeof (it));
-		it.it_value.tv_sec = (int) ((double)mSettings->mAmount / 100.0);
-		it.it_value.tv_usec = (int) 10000 * ((double)mSettings->mAmount -
-		    (double)it.it_value.tv_sec * 100.0);
-		err = setitimer( ITIMER_REAL, &it, NULL );
-		if ( err != 0 ) {
-		    perror("setitimer");
-		    exit(1);
-		}
+        memset (&it, 0, sizeof (it));
+        it.it_value.tv_sec = (int) ((double)mSettings->mAmount / 100.0);
+        it.it_value.tv_usec = (int) 10000 * ((double)mSettings->mAmount -
+            (double)it.it_value.tv_sec * 100.0);
+        err = setitimer( ITIMER_REAL, &it, NULL );
+        if ( err != 0 ) {
+            perror("setitimer");
+            exit(1);
+        }
     }
 #endif
     do {
@@ -143,7 +143,7 @@ void Client::RunTCP( void ) {
     } while ( ! (sInterupted  ||
                    (!mMode_Time  &&  0 >= mSettings->mAmount)) && canRead );
 #ifdef WIN32
-	timeKillEvent (mmtimer);
+    timeKillEvent (mmtimer);
 #endif
 
     // stop timing
@@ -166,8 +166,9 @@ void Client::RunTCP( void ) {
  * Does not close the socket.
  * ------------------------------------------------------------------- */
 
-void Client::Run( void ) {
-	int wc;
+void Client::Run( void )
+{
+    int wc;
     struct UDP_datagram* mBuf_UDP = (struct UDP_datagram*) mBuf;
     signed long currLen = 0;
     unsigned int burstcount = 0;
@@ -235,7 +236,7 @@ void Client::Run( void ) {
 
         // Test case: drop 17 packets and send 2 out-of-order:
         // sequence 51, 52, 70, 53, 54, 71, 72
-		/*
+        /*
         switch( reportstruct->packetID ) {
             case 53: reportstruct->packetID = 70; break;
             case 71: reportstruct->packetID = 53; break;
@@ -255,8 +256,10 @@ void Client::Run( void ) {
             // make an adjustment for how long the last loop iteration took
             // TODO this doesn't work well in certain cases, like 2 parallel streams
             adjust = delay_target + lastPacketTime.subUsec( reportstruct->packetTime );
-            if (isPoisson(mSettings)) adjust = delay + lastPacketTime.subUsec( reportstruct->packetTime ); // Andrea Detti patch Poisson
-			lastPacketTime.set( reportstruct->packetTime.tv_sec,
+            if (isPoisson(mSettings)) {
+                adjust = delay + lastPacketTime.subUsec( reportstruct->packetTime );
+            }
+            lastPacketTime.set( reportstruct->packetTime.tv_sec,
                                 reportstruct->packetTime.tv_usec );
 
             if ( adjust > 0  ||  delay > 0 ) {
@@ -283,9 +286,9 @@ void Client::Run( void ) {
         reportstruct->packetLen = currLen;
         ReportPacket( mSettings->reporthdr, reportstruct );
 
-		if (isPoisson(mSettings)) {
-			delay = (int)(-1.0*(double)delay_target*log((double)1.0-1.0*rand()/((double)RAND_MAX))) + adjust;
-		}
+        if (isPoisson(mSettings)) {
+            delay = (int)(-1.0*(double)delay_target*log((double)1.0-1.0*rand()/((double)RAND_MAX))) + adjust;
+        }
 
         if (mSettings->mBurstRate) {
             if ((++burstcount >= mSettings->mBurstRate) && (delay > 0))
@@ -327,7 +330,7 @@ void Client::Run( void ) {
 
         if ( isMulticast( mSettings ) ) {
             wc = write( mSettings->mSock, mBuf, mSettings->mBufLen );
-			WARN_errno( wc < 0, "write Run" );
+            WARN_errno( wc < 0, "write Run" );
         } else {
             write_UDP_FIN( );
         }
@@ -488,7 +491,7 @@ void Client::write_UDP_FIN( ) {
 
         // write data
         wc = write( mSettings->mSock, mBuf, mSettings->mBufLen );
-		WARN_errno( wc < 0, "write_UDP_FIN" );
+        WARN_errno( wc < 0, "write_UDP_FIN" );
 
         // wait until the socket is readable, or our timeout expires
         FD_ZERO( &readSet );
@@ -549,8 +552,8 @@ out_noerr:
             /* the server will send properly formated strings */
             if (log_handler > 0) {
                 wc = write(log_handler, buf, br);
-				WARN_errno( wc < 0, "write_UDP_FIN out_noerr" );
-			}
+                WARN_errno( wc < 0, "write_UDP_FIN out_noerr" );
+            }
         }
     }
     if (log_handler > 0)

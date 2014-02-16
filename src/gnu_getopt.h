@@ -70,9 +70,9 @@ extern int gnu_optopt;
    zero.
 
    The field `has_arg' is:
-   no_argument		(or 0) if the option does not take an argument,
-   required_argument	(or 1) if the option requires an argument,
-   optional_argument 	(or 2) if the option takes an optional argument.
+   no_argument          (or 0) if the option does not take an argument,
+   required_argument    (or 1) if the option requires an argument,
+   optional_argument    (or 2) if the option takes an optional argument.
 
    If the field `flag' is not NULL, it points to a variable that is set
    to the value given in the field `val' when the option is found, but
@@ -97,9 +97,9 @@ struct option {
 
 /* Names for the values of the `has_arg' field of `struct option'.  */
 
-#define	no_argument		    0
-#define required_argument	1
-#define optional_argument	2
+#define no_argument         0
+#define required_argument   1
+#define optional_argument   2
 
 int gnu_getopt( int argc,
                 char *const *argv,
