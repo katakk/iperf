@@ -140,9 +140,9 @@ void Client::RunTCP( void ) {
 #ifndef WIN32
     if ( mMode_Time ) {
 		memset (&it, 0, sizeof (it));
-		it.it_value.tv_sec = (int) (mSettings->mAmount / 100.0);
-		it.it_value.tv_usec = (int) 10000 * (mSettings->mAmount -
-		    it.it_value.tv_sec * 100.0);
+		it.it_value.tv_sec = (int) ((double)mSettings->mAmount / 100.0);
+		it.it_value.tv_usec = (int) 10000 * ((double)mSettings->mAmount -
+		    (double)it.it_value.tv_sec * 100.0);
 		err = setitimer( ITIMER_REAL, &it, NULL );
 		if ( err != 0 ) {
 		    perror("setitimer");
@@ -208,7 +208,7 @@ void Client::RunTCP( void ) {
 void Client::Run( void ) {
 	int wc;
     struct UDP_datagram* mBuf_UDP = (struct UDP_datagram*) mBuf; 
-    unsigned long currLen = 0; 
+    signed long currLen = 0; 
     unsigned int burstcount = 0;
 
     int delay_target = 0; 
