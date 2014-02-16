@@ -1,49 +1,4 @@
-/*--------------------------------------------------------------- 
- * Copyright (c) 1999,2000,2001,2002,2003                              
- * The Board of Trustees of the University of Illinois            
- * All Rights Reserved.                                           
- *--------------------------------------------------------------- 
- * Permission is hereby granted, free of charge, to any person    
- * obtaining a copy of this software (Iperf) and associated       
- * documentation files (the "Software"), to deal in the Software  
- * without restriction, including without limitation the          
- * rights to use, copy, modify, merge, publish, distribute,        
- * sublicense, and/or sell copies of the Software, and to permit     
- * persons to whom the Software is furnished to do
- * so, subject to the following conditions: 
- *
- *     
- * Redistributions of source code must retain the above 
- * copyright notice, this list of conditions and 
- * the following disclaimers. 
- *
- *     
- * Redistributions in binary form must reproduce the above 
- * copyright notice, this list of conditions and the following 
- * disclaimers in the documentation and/or other materials 
- * provided with the distribution. 
- * 
- *     
- * Neither the names of the University of Illinois, NCSA, 
- * nor the names of its contributors may be used to endorse 
- * or promote products derived from this Software without
- * specific prior written permission. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- * NONINFRINGEMENT. IN NO EVENT SHALL THE CONTIBUTORS OR COPYRIGHT 
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
- * ________________________________________________________________
- * National Laboratory for Applied Network Research 
- * National Center for Supercomputing Applications 
- * University of Illinois at Urbana-Champaign 
- * http://www.ncsa.uiuc.edu
- * ________________________________________________________________ 
- *
+/*---------------------------------------------------------------
  * Server.cpp
  * by Mark Gates <mgates@nlanr.net>
  *     Ajay Tirumala (tirumala@ncsa.uiuc.edu>.
@@ -91,15 +46,15 @@ Server::~Server() {
 void Server::Sig_Int( int inSigno ) {
 }
 
-/* ------------------------------------------------------------------- 
+/* -------------------------------------------------------------------
  * Receive data from the (connected) socket.
- * Sends termination flag several times at the end. 
- * Does not close the socket. 
- * ------------------------------------------------------------------- */ 
+ * Sends termination flag several times at the end.
+ * Does not close the socket.
+ * ------------------------------------------------------------------- */
 void Server::Run( void ) {
-    long currLen; 
+    long currLen;
     max_size_t totLen = 0;
-    struct UDP_datagram* mBuf_UDP  = (struct UDP_datagram*) mBuf; 
+    struct UDP_datagram* mBuf_UDP  = (struct UDP_datagram*) mBuf;
 
     ReportStruct *reportstruct = NULL;
 
@@ -108,31 +63,31 @@ void Server::Run( void ) {
         reportstruct->packetID = 0;
         mSettings->reporthdr = InitReport( mSettings );
         do {
-            // perform read 
-            currLen = recv( mSettings->mSock, mBuf, mSettings->mBufLen, 0 ); 
+            // perform read
+            currLen = recv( mSettings->mSock, mBuf, mSettings->mBufLen, 0 );
 
             if ( isUDP( mSettings ) ) {
-                // read the datagram ID and sentTime out of the buffer 
-                reportstruct->packetID = ntohl( mBuf_UDP->id ); 
+                // read the datagram ID and sentTime out of the buffer
+                reportstruct->packetID = ntohl( mBuf_UDP->id );
                 reportstruct->sentTime.tv_sec = ntohl( mBuf_UDP->tv_sec  );
-                reportstruct->sentTime.tv_usec = ntohl( mBuf_UDP->tv_usec ); 
+                reportstruct->sentTime.tv_usec = ntohl( mBuf_UDP->tv_usec );
                 reportstruct->packetLen = currLen;
                 gettimeofday( &(reportstruct->packetTime), NULL );
             } else {
                 totLen += currLen;
             }
 
-            // terminate when datagram begins with negative index 
-            // the datagram ID should be correct, just negated 
+            // terminate when datagram begins with negative index
+            // the datagram ID should be correct, just negated
             if ( reportstruct->packetID < 0 ) {
                 reportstruct->packetID = -reportstruct->packetID;
-                currLen = -1; 
+                currLen = -1;
             }
             if ( isUDP (mSettings))
                 ReportPacket( mSettings->reporthdr, reportstruct );
-        } while ( currLen > 0 ); 
+        } while ( currLen > 0 );
 
-        // stop timing 
+        // stop timing
         gettimeofday( &(reportstruct->packetTime), NULL );
         if ( !isUDP (mSettings)) {
             reportstruct->packetLen = totLen;
@@ -140,32 +95,32 @@ void Server::Run( void ) {
         }
         CloseReport( mSettings->reporthdr, reportstruct );
 
-        // send a acknowledgement back only if we're NOT receiving multicast 
+        // send a acknowledgement back only if we're NOT receiving multicast
         if ( isUDP( mSettings ) && !isMulticast( mSettings ) ) {
-            // send back an acknowledgement of the terminating datagram 
-            write_UDP_AckFIN( ); 
+            // send back an acknowledgement of the terminating datagram
+            write_UDP_AckFIN( );
         }
     } else {
         FAIL(1, "Out of memory! Closing server thread\n", mSettings);
     }
-    Mutex_Lock( &clients_mutex );     
-    Iperf_delete( &(mSettings->peer), &clients ); 
+    Mutex_Lock( &clients_mutex );
+    Iperf_delete( &(mSettings->peer), &clients );
     Mutex_Unlock( &clients_mutex );
 
     DELETE_PTR( reportstruct );
     EndReport( mSettings->reporthdr );
-} 
-// end Recv 
+}
+// end Recv
 
-/* ------------------------------------------------------------------- 
- * Send an AckFIN (a datagram acknowledging a FIN) on the socket, 
- * then select on the socket for some time. If additional datagrams 
- * come in, probably our AckFIN was lost and they are re-transmitted 
- * termination datagrams, so re-transmit our AckFIN. 
- * ------------------------------------------------------------------- */ 
+/* -------------------------------------------------------------------
+ * Send an AckFIN (a datagram acknowledging a FIN) on the socket,
+ * then select on the socket for some time. If additional datagrams
+ * come in, probably our AckFIN was lost and they are re-transmitted
+ * termination datagrams, so re-transmit our AckFIN.
+ * ------------------------------------------------------------------- */
 void Server::write_UDP_AckFIN( ) {
 
-    int rc, wc; 
+    int rc, wc;
 #ifndef WIN32 //hmm cannot complie this blob.
     struct out_of_order_packet *oop, *otmp;
     struct lost_packet_interval *lpi, *ltmp;
@@ -175,14 +130,14 @@ void Server::write_UDP_AckFIN( ) {
     int lost_sock = 0, lost_port = 0, buflen=1024, datagrams = 0;
     socklen_t addr_len = sizeof(struct sockaddr_in);
     void *buf = NULL;
-    fd_set readSet; 
-    FD_ZERO( &readSet ); 
+    fd_set readSet;
+    FD_ZERO( &readSet );
 
-    struct timeval timeout; 
+    struct timeval timeout;
 
 #ifndef WIN32 //hmm cannot complie this blob.
     /* Report the list of lost packets, minus out of order packets */
-    list_for_each_entry_safe(lpi, ltmp, 
+    list_for_each_entry_safe(lpi, ltmp,
             &mSettings->reporthdr->report.lost_packets, list)
     {
         list_for_each_entry_safe(oop, otmp,
@@ -232,16 +187,16 @@ void Server::write_UDP_AckFIN( ) {
     }
 
     /* do not leak memory, in case out of order packets are received but no loss occured */
-    list_for_each_entry_safe(oop, otmp, 
+    list_for_each_entry_safe(oop, otmp,
             &mSettings->reporthdr->report.out_of_order_packets, list)
     {
         list_del(&oop->list);
         free(oop);
     }
 #endif // WIN32
-    int count = 0; 
+    int count = 0;
     while ( count < 10 ) {
-        count++; 
+        count++;
 
         UDP_datagram *UDP_Hdr;
         server_hdr *hdr;
@@ -254,7 +209,7 @@ void Server::write_UDP_AckFIN( ) {
 
             hdr = (server_hdr*) (UDP_Hdr+1);
             lost_port = ntohs(hdr->lost_port);
-            
+
             hdr->flags        = htonl( HEADER_VERSION1 );
             hdr->total_len1   = htonl( (long) (stats->TotalLen >> 32) );
             hdr->total_len2   = htonl( (long) (stats->TotalLen & 0xFFFFFFFF) );
@@ -265,30 +220,30 @@ void Server::write_UDP_AckFIN( ) {
             hdr->outorder_cnt = htonl( stats->cntOutofOrder );
             hdr->datagrams    = htonl( stats->cntDatagrams );
             hdr->jitter1      = htonl( (long) stats->jitter );
-            hdr->jitter2      = htonl( (long) ((stats->jitter - (long)stats->jitter) 
+            hdr->jitter2      = htonl( (long) ((stats->jitter - (long)stats->jitter)
                     * rMillion) );
-            
+
             datagrams = ntohl(hdr->datagrams);
         }
 
-        // write data 
-        wc = write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+        // write data
+        wc = write( mSettings->mSock, mBuf, mSettings->mBufLen );
 		WARN_errno( wc < 0, "write_UDP_AckFIN" );
 
-        // wait until the socket is readable, or our timeout expires 
-        FD_SET( mSettings->mSock, &readSet ); 
-        timeout.tv_sec  = 1; 
-        timeout.tv_usec = 0; 
+        // wait until the socket is readable, or our timeout expires
+        FD_SET( mSettings->mSock, &readSet );
+        timeout.tv_sec  = 1;
+        timeout.tv_usec = 0;
 
-        rc = (int) select( mSettings->mSock+1, &readSet, NULL, NULL, &timeout ); 
-        FAIL_errno( rc == SOCKET_ERROR, "select", mSettings ); 
+        rc = (int) select( mSettings->mSock+1, &readSet, NULL, NULL, &timeout );
+        FAIL_errno( rc == SOCKET_ERROR, "select", mSettings );
 
         if ( rc == 0 ) {
-            // select timed out 
-            goto out_noerr; 
+            // select timed out
+            goto out_noerr;
         } else {
-            // socket ready to read 
-            rc = read( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+            // socket ready to read
+            rc = read( mSettings->mSock, mBuf, mSettings->mBufLen );
             WARN_errno( rc < 0, "read" );
             if ( rc <= 0 ) {
                 // Connection closed or errored
@@ -310,7 +265,7 @@ out_noerr:
     if (lost_port == 0)
         goto out;
     memset(&local_addr, 0, sizeof(local_addr));
-    if (getsockname(mSettings->mSock, (struct sockaddr *) &local_addr, 
+    if (getsockname(mSettings->mSock, (struct sockaddr *) &local_addr,
                     &addr_len) < 0)
     {
         fprintf(stderr, "getsockname error %s\n", strerror(errno));
@@ -318,20 +273,20 @@ out_noerr:
     }
     memset(&client_addr, 0, sizeof(client_addr));
     addr_len = sizeof(client_addr);
-    if (getpeername(mSettings->mSock, (struct sockaddr *) &client_addr, 
+    if (getpeername(mSettings->mSock, (struct sockaddr *) &client_addr,
                     &addr_len) < 0)
     {
         fprintf(stderr, "getpeername error %s\n", strerror(errno));
         goto out;
     }
-    
+
     local_addr.sin_port = 0; /* allow binding to any local port */
     if ((lost_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
     {
         fprintf(stderr, "socket error %s\n", strerror(errno));
         goto out;
     }
-    if (bind(lost_sock, (struct sockaddr *) &local_addr, 
+    if (bind(lost_sock, (struct sockaddr *) &local_addr,
              sizeof(local_addr)) < 0)
     {
         fprintf(stderr, "bind error %s\n", strerror(errno));
@@ -342,9 +297,9 @@ out_noerr:
         fprintf(stderr, "Out of memory %s\n", strerror(errno));
         goto out;
     }
-    
+
     client_addr.sin_port = htons(lost_port);
-    if (connect(lost_sock, (struct sockaddr *) &client_addr, 
+    if (connect(lost_sock, (struct sockaddr *) &client_addr,
                 sizeof(client_addr)) < 0)
     {
         fprintf(stderr, "connect error, %s\n", strerror(errno));
@@ -352,7 +307,7 @@ out_noerr:
     }
     sprintf((char *) buf, "LOST_GAPS DATAGRAMS_TOTAL %d\n", datagrams);
     bw = write(lost_sock, (char *) buf, strlen((char *)buf));
-    list_for_each_entry_safe(lpi, ltmp, 
+    list_for_each_entry_safe(lpi, ltmp,
             &mSettings->reporthdr->report.lost_packets, list)
     {
         list_del(&lpi->list);
@@ -364,12 +319,12 @@ out_noerr:
         free(lpi);
     }
     shutdown(lost_sock, SHUT_WR);
-    
+
 out:
     if (lost_sock > 0)
         close(lost_sock);
     /* do not leak memory */
-    list_for_each_entry_safe(lpi, ltmp, 
+    list_for_each_entry_safe(lpi, ltmp,
         &mSettings->reporthdr->report.lost_packets, list)
     {
         list_del(&lpi->list);
@@ -380,5 +335,5 @@ out:
 #endif // WIN32 //hmm cannot complie this blob.
 
 }
- // end write_UDP_AckFIN 
+ // end write_UDP_AckFIN
 

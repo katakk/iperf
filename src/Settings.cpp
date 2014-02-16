@@ -1,49 +1,4 @@
-/*--------------------------------------------------------------- 
- * Copyright (c) 1999,2000,2001,2002,2003                              
- * The Board of Trustees of the University of Illinois            
- * All Rights Reserved.                                           
- *--------------------------------------------------------------- 
- * Permission is hereby granted, free of charge, to any person    
- * obtaining a copy of this software (Iperf) and associated       
- * documentation files (the "Software"), to deal in the Software  
- * without restriction, including without limitation the          
- * rights to use, copy, modify, merge, publish, distribute,        
- * sublicense, and/or sell copies of the Software, and to permit     
- * persons to whom the Software is furnished to do
- * so, subject to the following conditions: 
- *
- *     
- * Redistributions of source code must retain the above 
- * copyright notice, this list of conditions and 
- * the following disclaimers. 
- *
- *     
- * Redistributions in binary form must reproduce the above 
- * copyright notice, this list of conditions and the following 
- * disclaimers in the documentation and/or other materials 
- * provided with the distribution. 
- * 
- *     
- * Neither the names of the University of Illinois, NCSA, 
- * nor the names of its contributors may be used to endorse 
- * or promote products derived from this Software without
- * specific prior written permission. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- * NONINFRINGEMENT. IN NO EVENT SHALL THE CONTIBUTORS OR COPYRIGHT 
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
- * ________________________________________________________________
- * National Laboratory for Applied Network Research 
- * National Center for Supercomputing Applications 
- * University of Illinois at Urbana-Champaign 
- * http://www.ncsa.uiuc.edu
- * ________________________________________________________________ 
- *
+/*---------------------------------------------------------------
  * Settings.cpp
  * by Mark Gates <mgates@nlanr.net>
  * & Ajay Tirumala <tirumala@ncsa.uiuc.edu>
@@ -76,67 +31,67 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 /*******************************************************************
  arg?  long_options     env_options              args
 --------------------------------------------------------------------
-1      singleclient     IPERF_SINGLECLIENT       no_argument        
-2*                                               <empty>            
-3*                                               <empty>            
-4*                                               <empty>            
-5*                                               <empty>            
-6*                                               <empty>            
-7*                                               <empty>            
-8*                                               <empty>            
-9*                                               <empty>            
-0*                                               <empty>            
-a*                                               <empty>            
-b:     bandwidth        IPERF_BANDWIDTH          required_argument  
-c:     client           IPERF_CLIENT             required_argument  
-d      dualtest         IPERF_DUALTEST           no_argument 	    
-e*                                               <empty>            
-f:     format           IPERF_FORMAT             required_argument  
-g*                                               <empty>            
-h      help                                      no_argument        
-i:     interval         IPERF_INTERVAL           required_argument  
-j*                                               <empty>            
-k:     losspacketslog   IPERF_LOSS_PACKET_LOG    required_argument  
-l:     len              IPERF_LEN                required_argument  
-m      print_mss        IPERF_PRINT_MSS          no_argument        
-n:     num              IPERF_NUM                required_argument  
-o:     output                                    required_argument  
-p:     port             IPERF_PORT               required_argument  
-r      tradeoff         IPERF_TRADEOFF           no_argument        
-s      server           IPERF_SERVER             no_argument        
-t:     time             IPERF_TIME               required_argument  
-u      udp              IPERF_UDP                no_argument        
-v      version                                   no_argument        
-w:     window           TCP_WINDOW_SIZE          required_argument  
-x:     reportexclude    IPERF_REPORTEXCLUDE      required_argument  
-y:     reportstyle      IPERF_REPORTSTYLE        required_argument  
-z*                                               <empty>            
-A*                                               <empty>            
-B:     bind             IPERF_BIND               required_argument  
-C      compatibility    IPERF_COMPAT             no_argument        
-D      daemon           IPERF_DAEMON             no_argument        
-E      poisson          IPERF_POISSON            no_argument        
-F:     file_input       IPERF_FILE_INPUT         required_argument  
-G*                                               <empty>            
-H*                                               <empty>            
-I      stdin_input      IPERF_STDIN_INPUT        no_argument        
-J*                                               <empty>            
-K*                                               <empty>            
-L:     listenport       IPERF_LISTENPORT         required_argument  
-M:     mss              IPERF_MSS                required_argument  
-N      nodelay          IPERF_NODELAY            no_argument        
-O:     interface        IPERF_INTERFACE          required_argument  
-P:     parallel         IPERF_PARALLEL           required_argument  
-Q:     priority         IPERF_PRIORITY           required_argument  
-R      remove                                    no_argument        
-S:     tos              IPERF_TOS                required_argument  
-T:     ttl              IPERF_TTL                required_argument  
-U      single_udp       IPERF_SINGLE_UDP         no_argument        
-V      ipv6_domain      IPERF_IPV6_DOMAIN        no_argument        
-W      suggest_win_size IPERF_SUGGEST_WIN_SIZE   no_argument        
-X:     burstrate        IPERF_BURSTRATE          required_argument  
-Y*                                               <empty>            
-Z:     linux-congestion IPERF_CONGESTION_CONTROL required_argument  
+1      singleclient     IPERF_SINGLECLIENT       no_argument
+2*                                               <empty>
+3*                                               <empty>
+4*                                               <empty>
+5*                                               <empty>
+6*                                               <empty>
+7*                                               <empty>
+8*                                               <empty>
+9*                                               <empty>
+0*                                               <empty>
+a*                                               <empty>
+b:     bandwidth        IPERF_BANDWIDTH          required_argument
+c:     client           IPERF_CLIENT             required_argument
+d      dualtest         IPERF_DUALTEST           no_argument 	
+e*                                               <empty>
+f:     format           IPERF_FORMAT             required_argument
+g*                                               <empty>
+h      help                                      no_argument
+i:     interval         IPERF_INTERVAL           required_argument
+j*                                               <empty>
+k:     losspacketslog   IPERF_LOSS_PACKET_LOG    required_argument
+l:     len              IPERF_LEN                required_argument
+m      print_mss        IPERF_PRINT_MSS          no_argument
+n:     num              IPERF_NUM                required_argument
+o:     output                                    required_argument
+p:     port             IPERF_PORT               required_argument
+r      tradeoff         IPERF_TRADEOFF           no_argument
+s      server           IPERF_SERVER             no_argument
+t:     time             IPERF_TIME               required_argument
+u      udp              IPERF_UDP                no_argument
+v      version                                   no_argument
+w:     window           TCP_WINDOW_SIZE          required_argument
+x:     reportexclude    IPERF_REPORTEXCLUDE      required_argument
+y:     reportstyle      IPERF_REPORTSTYLE        required_argument
+z*                                               <empty>
+A*                                               <empty>
+B:     bind             IPERF_BIND               required_argument
+C      compatibility    IPERF_COMPAT             no_argument
+D      daemon           IPERF_DAEMON             no_argument
+E      poisson          IPERF_POISSON            no_argument
+F:     file_input       IPERF_FILE_INPUT         required_argument
+G*                                               <empty>
+H*                                               <empty>
+I      stdin_input      IPERF_STDIN_INPUT        no_argument
+J*                                               <empty>
+K*                                               <empty>
+L:     listenport       IPERF_LISTENPORT         required_argument
+M:     mss              IPERF_MSS                required_argument
+N      nodelay          IPERF_NODELAY            no_argument
+O:     interface        IPERF_INTERFACE          required_argument
+P:     parallel         IPERF_PARALLEL           required_argument
+Q:     priority         IPERF_PRIORITY           required_argument
+R      remove                                    no_argument
+S:     tos              IPERF_TOS                required_argument
+T:     ttl              IPERF_TTL                required_argument
+U      single_udp       IPERF_SINGLE_UDP         no_argument
+V      ipv6_domain      IPERF_IPV6_DOMAIN        no_argument
+W      suggest_win_size IPERF_SUGGEST_WIN_SIZE   no_argument
+X:     burstrate        IPERF_BURSTRATE          required_argument
+Y*                                               <empty>
+Z:     linux-congestion IPERF_CONGESTION_CONTROL required_argument
 *******************************************************************/
 
 /* -------------------------------------------------------------------
@@ -296,7 +251,7 @@ void Settings_Initialize( thread_Settings *main ) {
     //main->mCompat     = false;         // -C,  run in Compatibility mode
     //main->mDaemon     = false;         // -D,  run as a daemon
     //main->mFileInput  = false;         // -F,
-    //main->mFileName     = NULL;        // -F,  filename 
+    //main->mFileName     = NULL;        // -F,  filename
     //main->mStdin      = false;         // -I,  default not stdin
     //main->mListenPort   = 0;           // -L,  listen port
     //main->mMSS          = 0;           // -M,  ie. don't set MSS
@@ -471,7 +426,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             if ( !isUDP( mExtSettings ) ) {
                 fprintf( stderr, warn_implied_udp, option );
             }
-            
+
             if ( mExtSettings->mThreadMode != kMode_Client ) {
                 fprintf( stderr, warn_invalid_server_option, option );
                 break;
@@ -568,7 +523,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             // so don't overwrite that value.
             if ( !isBuflenSet( mExtSettings ) ) {
                 mExtSettings->mBufLen = kDefault_UDPBufLen;
-            } else if ( mExtSettings->mBufLen < (int) ( sizeof( UDP_datagram ) 
+            } else if ( mExtSettings->mBufLen < (int) ( sizeof( UDP_datagram )
                         + sizeof( client_hdr ) ) &&
                         !isCompat( mExtSettings ) ) {
                 setCompat( mExtSettings );
@@ -749,7 +704,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 
         case 'V': // IPv6 Domain
             setIPV6( mExtSettings );
-            if ( mExtSettings->mThreadMode == kMode_Server 
+            if ( mExtSettings->mThreadMode == kMode_Server
                  && mExtSettings->mLocalhost != NULL ) {
                 // Test for Multicast
                 iperf_sockaddr temp;
@@ -804,7 +759,7 @@ void Settings_GetUpperCaseArg(const char *inarg, char *outarg) {
     int len = (int) strlen(inarg);
     strcpy(outarg,inarg);
 
-    if ( (len > 0) && (inarg[len-1] >='a') 
+    if ( (len > 0) && (inarg[len-1] >='a')
          && (inarg[len-1] <= 'z') )
         outarg[len-1]= outarg[len-1]+'A'-'a';
 }
@@ -814,7 +769,7 @@ void Settings_GetLowerCaseArg(const char *inarg, char *outarg) {
     int len = (int) strlen(inarg);
     strcpy(outarg,inarg);
 
-    if ( (len > 0) && (inarg[len-1] >='A') 
+    if ( (len > 0) && (inarg[len-1] >='A')
          && (inarg[len-1] <= 'Z') )
         outarg[len-1]= outarg[len-1]-'A'+'a';
 }
@@ -823,12 +778,12 @@ void Settings_GetLowerCaseArg(const char *inarg, char *outarg) {
  * Settings_GenerateListenerSettings
  * Called to generate the settings to be passed to the Listener
  * instance that will handle dual testings from the client side
- * this should only return an instance if it was called on 
- * the thread_Settings instance generated from the command line 
- * for client side execution 
+ * this should only return an instance if it was called on
+ * the thread_Settings instance generated from the command line
+ * for client side execution
  */
 void Settings_GenerateListenerSettings( thread_Settings *client, thread_Settings **listener ) {
-    if ( !isCompat( client ) && 
+    if ( !isCompat( client ) &&
          (client->mMode == kTest_DualTest || client->mMode == kTest_TradeOff) ) {
         *listener = new thread_Settings;
         memcpy(*listener, client, sizeof( thread_Settings ));
@@ -862,12 +817,12 @@ void Settings_GenerateListenerSettings( thread_Settings *client, thread_Settings
  * Settings_GenerateSpeakerSettings
  * Called to generate the settings to be passed to the Speaker
  * instance that will handle dual testings from the server side
- * this should only return an instance if it was called on 
- * the thread_Settings instance generated from the command line 
+ * this should only return an instance if it was called on
+ * the thread_Settings instance generated from the command line
  * for server side execution. This should be an inverse operation
- * of GenerateClientHdr. 
+ * of GenerateClientHdr.
  */
-void Settings_GenerateClientSettings( thread_Settings *server, 
+void Settings_GenerateClientSettings( thread_Settings *server,
                                       thread_Settings **client,
                                       client_hdr *hdr ) {
     int flags = ntohl(hdr->flags);
@@ -913,12 +868,12 @@ void Settings_GenerateClientSettings( thread_Settings *server,
         }
         (*client)->mHost = new char[REPORT_ADDRLEN];
         if ( ((sockaddr*)&server->peer)->sa_family == AF_INET ) {
-            inet_ntop( AF_INET, &((sockaddr_in*)&server->peer)->sin_addr, 
+            inet_ntop( AF_INET, &((sockaddr_in*)&server->peer)->sin_addr,
                        (*client)->mHost, REPORT_ADDRLEN);
         }
 #ifdef HAVE_IPV6
           else {
-            inet_ntop( AF_INET6, &((sockaddr_in6*)&server->peer)->sin6_addr, 
+            inet_ntop( AF_INET6, &((sockaddr_in6*)&server->peer)->sin6_addr,
                        (*client)->mHost, REPORT_ADDRLEN);
         }
 #endif

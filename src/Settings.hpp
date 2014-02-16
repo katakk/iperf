@@ -1,59 +1,5 @@
-/*--------------------------------------------------------------- 
- * Copyright (c) 1999,2000,2001,2002,2003                              
- * The Board of Trustees of the University of Illinois            
- * All Rights Reserved.                                           
- *--------------------------------------------------------------- 
- * Permission is hereby granted, free of charge, to any person    
- * obtaining a copy of this software (Iperf) and associated       
- * documentation files (the "Software"), to deal in the Software  
- * without restriction, including without limitation the          
- * rights to use, copy, modify, merge, publish, distribute,        
- * sublicense, and/or sell copies of the Software, and to permit     
- * persons to whom the Software is furnished to do
- * so, subject to the following conditions: 
- *
- *     
- * Redistributions of source code must retain the above 
- * copyright notice, this list of conditions and 
- * the following disclaimers. 
- *
- *     
- * Redistributions in binary form must reproduce the above 
- * copyright notice, this list of conditions and the following 
- * disclaimers in the documentation and/or other materials 
- * provided with the distribution. 
- * 
- *     
- * Neither the names of the University of Illinois, NCSA, 
- * nor the names of its contributors may be used to endorse 
- * or promote products derived from this Software without
- * specific prior written permission. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- * NONINFRINGEMENT. IN NO EVENT SHALL THE CONTIBUTORS OR COPYRIGHT 
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
- * ________________________________________________________________
- * National Laboratory for Applied Network Research 
- * National Center for Supercomputing Applications 
- * University of Illinois at Urbana-Champaign 
- * http://www.ncsa.uiuc.edu
- * ________________________________________________________________ 
- *
- * Settings.hpp
- * by Mark Gates <mgates@nlanr.net>
- * &  Ajay Tirumala <tirumala@ncsa.uiuc.edu>
- * -------------------------------------------------------------------
+/*---------------------------------------------------------------
  * Stores and parses the initial values for all the global variables.
- * -------------------------------------------------------------------
- * headers
- * uses
- *   <stdlib.h>
- *   <assert.h>
  * ------------------------------------------------------------------- */
 
 #ifndef SETTINGS_H
@@ -97,7 +43,7 @@ typedef enum TestMode {
  * or server. By using this structure rather than
  * a global structure or class we can have multiple
  * clients or servers running with different settings.
- * In version 2.0 and above this structure contains 
+ * In version 2.0 and above this structure contains
  * all the information needed for a thread to execute
  * and contains only C elements so it can be manipulated
  * by either C or C++.
@@ -143,12 +89,12 @@ typedef struct thread_Settings {
         bool   mNoSettingsReport;       // -x s
         bool   mNoConnectionReport;     // -x c
         bool   mNoDataReport;           // -x d
-        bool   mNoServerReport;         // -x 
+        bool   mNoServerReport;         // -x
         bool   mNoMultReport;           // -x m
         bool   mSinlgeClient;           // -1
         bool   mPoisson;                // Andrea Detti Patch Poisson
     */
-    int flags; 
+    int flags;
     // enums (which should be special int's)
     ThreadMode mThreadMode;         // -s or -c
     ReportMode mReportMode;
@@ -305,7 +251,7 @@ typedef struct thread_Settings {
 #define INVALID_DUAL_HDR 0x00000002
 
 // used to reference the 4 byte ID number we place in UDP datagrams
-// use int32_t if possible, otherwise a 32 bit bitfield (e.g. on J90) 
+// use int32_t if possible, otherwise a 32 bit bitfield (e.g. on J90)
 typedef struct UDP_datagram {
 #ifdef HAVE_INT32_T
     int32_t id;
@@ -321,7 +267,7 @@ typedef struct UDP_datagram {
 /*
  * The client_hdr structure is sent from clients
  * to servers to alert them of things that need
- * to happen. Order must be perserved in all 
+ * to happen. Order must be perserved in all
  * future releases for backward compatibility.
  * 1.7 has flags, numThreads, mPort, and bufferlen
  */
@@ -335,10 +281,10 @@ typedef struct client_hdr {
      * which information is available. So 1.7 uses
      * 0x80000000 and the next time information is added
      * the 1.7 bit will be set and 0x40000000 will be
-     * set signifying additional information. If no 
+     * set signifying additional information. If no
      * information bits are set then the header is ignored.
      * The lowest order diferentiates between dualtest and
-     * tradeoff modes, wheither the speaker needs to start 
+     * tradeoff modes, wheither the speaker needs to start
      * immediately or after the audience finishes.
      */
     int32_t flags;
@@ -373,7 +319,7 @@ typedef struct server_hdr {
      * which information is available. So 1.7 uses
      * 0x80000000 and the next time information is added
      * the 1.7 bit will be set and 0x40000000 will be
-     * set signifying additional information. If no 
+     * set signifying additional information. If no
      * information bits are set then the header is ignored.
      */
     int32_t flags;
@@ -427,7 +373,7 @@ typedef struct server_hdr {
     void Settings_GenerateListenerSettings( thread_Settings *client, thread_Settings **listener);
 
     // generate settings for speaker instance
-    void Settings_GenerateClientSettings( thread_Settings *server, 
+    void Settings_GenerateClientSettings( thread_Settings *server,
                                           thread_Settings **client,
                                           client_hdr *hdr );
 

@@ -1,54 +1,3 @@
-/*--------------------------------------------------------------- 
- * Copyright (c) 1999,2000,2001,2002,2003                              
- * The Board of Trustees of the University of Illinois            
- * All Rights Reserved.                                           
- *--------------------------------------------------------------- 
- * Permission is hereby granted, free of charge, to any person    
- * obtaining a copy of this software (Iperf) and associated       
- * documentation files (the "Software"), to deal in the Software  
- * without restriction, including without limitation the          
- * rights to use, copy, modify, merge, publish, distribute,        
- * sublicense, and/or sell copies of the Software, and to permit     
- * persons to whom the Software is furnished to do
- * so, subject to the following conditions: 
- *
- *     
- * Redistributions of source code must retain the above 
- * copyright notice, this list of conditions and 
- * the following disclaimers. 
- *
- *     
- * Redistributions in binary form must reproduce the above 
- * copyright notice, this list of conditions and the following 
- * disclaimers in the documentation and/or other materials 
- * provided with the distribution. 
- * 
- *     
- * Neither the names of the University of Illinois, NCSA, 
- * nor the names of its contributors may be used to endorse 
- * or promote products derived from this Software without
- * specific prior written permission. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- * NONINFRINGEMENT. IN NO EVENT SHALL THE CONTIBUTORS OR COPYRIGHT 
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
- * ________________________________________________________________
- * National Laboratory for Applied Network Research 
- * National Center for Supercomputing Applications 
- * University of Illinois at Urbana-Champaign 
- * http://www.ncsa.uiuc.edu
- * ________________________________________________________________ 
- *
- * Reporter.c
- * by Kevin Gibbs <kgibbs@nlanr.net>
- *
- * ________________________________________________________________ */
-
 #include "headers.h"
 #include "Settings.hpp"
 #include "util.h"
@@ -65,8 +14,8 @@
   instance the provided CSV format does not have a settings
   report so it uses settings_notimpl.
   */
-void* connection_notimpl( Connection_Info * nused, int nuse ) { 
-    return NULL; 
+void* connection_notimpl( Connection_Info * nused, int nuse ) {
+    return NULL;
 }
 void settings_notimpl( ReporterData * nused ) { }
 void statistics_notimpl( Transfer_Info * nused ) { }
@@ -146,7 +95,7 @@ MultiHeader* InitMulti( thread_Settings *agent, int inID ) {
                 if ( agent->mInterval != 0.0 ) {
                     struct timeval *interval = &data->intervalTime;
                     interval->tv_sec = (long) agent->mInterval;
-                    interval->tv_usec = (long) ((agent->mInterval - interval->tv_sec) 
+                    interval->tv_usec = (long) ((agent->mInterval - interval->tv_sec)
                                                 * rMillion);
                 }
                 data->mHost = agent->mHost;
@@ -228,13 +177,13 @@ ReportHeader* InitReport( thread_Settings *agent ) {
 #endif
             reporthdr->reporterindex = NUM_REPORT_STRUCTS - 1;
             data->info.transferID = agent->mSock;
-            data->info.groupID = (agent->multihdr != NULL ? agent->multihdr->groupID 
+            data->info.groupID = (agent->multihdr != NULL ? agent->multihdr->groupID
                                                           : -1);
             data->type = TRANSFER_REPORT;
             if ( agent->mInterval != 0.0 ) {
                 struct timeval *interval = &data->intervalTime;
                 interval->tv_sec = (long) agent->mInterval;
-                interval->tv_usec = (long) ((agent->mInterval - interval->tv_sec) 
+                interval->tv_usec = (long) ((agent->mInterval - interval->tv_sec)
                                             * rMillion);
             }
             data->mHost = agent->mHost;
@@ -317,7 +266,7 @@ ReportHeader* InitReport( thread_Settings *agent ) {
          */
         reporthdr->next = NULL;
         process_report ( reporthdr );
-#endif 
+#endif
     }
     if ( !isDataReport( agent ) ) {
         reporthdr = NULL;
@@ -327,7 +276,7 @@ ReportHeader* InitReport( thread_Settings *agent ) {
 
 /*
  * ReportPacket is called by a transfer agent to record
- * the arrival or departure of a "packet" (for TCP it 
+ * the arrival or departure of a "packet" (for TCP it
  * will actually represent many packets). This needs to
  * be as simple and fast as possible as it gets called for
  * every "packet".
@@ -357,7 +306,7 @@ void ReportPacket( ReportHeader* agent, ReportStruct *packet ) {
 
         // Put the information there
         memcpy( agent->data + agent->agentindex, packet, sizeof(ReportStruct) );
-        
+
         // Updating agentindex MUST be the last thing done
         agent->agentindex++;
 #ifndef HAVE_THREAD
@@ -365,7 +314,7 @@ void ReportPacket( ReportHeader* agent, ReportStruct *packet ) {
          * Process the report in this thread
          */
         process_report ( agent );
-#endif 
+#endif
     }
 }
 
@@ -433,14 +382,14 @@ void ReportSettings( thread_Settings *agent ) {
          * Create in one big chunk
          */
         ReportHeader *reporthdr = (ReportHeader *) malloc( sizeof(ReportHeader) );
-    
+
         if ( reporthdr != NULL ) {
             ReporterData *data = &reporthdr->report;
             data->info.transferID = agent->mSock;
             data->info.groupID = -1;
             reporthdr->agentindex = -1;
             reporthdr->reporterindex = -1;
-        
+
             data->mHost = agent->mHost;
             data->mLocalhost = agent->mLocalhost;
             data->mode = agent->mReportMode;
@@ -457,7 +406,7 @@ void ReportSettings( thread_Settings *agent ) {
             data->connection.size_peer = agent->size_peer;
             data->connection.local = agent->local;
             data->connection.size_local = agent->size_local;
-    
+
     #ifdef HAVE_THREAD
             /*
              * Update the ReportRoot to include this report.
@@ -473,7 +422,7 @@ void ReportSettings( thread_Settings *agent ) {
              */
             reporthdr->next = NULL;
             process_report ( reporthdr );
-    #endif 
+    #endif
         } else {
             FAIL(1, "Out of Memory!!\n", agent);
         }
@@ -496,7 +445,7 @@ void ReportServerUDP( thread_Settings *agent, server_hdr *server ) {
 
         if ( reporthdr != NULL ) {
             stats->transferID = agent->mSock;
-            stats->groupID = (agent->multihdr != NULL ? agent->multihdr->groupID 
+            stats->groupID = (agent->multihdr != NULL ? agent->multihdr->groupID
                                                       : -1);
             reporthdr->agentindex = -1;
             reporthdr->reporterindex = -1;
@@ -507,7 +456,7 @@ void ReportServerUDP( thread_Settings *agent, server_hdr *server ) {
             stats->jitter = ntohl( server->jitter1 );
             stats->jitter += ntohl( server->jitter2 ) / (double)rMillion;
             stats->TotalLen = (((max_size_t) ntohl( server->total_len1 )) << 32) +
-                                  ntohl( server->total_len2 ); 
+                                  ntohl( server->total_len2 );
             stats->startTime = 0;
             stats->endTime = ntohl( server->stop_sec );
             stats->endTime += ntohl( server->stop_usec ) / (double)rMillion;
@@ -519,7 +468,7 @@ void ReportServerUDP( thread_Settings *agent, server_hdr *server ) {
             reporthdr->report.connection.size_peer = agent->size_local;
             reporthdr->report.connection.local = agent->peer;
             reporthdr->report.connection.size_local = agent->size_peer;
-            
+
 #ifdef HAVE_THREAD
             /*
              * Update the ReportRoot to include this report.
@@ -535,7 +484,7 @@ void ReportServerUDP( thread_Settings *agent, server_hdr *server ) {
              */
             reporthdr->next = NULL;
             process_report ( reporthdr );
-#endif 
+#endif
         } else {
             FAIL(1, "Out of Memory!!\n", agent);
         }
@@ -694,9 +643,9 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
             // UDP packet
             double transit = 0.0;
             double deltaTransit;
-            
-            // from RFC 1889, Real Time Protocol (RTP) 
-            // J = J + ( | D(i-1,i) | - J ) / 16 
+
+            // from RFC 1889, Real Time Protocol (RTP)
+            // J = J + ( | D(i-1,i) | - J ) / 16
             transit = TimeDifference( packet->packetTime, packet->sentTime );
             if ( data->lastTransit != 0.0 ) {
                 deltaTransit = transit - data->lastTransit;
@@ -708,12 +657,12 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
 				stats->delay_total+=transit*1000; // Andrea Detti
             }
             data->lastTransit = transit;
-    
-            // packet loss occured if the datagram numbers aren't sequential 
+
+            // packet loss occured if the datagram numbers aren't sequential
             if ( packet->packetID != data->PacketID + 1 ) {
                 if ( packet->packetID < data->PacketID + 1 ) {
                     data->cntOutofOrder++;
-                    if (reporthdr->report.mThreadMode != kMode_Client) 
+                    if (reporthdr->report.mThreadMode != kMode_Client)
                     {
                         struct out_of_order_packet *oop;
                         if (!(oop = (struct out_of_order_packet *) malloc(sizeof(struct out_of_order_packet))))
@@ -743,14 +692,14 @@ int reporter_handle_packet( ReportHeader *reporthdr ) {
                         list_add_tail(&lpi->list, &data->lost_packets);
                         /*
                         printf("Packet %d revealed a loss gap from %d, "
-                            "total loss %d\n", packet->packetID, 
+                            "total loss %d\n", packet->packetID,
                             data->PacketID, data->cntError);
                         */
 #endif
                     }
                 }
             }
-            // never decrease datagramID (e.g. if we get an out-of-order packet) 
+            // never decrease datagramID (e.g. if we get an out-of-order packet)
             if ( packet->packetID > data->PacketID ) {
                 data->PacketID = packet->packetID;
             }
@@ -840,9 +789,9 @@ int reporter_condprintstats( ReporterData *stats, MultiHeader *multireport, int 
         if ( isMultipleReport(stats) ) {
             reporter_handle_multiple_reports( multireport, &stats->info, force );
         }
-    } else while ((stats->intervalTime.tv_sec != 0 || 
-                   stats->intervalTime.tv_usec != 0) && 
-                  TimeDifference( stats->nextTime, 
+    } else while ((stats->intervalTime.tv_sec != 0 ||
+                   stats->intervalTime.tv_usec != 0) &&
+                  TimeDifference( stats->nextTime,
                                   stats->packetTime ) < 0 ) {
         stats->info.cntOutofOrder = stats->cntOutofOrder - stats->lastOutofOrder;
         stats->lastOutofOrder = stats->cntOutofOrder;
@@ -889,7 +838,7 @@ int reporter_print( ReporterData *stats, int type, int end ) {
             settings_reports[stats->mode]( stats );
             break;
         case CONNECTION_REPORT:
-            stats->info.reserved_delay = connection_reports[stats->mode]( 
+            stats->info.reserved_delay = connection_reports[stats->mode](
                                                &stats->connection,
                                                stats->info.transferID );
             break;

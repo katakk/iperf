@@ -1,52 +1,4 @@
-/*--------------------------------------------------------------- 
- * Copyright (c) 1999,2000,2001,2002,2003                              
- * The Board of Trustees of the University of Illinois            
- * All Rights Reserved.                                           
- *--------------------------------------------------------------- 
- * Permission is hereby granted, free of charge, to any person    
- * obtaining a copy of this software (Iperf) and associated       
- * documentation files (the "Software"), to deal in the Software  
- * without restriction, including without limitation the          
- * rights to use, copy, modify, merge, publish, distribute,        
- * sublicense, and/or sell copies of the Software, and to permit     
- * persons to whom the Software is furnished to do
- * so, subject to the following conditions: 
- *
- *     
- * Redistributions of source code must retain the above 
- * copyright notice, this list of conditions and 
- * the following disclaimers. 
- *
- *     
- * Redistributions in binary form must reproduce the above 
- * copyright notice, this list of conditions and the following 
- * disclaimers in the documentation and/or other materials 
- * provided with the distribution. 
- * 
- *     
- * Neither the names of the University of Illinois, NCSA, 
- * nor the names of its contributors may be used to endorse 
- * or promote products derived from this Software without
- * specific prior written permission. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- * NONINFRINGEMENT. IN NO EVENT SHALL THE CONTIBUTORS OR COPYRIGHT 
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
- * ________________________________________________________________
- * National Laboratory for Applied Network Research 
- * National Center for Supercomputing Applications 
- * University of Illinois at Urbana-Champaign 
- * http://www.ncsa.uiuc.edu
- * ________________________________________________________________ 
- *
- * Client.cpp
- * by Mark Gates <mgates@nlanr.net>
- * -------------------------------------------------------------------
+/*---------------------------------------------------------------
  * A client thread initiates a connect to the server and handles
  * sending and receiving data, then closes the socket.
  * ------------------------------------------------------------------- */
@@ -112,8 +64,8 @@ Client::~Client() {
     DELETE_ARRAY( mBuf );
 } // end ~Client
 
-const double kSecs_to_usecs = 1e6; 
-const int    kBytes_to_Bits = 8; 
+const double kSecs_to_usecs = 1e6;
+const int    kBytes_to_Bits = 8;
 
 void Client::RunTCP( void ) {
     long currLen;
@@ -126,8 +78,8 @@ void Client::RunTCP( void ) {
 
     char* readAt = mBuf;
 
-    // Indicates if the stream is readable 
-    bool canRead = true, mMode_Time = isModeTime( mSettings ); 
+    // Indicates if the stream is readable
+    bool canRead = true, mMode_Time = isModeTime( mSettings );
 
     ReportStruct *reportstruct = NULL;
 
@@ -154,19 +106,19 @@ void Client::RunTCP( void ) {
     }
 #endif
     do {
-        // Read the next data block from 
-        // the file if it's file input 
+        // Read the next data block from
+        // the file if it's file input
         if ( isFileInput( mSettings ) ) {
-            Extractor_getNextDataBlock( readAt, mSettings ); 
-            canRead = Extractor_canRead( mSettings ) != 0; 
+            Extractor_getNextDataBlock( readAt, mSettings );
+            canRead = Extractor_canRead( mSettings ) != 0;
         } else
-            canRead = true; 
+            canRead = true;
 
-        // perform write 
-        currLen = write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+        // perform write
+        currLen = write( mSettings->mSock, mBuf, mSettings->mBufLen );
         if ( currLen < 0 ) {
-            WARN_errno( currLen < 0, "write2" ); 
-            break; 
+            WARN_errno( currLen < 0, "write2" );
+            break;
         }
         totLen += currLen;
 
@@ -174,7 +126,7 @@ void Client::RunTCP( void ) {
             gettimeofday( &(reportstruct->packetTime), NULL );
             reportstruct->packetLen = currLen;
             ReportPacket( mSettings->reporthdr, reportstruct );
-        }   
+        }
 
         if ( !mMode_Time ) {
             /* mAmount may be unsigned, so don't let it underflow! */
@@ -185,8 +137,8 @@ void Client::RunTCP( void ) {
             }
         }
 
-    } while ( ! (sInterupted  || 
-                   (!mMode_Time  &&  0 >= mSettings->mAmount)) && canRead ); 
+    } while ( ! (sInterupted  ||
+                   (!mMode_Time  &&  0 >= mSettings->mAmount)) && canRead );
 #ifdef WIN32
 	timeKillEvent (mmtimer);
 #endif
@@ -205,21 +157,21 @@ void Client::RunTCP( void ) {
     EndReport( mSettings->reporthdr );
 }
 
-/* ------------------------------------------------------------------- 
- * Send data using the connected UDP/TCP socket, 
- * until a termination flag is reached. 
- * Does not close the socket. 
- * ------------------------------------------------------------------- */ 
+/* -------------------------------------------------------------------
+ * Send data using the connected UDP/TCP socket,
+ * until a termination flag is reached.
+ * Does not close the socket.
+ * ------------------------------------------------------------------- */
 
 void Client::Run( void ) {
 	int wc;
-    struct UDP_datagram* mBuf_UDP = (struct UDP_datagram*) mBuf; 
-    signed long currLen = 0; 
+    struct UDP_datagram* mBuf_UDP = (struct UDP_datagram*) mBuf;
+    signed long currLen = 0;
     unsigned int burstcount = 0;
 
-    int delay_target = 0; 
-    int delay = 0; 
-    int adjust = 0; 
+    int delay_target = 0;
+    int delay = 0;
+    int adjust = 0;
 
     char* readAt = mBuf;
 
@@ -229,9 +181,9 @@ void Client::Run( void ) {
         return;
     }
 #endif
-    
-    // Indicates if the stream is readable 
-    bool canRead = true, mMode_Time = isModeTime( mSettings ); 
+
+    // Indicates if the stream is readable
+    bool canRead = true, mMode_Time = isModeTime( mSettings );
 
     // setup termination variables
     if ( mMode_Time ) {
@@ -240,17 +192,17 @@ void Client::Run( void ) {
     }
 
     if ( isUDP( mSettings ) ) {
-        // Due to the UDP timestamps etc, included 
-        // reduce the read size by an amount 
+        // Due to the UDP timestamps etc, included
+        // reduce the read size by an amount
         // equal to the header size
-    
-        // compute delay for bandwidth restriction, constrained to [0,1] seconds 
-        delay_target = (int) ( mSettings->mBufLen * ((kSecs_to_usecs * kBytes_to_Bits) 
-                                                     / mSettings->mUDPRate) ); 
-        if ( delay_target < 0  || 
+
+        // compute delay for bandwidth restriction, constrained to [0,1] seconds
+        delay_target = (int) ( mSettings->mBufLen * ((kSecs_to_usecs * kBytes_to_Bits)
+                                                     / mSettings->mUDPRate) );
+        if ( delay_target < 0  ||
              delay_target > (int) 1 * kSecs_to_usecs ) {
-            fprintf( stderr, warn_delay_large, delay_target / kSecs_to_usecs ); 
-            delay_target = (int) kSecs_to_usecs * 1; 
+            fprintf( stderr, warn_delay_large, delay_target / kSecs_to_usecs );
+            delay_target = (int) kSecs_to_usecs * 1;
         }
         if ( isFileInput( mSettings ) ) {
             if ( isCompat( mSettings ) ) {
@@ -275,56 +227,56 @@ void Client::Run( void ) {
     lastPacketTime.setnow();
 
     if (isPoisson(mSettings)) srand(lastPacketTime.getUsecs());
-   
+
     do {
 
-        // Test case: drop 17 packets and send 2 out-of-order: 
+        // Test case: drop 17 packets and send 2 out-of-order:
         // sequence 51, 52, 70, 53, 54, 71, 72
 		/*
-        switch( reportstruct->packetID ) { 
-            case 53: reportstruct->packetID = 70; break; 
-            case 71: reportstruct->packetID = 53; break; 
-            case 54: reportstruct->packetID = 71; break; 
-            default: break; 
+        switch( reportstruct->packetID ) {
+            case 53: reportstruct->packetID = 70; break;
+            case 71: reportstruct->packetID = 53; break;
+            case 54: reportstruct->packetID = 71; break;
+            default: break;
         }
         */
         gettimeofday( &(reportstruct->packetTime), NULL );
 
         if ( isUDP( mSettings ) ) {
-            // store datagram ID into buffer 
-            mBuf_UDP->id      = htonl( (reportstruct->packetID)++ ); 
-            mBuf_UDP->tv_sec  = htonl( reportstruct->packetTime.tv_sec ); 
+            // store datagram ID into buffer
+            mBuf_UDP->id      = htonl( (reportstruct->packetID)++ );
+            mBuf_UDP->tv_sec  = htonl( reportstruct->packetTime.tv_sec );
             mBuf_UDP->tv_usec = htonl( reportstruct->packetTime.tv_usec );
 
-            // delay between writes 
-            // make an adjustment for how long the last loop iteration took 
-            // TODO this doesn't work well in certain cases, like 2 parallel streams 
-            adjust = delay_target + lastPacketTime.subUsec( reportstruct->packetTime ); 
+            // delay between writes
+            // make an adjustment for how long the last loop iteration took
+            // TODO this doesn't work well in certain cases, like 2 parallel streams
+            adjust = delay_target + lastPacketTime.subUsec( reportstruct->packetTime );
             if (isPoisson(mSettings)) adjust = delay + lastPacketTime.subUsec( reportstruct->packetTime ); // Andrea Detti patch Poisson
-			lastPacketTime.set( reportstruct->packetTime.tv_sec, 
-                                reportstruct->packetTime.tv_usec ); 
+			lastPacketTime.set( reportstruct->packetTime.tv_sec,
+                                reportstruct->packetTime.tv_usec );
 
             if ( adjust > 0  ||  delay > 0 ) {
-                delay += adjust; 
+                delay += adjust;
             }
         }
 
-        // Read the next data block from 
-        // the file if it's file input 
+        // Read the next data block from
+        // the file if it's file input
         if ( isFileInput( mSettings ) ) {
-            Extractor_getNextDataBlock( readAt, mSettings ); 
-            canRead = Extractor_canRead( mSettings ) != 0; 
+            Extractor_getNextDataBlock( readAt, mSettings );
+            canRead = Extractor_canRead( mSettings ) != 0;
         } else
-            canRead = true; 
+            canRead = true;
 
-        // perform write 
-        currLen = write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+        // perform write
+        currLen = write( mSettings->mSock, mBuf, mSettings->mBufLen );
         if ( currLen < 0 && currLen != -ENOBUFS ) {
-            WARN_errno( currLen < 0, "write2" ); 
-            break; 
+            WARN_errno( currLen < 0, "write2" );
+            break;
         }
 
-        // report packets 
+        // report packets
         reportstruct->packetLen = currLen;
         ReportPacket( mSettings->reporthdr, reportstruct );
 
@@ -335,12 +287,12 @@ void Client::Run( void ) {
         if (mSettings->mBurstRate) {
             if ((++burstcount >= mSettings->mBurstRate) && (delay > 0))
             {
-                 delay_loop( delay * mSettings->mBurstRate); 
+                 delay_loop( delay * mSettings->mBurstRate);
             }
             burstcount %= mSettings->mBurstRate;
         }
         else if ( delay > 0 ) {
-            delay_loop( delay ); 
+            delay_loop( delay );
         }
         if ( !mMode_Time ) {
             /* mAmount may be unsigned, so don't let it underflow! */
@@ -351,35 +303,35 @@ void Client::Run( void ) {
             }
         }
 
-    } while ( ! (sInterupted  || 
-                 (mMode_Time   &&  mEndTime.before( reportstruct->packetTime ))  || 
-                 (!mMode_Time  &&  0 >= mSettings->mAmount)) && canRead ); 
+    } while ( ! (sInterupted  ||
+                 (mMode_Time   &&  mEndTime.before( reportstruct->packetTime ))  ||
+                 (!mMode_Time  &&  0 >= mSettings->mAmount)) && canRead );
 
     // stop timing
     gettimeofday( &(reportstruct->packetTime), NULL );
     CloseReport( mSettings->reporthdr, reportstruct );
 
     if ( isUDP( mSettings ) ) {
-        // send a final terminating datagram 
-        // Don't count in the mTotalLen. The server counts this one, 
-        // but didn't count our first datagram, so we're even now. 
-        // The negative datagram ID signifies termination to the server. 
-    
-        // store datagram ID into buffer 
-        mBuf_UDP->id      = htonl( -(reportstruct->packetID)  ); 
-        mBuf_UDP->tv_sec  = htonl( reportstruct->packetTime.tv_sec ); 
-        mBuf_UDP->tv_usec = htonl( reportstruct->packetTime.tv_usec ); 
+        // send a final terminating datagram
+        // Don't count in the mTotalLen. The server counts this one,
+        // but didn't count our first datagram, so we're even now.
+        // The negative datagram ID signifies termination to the server.
+
+        // store datagram ID into buffer
+        mBuf_UDP->id      = htonl( -(reportstruct->packetID)  );
+        mBuf_UDP->tv_sec  = htonl( reportstruct->packetTime.tv_sec );
+        mBuf_UDP->tv_usec = htonl( reportstruct->packetTime.tv_usec );
 
         if ( isMulticast( mSettings ) ) {
             wc = write( mSettings->mSock, mBuf, mSettings->mBufLen );
 			WARN_errno( wc < 0, "write Run" );
         } else {
-            write_UDP_FIN( ); 
+            write_UDP_FIN( );
         }
     }
     DELETE_PTR( reportstruct );
     EndReport( mSettings->reporthdr );
-} 
+}
 // end Run
 
 void Client::InitiateServer() {
@@ -417,7 +369,7 @@ void Client::Connect( ) {
     // create an internet socket
     int type = ( isUDP( mSettings )  ?  SOCK_DGRAM : SOCK_STREAM);
 
-    int domain = (SockAddr_isIPv6( &mSettings->peer ) ? 
+    int domain = (SockAddr_isIPv6( &mSettings->peer ) ?
 #ifdef HAVE_IPV6
                   AF_INET6
 #else
@@ -434,45 +386,45 @@ void Client::Connect( ) {
     SockAddr_localAddr( mSettings );
     if ( mSettings->mLocalhost != NULL ) {
         // bind socket to local address
-        rc = bind( mSettings->mSock, (sockaddr*) &mSettings->local, 
+        rc = bind( mSettings->mSock, (sockaddr*) &mSettings->local,
                    SockAddr_get_sizeof_sockaddr( &mSettings->local ) );
         WARN_errno( rc == SOCKET_ERROR, "bind" );
     }
 
     // connect socket
-    rc = connect( mSettings->mSock, (sockaddr*) &mSettings->peer, 
+    rc = connect( mSettings->mSock, (sockaddr*) &mSettings->peer,
                   SockAddr_get_sizeof_sockaddr( &mSettings->peer ));
     FAIL_errno( rc == SOCKET_ERROR, "connect", mSettings );
 
-    getsockname( mSettings->mSock, (sockaddr*) &mSettings->local, 
+    getsockname( mSettings->mSock, (sockaddr*) &mSettings->local,
                  &mSettings->size_local );
     getpeername( mSettings->mSock, (sockaddr*) &mSettings->peer,
                  &mSettings->size_peer );
 } // end Connect
 
-/* ------------------------------------------------------------------- 
- * Send a datagram on the socket. The datagram's contents should signify 
- * a FIN to the application. Keep re-transmitting until an 
- * acknowledgement datagram is received. 
- * ------------------------------------------------------------------- */ 
+/* -------------------------------------------------------------------
+ * Send a datagram on the socket. The datagram's contents should signify
+ * a FIN to the application. Keep re-transmitting until an
+ * acknowledgement datagram is received.
+ * ------------------------------------------------------------------- */
 void Client::write_UDP_FIN( ) {
-    int rc, wc; 
-    fd_set readSet; 
-    struct timeval timeout; 
+    int rc, wc;
+    fd_set readSet;
+    struct timeval timeout;
 
     int lost_ssock = 0, lost_sock, lost_port, buflen=1024, br, log_handler = 0;
     struct sockaddr_in local_addr;
     socklen_t addr_len = sizeof(struct sockaddr_in);
     server_hdr *shdr;
     void *buf = NULL; /* NULL indicates no need for a buffer */
-    
+
     shdr = (server_hdr*) ((UDP_datagram*)mBuf + 1);
-    
+
 #ifndef WIN32
     if (mSettings->lossPacketsFileName)
     {
-        if ((log_handler = open(mSettings->lossPacketsFileName, 
-                (O_CREAT | O_WRONLY | O_TRUNC), 
+        if ((log_handler = open(mSettings->lossPacketsFileName,
+                (O_CREAT | O_WRONLY | O_TRUNC),
                 (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH))) < 0)
         {
             fprintf(stderr, "fopen error %s\n", strerror(errno));
@@ -482,7 +434,7 @@ void Client::write_UDP_FIN( ) {
          * Open up a TCP socket to receive the lost packet data on
          */
         memset(&local_addr, 0, sizeof(local_addr));
-        if (getsockname(mSettings->mSock, (struct sockaddr *) &local_addr, 
+        if (getsockname(mSettings->mSock, (struct sockaddr *) &local_addr,
                     &addr_len) < 0)
         {
             fprintf(stderr, "getsockname error %s\n", strerror(errno));
@@ -494,7 +446,7 @@ void Client::write_UDP_FIN( ) {
             fprintf(stderr, "socket error %s\n", strerror(errno));
             exit(1);
         }
-        if (bind(lost_ssock, (struct sockaddr *) &local_addr, 
+        if (bind(lost_ssock, (struct sockaddr *) &local_addr,
              sizeof(local_addr)) < 0)
         {
             fprintf(stderr, "bind error %s\n", strerror(errno));
@@ -502,7 +454,7 @@ void Client::write_UDP_FIN( ) {
         }
         memset(&local_addr, 0, sizeof(local_addr));
         addr_len = sizeof(local_addr);
-        if (getsockname(lost_ssock, (struct sockaddr *) &local_addr, 
+        if (getsockname(lost_ssock, (struct sockaddr *) &local_addr,
                     &addr_len) < 0)
         {
             fprintf(stderr, "getsockname error %s\n", strerror(errno));
@@ -511,9 +463,9 @@ void Client::write_UDP_FIN( ) {
         listen(lost_ssock, 1);
         lost_port = ntohs(local_addr.sin_port);
         printf("TCP socket bound on port %d\n", lost_port);
-        
+
         shdr->lost_port = local_addr.sin_port; /* network format */
-        
+
         if (!(buf = malloc(buflen)))
         {
             fprintf(stderr, "Out of memory %s\n", strerror(errno));
@@ -527,29 +479,29 @@ void Client::write_UDP_FIN( ) {
         shdr->lost_port = 0; /* this indicates no interest in logging */
     }
 
-    int count = 0; 
+    int count = 0;
     while ( count < 10 ) {
-        count++; 
+        count++;
 
-        // write data 
-        wc = write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+        // write data
+        wc = write( mSettings->mSock, mBuf, mSettings->mBufLen );
 		WARN_errno( wc < 0, "write_UDP_FIN" );
 
-        // wait until the socket is readable, or our timeout expires 
-        FD_ZERO( &readSet ); 
-        FD_SET( mSettings->mSock, &readSet ); 
-        timeout.tv_sec  = 0; 
-        timeout.tv_usec = 250000; // quarter second, 250 ms 
+        // wait until the socket is readable, or our timeout expires
+        FD_ZERO( &readSet );
+        FD_SET( mSettings->mSock, &readSet );
+        timeout.tv_sec  = 0;
+        timeout.tv_usec = 250000; // quarter second, 250 ms
 
-        rc = select( mSettings->mSock+1, &readSet, NULL, NULL, &timeout ); 
-        FAIL_errno( rc == SOCKET_ERROR, "select", mSettings ); 
+        rc = select( mSettings->mSock+1, &readSet, NULL, NULL, &timeout );
+        FAIL_errno( rc == SOCKET_ERROR, "select", mSettings );
 
         if ( rc == 0 ) {
-            // select timed out 
-            continue; 
+            // select timed out
+            continue;
         } else {
-            // socket ready to read 
-            rc = read( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+            // socket ready to read
+            rc = read( mSettings->mSock, mBuf, mSettings->mBufLen );
             WARN_errno( rc < 0, "read" );
             if ( rc < 0 ) {
                 break;
@@ -558,10 +510,10 @@ void Client::write_UDP_FIN( ) {
             }
 
             goto out_noerr;
-        } 
-    } 
+        }
+    }
 
-    fprintf( stderr, warn_no_ack, mSettings->mSock, count ); 
+    fprintf( stderr, warn_no_ack, mSettings->mSock, count );
     goto out;
 
 out_noerr:
@@ -570,7 +522,7 @@ out_noerr:
     /* accept and start reading from the TCP socket, dump to stderr */
     memset(&local_addr, 0, sizeof(struct sockaddr_in));
     addr_len = sizeof(local_addr);
-    if ((lost_sock = accept(lost_ssock, (struct sockaddr *) &local_addr, 
+    if ((lost_sock = accept(lost_ssock, (struct sockaddr *) &local_addr,
                             &addr_len)) < 0)
     {
         fprintf(stderr, "accept error %s\n", strerror(errno));
@@ -601,11 +553,11 @@ out_noerr:
     if (log_handler > 0)
         close(log_handler);
     close(lost_sock);
-    
+
 out:
     if (lost_ssock > 0)
         close(lost_ssock);
     if (buf)
         free(buf); /* not really necessary, since exiting */
- } 
- // end write_UDP_FIN 
+ }
+ // end write_UDP_FIN
