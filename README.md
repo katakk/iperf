@@ -19,7 +19,7 @@
 
 #### パッチあて状況
 
-https://github.com/katakk/iperf/issues/3
+*https://github.com/katakk/iperf/issues/3
 *`27`まで完了  http://sourceforge.net/p/iperf/patches/   
 *`git checkout 1e78b56b434e4c979ee0564725be131f44047e63` してパッチ当てるきゅん   
 * `23`    Android build scripts        `2012-06-08`  バイナリは一緒に入れといたきゅん     
