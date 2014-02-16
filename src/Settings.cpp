@@ -83,7 +83,8 @@ Y*                                               <empty>
 Z:     linux-congestion IPERF_CONGESTION_CONTROL required_argument
 *******************************************************************/
 
-const char short_options[] = "1b:c:df:hi:k:l:mn:o:p:rst:uvw:x:y:B:CDEF:IL:M:NO:P:Q:RS:T:UVWX:Z:";
+const char short_options[] =
+ "1b:c:df:hi:k:l:mn:o:p:rst:uvw:x:y:B:CDEF:IL:M:NO:P:Q:RS:T:UVWX:Z:";
 
 /* -------------------------------------------------------------------
  * defaults
