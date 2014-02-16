@@ -10,9 +10,10 @@
 ####ライセンス問題
 
 getoptがGPL感染しておりましたきゅん  
-FreeGetOpt http://freegetopt.sourceforge.net に変えましたきゅん  
+FreeGetOpt http://freegetopt.sourceforge.net に変えましたきゅん  BSDL  
 
-kernellist.h
+ライセンスが曖昧
+kernellist.h -> sys/queue.h に変更したきゅん BSDL  
 
 ####VC++2005でビルド通したきゅん
 
