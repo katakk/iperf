@@ -10,6 +10,8 @@
 #    include <ws2tcpip.h>
 #    include <windows.h>
 #pragma comment(lib, "ws2_32.lib")
+#    include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 #    define HAVE_WIN32_THREAD 1
 #else /* WIN32 */
