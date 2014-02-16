@@ -4,21 +4,22 @@
 * コンパイルは `$ make  ` インストールは ` $ cp ./src/iperf  /usr/local/bin/iperf ` きゅん    
 * ソースは`BSDL`
 
-####simplizeした不要ファイル削除
+####VC++2005でビルド通したきゅん
 
-オリジナル欲しい人は`remotes/origin/original` きゅん   
+* プロジェ`iperf.vcproj`, `iperf.sln` バイナリ `iperf.exe` 
 
-####ライセンス問題
+####simplize
+
+* 不要ファイル削除
+* オリジナル欲しい人は`remotes/origin/original` きゅん   
+
+####ライセンス
 
 * getoptがGPL感染しておりましたきゅん  
 FreeGetOpt http://freegetopt.sourceforge.net に変えましたきゅん  `BSDL`  
 
 * ライセンスが曖昧  
 kernellist.h -> sys/queue.h に変更したきゅん `BSDL`  
-
-####VC++2005でビルド通したきゅん
-
-* プロジェ`iperf.vcproj`, `iperf.sln` バイナリ `iperf.exe` 
 
 ####使い方
 
