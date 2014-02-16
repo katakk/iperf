@@ -897,7 +897,8 @@ void Settings_GenerateClientSettings( thread_Settings *server,
 #else
             (*client)->mAmount |= 0xFFFFFFFF00000000;
 #endif
-            (*client)->mAmount = -(*client)->mAmount;
+//bug       (*client)->mAmount = -(*client)->mAmount;
+			(*client)->mAmount = (~(*client)->mAmount) + 1;
         }
         (*client)->mFileName   = NULL;
         (*client)->mHost       = NULL;
