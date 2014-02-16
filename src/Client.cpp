@@ -138,6 +138,8 @@ void Client::RunTCP( void ) {
 
     lastPacketTime.setnow();
 #ifdef WIN32
+	int mmtimer;
+	mmtimer = timeSetEvent(mSettings->mAmount * 10, 50, (LPTIMECALLBACK)Sig_Interupt, 0, TIME_ONESHOT);
 #else
     if ( mMode_Time ) {
 		memset (&it, 0, sizeof (it));
@@ -185,6 +187,9 @@ void Client::RunTCP( void ) {
 
     } while ( ! (sInterupted  || 
                    (!mMode_Time  &&  0 >= mSettings->mAmount)) && canRead ); 
+#ifdef WIN32
+	timeKillEvent (mmtimer);
+#endif
 
     // stop timing
     gettimeofday( &(reportstruct->packetTime), NULL );
