@@ -74,7 +74,9 @@ void Client::RunTCP( void ) {
     long currLen;
     max_size_t totLen = 0;
 
-#ifndef WIN32
+#ifdef WIN32
+    MMRESULT mmtimer = (MMRESULT) NULL;
+#else
     struct itimerval it;
     int err;
 #endif
@@ -92,11 +94,12 @@ void Client::RunTCP( void ) {
     reportstruct->packetID = 0;
 
     lastPacketTime.setnow();
+    if ( mMode_Time && mSettings->mAmount != 0 ) {
+
 #ifdef WIN32
-    int mmtimer;
-    mmtimer = timeSetEvent(mSettings->mAmount * 10, 50, (LPTIMECALLBACK)Sig_Interupt, 0, TIME_ONESHOT);
+        mmtimer = timeSetEvent(mSettings->mAmount * 10, 50,
+                      (LPTIMECALLBACK)Sig_Interupt, 0, TIME_ONESHOT);
 #else
-    if ( mMode_Time ) {
         memset (&it, 0, sizeof (it));
         it.it_value.tv_sec = (int) ((double)mSettings->mAmount / 100.0);
         it.it_value.tv_usec = (int) 10000 * ((double)mSettings->mAmount -
@@ -106,8 +109,8 @@ void Client::RunTCP( void ) {
             perror("setitimer");
             exit(1);
         }
-    }
 #endif
+    }
     do {
         // Read the next data block from
         // the file if it's file input
@@ -142,8 +145,13 @@ void Client::RunTCP( void ) {
 
     } while ( ! (sInterupted  ||
                    (!mMode_Time  &&  0 >= mSettings->mAmount)) && canRead );
+
 #ifdef WIN32
-    timeKillEvent (mmtimer);
+    if ( mMode_Time && mSettings->mAmount != 0 ) {
+        if( mmtimer ) {
+            timeKillEvent(mmtimer);
+        }
+    }
 #endif
 
     // stop timing
