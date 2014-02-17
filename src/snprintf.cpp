@@ -27,7 +27,7 @@ int snprintf(char *buf, size_t size, const char *fmt, ...) {
     va_list ap;
 
     va_start(ap, fmt);
-    vsprintf(buf, fmt, ap); /* Sigh, some vsprintf's return ptr, not length */
+    vsnprintf(buf, size, fmt, ap); /* Sigh, some vsprintf's return ptr, not length */
     n = (int) strlen(buf);
     va_end(ap);
 
