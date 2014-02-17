@@ -18,10 +18,10 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				OptimizeForProcessor="0"
+				Optimization="0"
 				AdditionalIncludeDirectories=".;..;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="4"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
