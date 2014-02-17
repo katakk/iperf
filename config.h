@@ -4,6 +4,7 @@
 
 /* Define if threads exist (using pthreads or Win32 threads) */
 #ifdef WIN32
+#    define _CRT_SECURE_NO_WARNINGS
 #    define _WIN32_WINNT 0x0400 /* use (at least) WinNT 4.0 API */
 #    define WIN32_LEAN_AND_MEAN /* exclude unnecesary headers */
 #    include <winsock2.h>
@@ -26,7 +27,6 @@
 
 /* Define if the strings.h header file exists */
 #ifdef WIN32
-#define _CRT_SECURE_NO_WARNINGS
 /* #undef HAVE_STRINGS_H */
 #else /* WIN32 */
 #    define HAVE_STRINGS_H 1
