@@ -186,10 +186,6 @@ void Client::Run( void )
     int adjust = 0;
 
     char* readAt = mBuf;
-#ifdef WIN32
-    DWORD dwBytesSent;
-    WSABUF CallerData;
-#endif
 
 #if HAVE_THREAD
     if ( !isUDP( mSettings ) ) {
@@ -341,14 +337,7 @@ void Client::Run( void )
         mBuf_UDP->tv_usec = htonl( reportstruct->packetTime.tv_usec );
 
         if ( isMulticast( mSettings ) ) {
-#ifdef WIN32
-            CallerData.buf = mBuf;
-            CallerData.len = mSettings->mBufLen;
-            WSASend(mSettings->mSock, &CallerData, 1, &dwBytesSent, 0, NULL, NULL);
-            wc = dwBytesSent;
-#else
             wc = write( mSettings->mSock, mBuf, mSettings->mBufLen );
-#endif
             WARN_errno( wc < 0, "write Run" );
         } else {
             write_UDP_FIN( );
@@ -386,29 +375,15 @@ void Client::InitiateServer() {
  * ------------------------------------------------------------------- */
 
 void Client::Connect( ) {
-#ifdef WIN32
-    WSAPROTOCOL_INFO *pinfo;
-#endif
     int rc;
     SockAddr_remoteAddr( mSettings );
 
     assert( mSettings->inHostname != NULL );
 
     // create an internet socket
-    int type = ( isUDP( mSettings )  ?  SOCK_DGRAM : SOCK_STREAM);
-
-    int domain = (SockAddr_isIPv6( &mSettings->peer ) ?
-#ifdef HAVE_IPV6
-                  AF_INET6
-#else
-                  AF_INET
-#endif
-                  : AF_INET);
-
 #ifdef WIN32
     //RSVP TCP サービスプロバイダー を探す。
-    pinfo = FindProtocolInfo(AF_INET, SOCK_STREAM, IPPROTO_TCP, ( mSettings->mTOS ) ? XP1_QOS_SUPPORTED : 0 );
-    mSettings->mSock = WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, pinfo, 0, 0);
+    mSettings->mSock = WIN32Socket(mSettings);
 #else
     mSettings->mSock = socket( domain, type, 0 );
 #endif

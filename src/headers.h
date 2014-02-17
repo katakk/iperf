@@ -106,12 +106,51 @@
         return NULL;
     }
 
+#ifdef HAVE_IPV6
+#define WIN32SocketDomain(setting) (SockAddr_isIPv6( &setting->local ) ? AF_INET6 : AF_INET )
+#else
+#define WIN32SocketDomain(setting) (SockAddr_isIPv6( &setting->local ) ? AF_INET : AF_INET )
+#endif
+
+#define WIN32Socket(setting) \
+        WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, \
+        FindProtocolInfo( WIN32SocketDomain(setting), \
+        (isUDP( setting )  ?  SOCK_DGRAM  : SOCK_STREAM), \
+        (isUDP( setting )  ?  IPPROTO_UDP : IPPROTO_TCP), \
+        ( setting->mTOS ) ? XP1_QOS_SUPPORTED : 0 ), \
+        0, \
+        (SockAddr_isMulticast( &setting->local ) ? \
+            WSA_FLAG_MULTIPOINT_C_LEAF | WSA_FLAG_MULTIPOINT_D_LEAF : 0 ) \
+        )
+
 /* close, read, and write only work on files in Windows.
  * I get away with #defining them because I don't read files. */
     #define close( s )       closesocket( s )
-    #define read( s, b, l )  recv( s, (char*) b, l, 0 )
-    #define write( s, b, l ) send( s, (char*) b, l, 0 )
 
+    /* WSA 1.1 */
+    /* #define read( s, b, l )  recv( s, (char*) b, l, 0 ) */
+    /* #define write( s, b, l ) send( s, (char*) b, l, 0 ) */
+
+    /* WSA 2.2 */
+    static int read( int s, void * b, size_t l )
+    {
+        WSABUF RecvData;
+        DWORD  dwBytesRecv;
+        RecvData.buf = (char*) b;
+        RecvData.len = (u_long) l;
+        WSARecv(s, &RecvData, sizeof(RecvData), &dwBytesRecv, 0, NULL, NULL);
+        return dwBytesRecv;
+    }
+
+    static int write( int s, void * b, size_t l )
+    {
+        WSABUF SendData;
+        DWORD  dwBytesSent;
+        SendData.buf = (char*) b;
+        SendData.len = (u_long) l;
+        WSASend(s, &SendData, 1, &dwBytesSent, 0, NULL, NULL);
+        return dwBytesSent;
+    }
 #else /* not defined WIN32 */
 
 /* required on AIX for FD_SET (requires bzero).
