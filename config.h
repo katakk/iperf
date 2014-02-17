@@ -11,7 +11,6 @@
 #    include <ws2tcpip.h>
 #    include <windows.h>
 #pragma comment(lib, "ws2_32.lib")
-
 #    define HAVE_WIN32_THREAD 1
 #else /* WIN32 */
 #    define HAVE_POSIX_THREAD 1
@@ -61,6 +60,7 @@
 #ifdef WIN32
 #    define HAVE_USLEEP 1
 #else /* WIN32 */
+#    define HAVE_VSNPRINTF    1
 #    define HAVE_INET_PTON 1
 #    define HAVE_INET_NTOP 1
 #    define HAVE_GETTIMEOFDAY 1

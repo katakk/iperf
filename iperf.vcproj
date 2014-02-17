@@ -18,13 +18,14 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				OptimizeForProcessor="0"
 				AdditionalIncludeDirectories=".;..;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="4"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -124,10 +125,10 @@
 				RelativePath=".\src\Extractor.cpp">
 			</File>
 			<File
-				RelativePath=".\src\gettimeofday.cpp">
+				RelativePath=".\src\getopt.cpp">
 			</File>
 			<File
-				RelativePath=".\src\getopt.cpp">
+				RelativePath=".\src\gettimeofday.cpp">
 			</File>
 			<File
 				RelativePath=".\src\inet_ntop.cpp">
@@ -216,10 +217,10 @@
 				RelativePath=".\src\Extractor.h">
 			</File>
 			<File
-				RelativePath=".\src\gettimeofday.h">
+				RelativePath=".\src\getopt.h">
 			</File>
 			<File
-				RelativePath=".\src\getopt.h">
+				RelativePath=".\src\gettimeofday.h">
 			</File>
 			<File
 				RelativePath=".\src\headers.h">
