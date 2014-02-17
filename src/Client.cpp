@@ -381,6 +381,16 @@ void Client::Connect( ) {
     assert( mSettings->inHostname != NULL );
 
     // create an internet socket
+    int type = ( isUDP( mSettings )  ?  SOCK_DGRAM : SOCK_STREAM);
+
+    int domain = (SockAddr_isIPv6( &mSettings->peer ) ? 
+#ifdef HAVE_IPV6
+                  AF_INET6
+#else
+                  AF_INET
+#endif
+                  : AF_INET);
+
 #ifdef WIN32
     //RSVP TCP サービスプロバイダー を探す。
     mSettings->mSock = WIN32Socket(mSettings);
