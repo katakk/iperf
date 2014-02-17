@@ -468,7 +468,7 @@ void Client::write_UDP_FIN( ) {
     if (mSettings->lossPacketsFileName)
     {
 #ifdef WIN32
-        if ((log_handler = fopen(mSettings->lossPacketsFileName, "w" )))
+        if ((log_handler = fopen(mSettings->lossPacketsFileName, "w" )) < 0)
 #else
         if ((log_handler = open(mSettings->lossPacketsFileName,
                 (O_CREAT | O_WRONLY | O_TRUNC),
