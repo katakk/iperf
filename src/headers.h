@@ -69,6 +69,43 @@
         #define snprintf _snprintf
     #endif // __MWERKS__
 
+
+    // find Probider
+    static WSAPROTOCOL_INFO *FindProtocolInfo(int af, int type, int protocol, DWORD flags)
+    {
+        WSAPROTOCOL_INFO *buf=NULL;
+        static WSAPROTOCOL_INFO pinfo;
+
+        DWORD size = 0;
+        DWORD num;
+
+        WSAEnumProtocols(NULL, NULL, &size);
+        buf = (WSAPROTOCOL_INFO *)LocalAlloc(LPTR, size);
+        num = size / sizeof(WSAPROTOCOL_INFO);
+
+        WSAEnumProtocols(NULL, buf, &size);
+
+        for(DWORD i=0; i < num ;i++)
+        {
+            if ((buf[i].iAddressFamily == af) &&
+                (buf[i].iSocketType == type) &&
+                (buf[i].iProtocol == protocol))
+            {
+                if ((buf[i].dwServiceFlags1 & flags) == flags)
+                {
+                    memcpy(&pinfo, &buf[i], sizeof(WSAPROTOCOL_INFO));
+                    LocalFree(buf);
+                    return &pinfo;
+                }
+
+            }
+
+        }
+
+        LocalFree(buf);
+        return NULL;
+    }
+
 /* close, read, and write only work on files in Windows.
  * I get away with #defining them because I don't read files. */
     #define close( s )       closesocket( s )
