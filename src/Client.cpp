@@ -186,6 +186,10 @@ void Client::Run( void )
     int adjust = 0;
 
     char* readAt = mBuf;
+#ifdef WIN32
+	DWORD dwBytesSent;
+	WSABUF CallerData;
+#endif
 
 #if HAVE_THREAD
     if ( !isUDP( mSettings ) ) {
@@ -337,7 +341,14 @@ void Client::Run( void )
         mBuf_UDP->tv_usec = htonl( reportstruct->packetTime.tv_usec );
 
         if ( isMulticast( mSettings ) ) {
+#ifdef WIN32
+            CallerData.buf = mBuf;
+            CallerData.len = mSettings->mBufLen;
+            WSASend(mSettings->mSock, &CallerData, 1, &dwBytesSent, 0, NULL, NULL);
+            wc = dwBytesSent;
+#else
             wc = write( mSettings->mSock, mBuf, mSettings->mBufLen );
+#endif
             WARN_errno( wc < 0, "write Run" );
         } else {
             write_UDP_FIN( );
@@ -368,6 +379,43 @@ void Client::InitiateServer() {
     }
 }
 
+#ifdef WIN32
+WSAPROTOCOL_INFO *FindProtocolInfo(int af, int type, int protocol, DWORD flags)
+{
+    WSAPROTOCOL_INFO *buf=NULL;
+    static WSAPROTOCOL_INFO pinfo;
+
+    DWORD size = 0;
+    DWORD num;
+
+    WSAEnumProtocols(NULL, NULL, &size);
+    buf = (WSAPROTOCOL_INFO *)LocalAlloc(LPTR, size);
+    num = size / sizeof(WSAPROTOCOL_INFO);
+
+    WSAEnumProtocols(NULL, buf, &size);
+
+    for(DWORD i=0; i < num ;i++)
+    {
+        if ((buf[i].iAddressFamily == af) &&
+            (buf[i].iSocketType == type) &&
+            (buf[i].iProtocol == protocol))
+        {
+            if ((buf[i].dwServiceFlags1 & flags) == flags)
+            {
+                memcpy(&pinfo, &buf[i], sizeof(WSAPROTOCOL_INFO));
+                LocalFree(buf);
+                return &pinfo;
+            }
+
+        }
+
+    }
+
+    LocalFree(buf);
+    return NULL;
+}
+#endif
+
 /* -------------------------------------------------------------------
  * Setup a socket connected to a server.
  * If inLocalhost is not null, bind to that address, specifying
@@ -375,6 +423,9 @@ void Client::InitiateServer() {
  * ------------------------------------------------------------------- */
 
 void Client::Connect( ) {
+#ifdef WIN32
+	WSAPROTOCOL_INFO *pinfo;
+#endif
     int rc;
     SockAddr_remoteAddr( mSettings );
 
@@ -391,7 +442,13 @@ void Client::Connect( ) {
 #endif
                   : AF_INET);
 
-    mSettings->mSock = socket( domain, type, 0 );
+#ifdef WIN32
+    //RSVP TCP サービスプロバイダー を探す。
+    pinfo = FindProtocolInfo(AF_INET, SOCK_STREAM, IPPROTO_TCP, ( mSettings->mTOS ) ? XP1_QOS_SUPPORTED : 0 );
+    mSettings->mSock = WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, pinfo, 0, 0);
+#else
+	mSettings->mSock = socket( domain, type, 0 );
+#endif
     WARN_errno( mSettings->mSock == INVALID_SOCKET, "socket" );
 
     SetSocketOptions( mSettings );
@@ -406,8 +463,13 @@ void Client::Connect( ) {
     }
 
     // connect socket
+#ifdef WIN32
+	rc = WSAConnect( mSettings->mSock, (sockaddr*) &mSettings->peer,
+		SockAddr_get_sizeof_sockaddr( &mSettings->peer ), NULL, NULL, &mSettings->mQOS, NULL);
+#else /* WIN32 */
     rc = connect( mSettings->mSock, (sockaddr*) &mSettings->peer,
                   SockAddr_get_sizeof_sockaddr( &mSettings->peer ));
+#endif /* WIN32 */
     FAIL_errno( rc == SOCKET_ERROR, "connect", mSettings );
 
     getsockname( mSettings->mSock, (sockaddr*) &mSettings->local,

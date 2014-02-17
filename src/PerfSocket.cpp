@@ -17,7 +17,11 @@
  * ------------------------------------------------------------------- */
 
 void SetSocketOptions( thread_Settings *inSettings ) {
-    // set the TCP window size (socket buffer sizes)
+#ifdef WIN32
+    DWORD dwBytesSent;
+#endif /* WIN32 */
+
+       // set the TCP window size (socket buffer sizes)
     // also the UDP buffer size
     // must occur before call to accept() for large window sizes
     setsock_tcp_windowsize( inSettings->mSock, inSettings->mTCPWin,
@@ -84,12 +88,40 @@ void SetSocketOptions( thread_Settings *inSettings ) {
     }
 
 
-#ifdef IP_TOS
-
     // set IP TOS (type-of-service) field
     if ( inSettings->mTOS > 0 ) {
        int  tos = inSettings->mTOS;
        Socklen_t len = sizeof(tos);
+
+#ifdef WIN32
+//= SERVICETYPE_CONTROLLEDLOAD;     
+//= SERVICETYPE_GUARANTEED;         
+
+        inSettings->mQOS.SendingFlowspec.TokenRate = 1;                             /* In Bytes/sec */
+        inSettings->mQOS.SendingFlowspec.TokenBucketSize = 1;                       /* In Bytes */
+        inSettings->mQOS.SendingFlowspec.PeakBandwidth = 1;                         /* In Bytes/sec */
+        inSettings->mQOS.SendingFlowspec.Latency = QOS_NOT_SPECIFIED;               /* In microseconds */
+        inSettings->mQOS.SendingFlowspec.DelayVariation = QOS_NOT_SPECIFIED;        /* In microseconds */
+        inSettings->mQOS.SendingFlowspec.ServiceType = inSettings->mTOS;
+        inSettings->mQOS.SendingFlowspec.MaxSduSize = QOS_NOT_SPECIFIED;            /* In Bytes */
+        inSettings->mQOS.SendingFlowspec.MinimumPolicedSize = QOS_NOT_SPECIFIED;    /* In Bytes */
+
+        inSettings->mQOS.ReceivingFlowspec.TokenRate = 1;                           /* In Bytes/sec */
+        inSettings->mQOS.ReceivingFlowspec.TokenBucketSize = 1;                     /* In Bytes */
+        inSettings->mQOS.ReceivingFlowspec.PeakBandwidth = 1;                       /* In Bytes/sec */
+        inSettings->mQOS.ReceivingFlowspec.Latency = QOS_NOT_SPECIFIED;             /* In microseconds */
+        inSettings->mQOS.ReceivingFlowspec.DelayVariation = QOS_NOT_SPECIFIED;      /* In microseconds */
+        inSettings->mQOS.ReceivingFlowspec.ServiceType = inSettings->mTOS;
+        inSettings->mQOS.ReceivingFlowspec.MaxSduSize = QOS_NOT_SPECIFIED;          /* In Bytes */
+        inSettings->mQOS.ReceivingFlowspec.MinimumPolicedSize = QOS_NOT_SPECIFIED;  /* In Bytes */
+
+        inSettings->mQOS.ProviderSpecific.buf = NULL;
+        inSettings->mQOS.ProviderSpecific.len = 0;
+
+        WSAIoctl(inSettings->mSock, SIO_SET_QOS, &inSettings->mQOS, sizeof(QOS), NULL, 0, &dwBytesSent, NULL, NULL);
+
+#else /* WIN32 */
+#    ifdef IP_TOS
        if ( !isIPV6( inSettings ) )
        {
           // for IPv4
@@ -99,17 +131,18 @@ void SetSocketOptions( thread_Settings *inSettings ) {
        }
        else
        {
-#ifndef IPV6_TCLASS
-#define IPV6_TCLASS 67
-#endif
+#    ifndef IPV6_TCLASS
+#        define IPV6_TCLASS 67
+#    endif
           // for IPv6 (traffic class)
           int rc = setsockopt( inSettings->mSock, IPPROTO_IPV6, IPV6_TCLASS,
                                (char*) &tos, len );
           WARN_errno( rc == SOCKET_ERROR, "setsockopt IPV6_TCLASS" );
        }
+#    endif /* IP_TOS */
+#endif /* WIN32 */
     }
 
-#endif
 
 #ifdef SO_PRIORITY
     /* From socket(7): "Set the protocol-defined priority for all

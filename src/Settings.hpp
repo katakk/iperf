@@ -125,6 +125,9 @@ typedef struct thread_Settings {
 #if defined( HAVE_WIN32_THREAD )
     HANDLE mHandle;
 #endif
+#ifdef WIN32
+    QOS mQOS;
+#endif
 } thread_Settings;
 
 /*
