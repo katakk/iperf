@@ -63,6 +63,11 @@ void waitUntilQuit( void );
  * waits for all threads to complete
  * ------------------------------------------------------------------- */
 int main( int argc, char **argv ) {
+#ifdef WIN32
+    // Start winsock
+    WSADATA wsaData;
+    int rc;
+#endif
 
     // Set SIGTERM and SIGINT to call our user interrupt function
     my_signal( SIGTERM, Sig_Interupt );
@@ -74,8 +79,7 @@ int main( int argc, char **argv ) {
     signal(SIGPIPE,SIG_IGN);
 #else
     // Start winsock
-    WSADATA wsaData;
-    int rc = WSAStartup( 0x202, &wsaData );
+    rc = WSAStartup( 0x202, &wsaData );
     WARN_errno( rc == SOCKET_ERROR, "WSAStartup" );
     if (rc == SOCKET_ERROR)
         return 0;
