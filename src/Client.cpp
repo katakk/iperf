@@ -444,7 +444,7 @@ void Client::Connect( ) {
 
 #ifdef WIN32
     //RSVP TCP サービスプロバイダー を探す。
-    pinfo = FindProtocolInfo(AF_INET, SOCK_STREAM, IPPROTO_TCP, ( mSettings->mTOS ) ? XP1_QOS_SUPPORTED : 0 );
+	pinfo = FindProtocolInfo(AF_INET, SOCK_STREAM, IPPROTO_TCP, ( mSettings->mTOS ) ? XP1_QOS_SUPPORTED : 0 );
     mSettings->mSock = WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, pinfo, 0, 0);
 #else
 	mSettings->mSock = socket( domain, type, 0 );
@@ -488,7 +488,12 @@ void Client::write_UDP_FIN( ) {
     fd_set readSet;
     struct timeval timeout;
 
-    int lost_ssock = 0, lost_sock, lost_port, buflen=1024, br, log_handler = 0;
+    int lost_ssock = 0, lost_sock, lost_port, buflen=1024, br;
+#ifdef WIN32
+	FILE *log_handler = NULL;
+#else
+	int log_handler = 0;
+#endif /* WIN32 */
     struct sockaddr_in local_addr;
     socklen_t addr_len = sizeof(struct sockaddr_in);
     server_hdr *shdr;
@@ -496,12 +501,15 @@ void Client::write_UDP_FIN( ) {
 
     shdr = (server_hdr*) ((UDP_datagram*)mBuf + 1);
 
-#ifndef WIN32
     if (mSettings->lossPacketsFileName)
     {
-        if ((log_handler = open(mSettings->lossPacketsFileName,
+#ifdef WIN32
+		if ((log_handler = fopen(mSettings->lossPacketsFileName, "w" )))
+#else
+		if ((log_handler = open(mSettings->lossPacketsFileName,
                 (O_CREAT | O_WRONLY | O_TRUNC),
                 (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH))) < 0)
+#endif /* WIN32 */
         {
             fprintf(stderr, "fopen error %s\n", strerror(errno));
             goto not_interested_in_packet_loss;
@@ -547,9 +555,9 @@ void Client::write_UDP_FIN( ) {
             fprintf(stderr, "Out of memory %s\n", strerror(errno));
             exit(1);
         }
+
     }
     else
-#endif /* WIN32 */
     {
     not_interested_in_packet_loss:
         shdr->lost_port = 0; /* this indicates no interest in logging */
@@ -621,13 +629,22 @@ out_noerr:
         {
             /* the server will send properly formated strings */
             if (log_handler > 0) {
+#ifdef WIN32
+                wc = fwrite(buf, sizeof(const char),  br,log_handler);
+#else
                 wc = write(log_handler, buf, br);
+#endif
                 WARN_errno( wc < 0, "write_UDP_FIN out_noerr" );
             }
         }
     }
+#ifdef WIN32
+    if (log_handler > 0)
+        fclose(log_handler);
+#else
     if (log_handler > 0)
         close(log_handler);
+#endif
     close(lost_sock);
 
 out:
