@@ -170,7 +170,7 @@ typedef struct sockaddr_in iperf_sockaddr;
 #endif
 
 #ifdef WIN32
-typedef unsigned long long max_size_t;
+typedef unsigned __int64 max_size_t;
 #else
 typedef uint64_t max_size_t;
 #endif
