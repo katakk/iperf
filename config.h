@@ -26,6 +26,7 @@
 
 /* Define if the strings.h header file exists */
 #ifdef WIN32
+#define _CRT_SECURE_NO_WARNINGS
 /* #undef HAVE_STRINGS_H */
 #else /* WIN32 */
 #    define HAVE_STRINGS_H 1
