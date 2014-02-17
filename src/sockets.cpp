@@ -117,7 +117,7 @@ ssize_t readn( int inSock, void *outBuf, size_t inLen ) {
 ssize_t writen( int inSock, const void *inBuf, size_t inLen ) {
     size_t  nleft;
     int     nwritten;
-    const char *ptr;
+    char    *ptr;
 
     assert( inSock >= 0 );
     assert( inBuf != NULL );
