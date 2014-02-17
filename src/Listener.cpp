@@ -240,17 +240,12 @@ void Listener::Listen( ) {
                   : AF_INET);
 
 #ifdef WIN32
-    if ( SockAddr_isMulticast( &mSettings->local ) ) {
-        // Multicast on Win32 requires special handling
-        mSettings->mSock = WSASocket( domain, type, 0, 0, 0, WSA_FLAG_MULTIPOINT_C_LEAF | WSA_FLAG_MULTIPOINT_D_LEAF );
-        WARN_errno( mSettings->mSock == INVALID_SOCKET, "socket" );
-
-    } else
+    // Multicast on Win32 requires special handling
+    mSettings->mSock = WIN32Socket(mSettings);
+#else
+    mSettings->mSock = socket( domain, type, 0 );
 #endif
-    {
-        mSettings->mSock = socket( domain, type, 0 );
-        WARN_errno( mSettings->mSock == INVALID_SOCKET, "socket" );
-    }
+    WARN_errno( mSettings->mSock == INVALID_SOCKET, "socket" );
 
     SetSocketOptions( mSettings );
 
