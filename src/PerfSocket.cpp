@@ -94,9 +94,9 @@ void SetSocketOptions( thread_Settings *inSettings ) {
        Socklen_t len = sizeof(tos);
 
 #ifdef WIN32
-//= SERVICETYPE_CONTROLLEDLOAD;     
-//= SERVICETYPE_GUARANTEED;         
-
+//now testing...
+//= "0x60 SERVICETYPE_CONTROLLEDLOAD  Controlled Load" 2
+//= "0xA0 SERVICETYPE_GUARANTEED      Guaranteed"      3
         inSettings->mQOS.SendingFlowspec.TokenRate = 1;                             /* In Bytes/sec */
         inSettings->mQOS.SendingFlowspec.TokenBucketSize = 1;                       /* In Bytes */
         inSettings->mQOS.SendingFlowspec.PeakBandwidth = 1;                         /* In Bytes/sec */
