@@ -36,8 +36,7 @@
  * author:
  *      Paul Vixie, 1996.
  */
-int
-inet_ntop(int af, const void *src, char *dst, size_t size) {
+int inet_ntop(int af, const void *src, char *dst, size_t size) {
     switch ( af ) {
         case AF_INET:
             return(inet_ntop4((const unsigned char *)src, dst, size));
@@ -62,16 +61,16 @@ inet_ntop(int af, const void *src, char *dst, size_t size) {
  * author:
  *      Paul Vixie, 1996.
  */
-int
-inet_ntop4(const unsigned char *src, char *dst, size_t size) {
+#define INET_NTOP_TEMP_SIZE sizeof("255.255.255.255")  /* [16] */
+int inet_ntop4(const unsigned char *src, char *dst, size_t size) {
     static const char *fmt = "%u.%u.%u.%u";
-    char tmp[sizeof "255.255.255.255"];
+    char tmp[INET_NTOP_TEMP_SIZE];
 
-    if ( (size_t)sprintf(tmp, fmt, src[0], src[1], src[2], src[3]) >= size ) {
+    if ( (size_t)snprintf(tmp, INET_NTOP_TEMP_SIZE, fmt, src[0], src[1], src[2], src[3]) >= size ) {
         return 0;
     }
-    strcpy(dst, tmp);
-
+    strncpy(dst, tmp, size - 1);
+	dst[size - 1] = 0;
     return 1;
 }
 
@@ -82,8 +81,8 @@ inet_ntop4(const unsigned char *src, char *dst, size_t size) {
  *      Paul Vixie, 1996.
  */
 #ifdef HAVE_IPV6
-int
-inet_ntop6(const unsigned char *src, char *dst, size_t size) {
+#define INET6_NTOP_TEMP_SIZE sizeof("ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255")
+int inet_ntop6(const unsigned char *src, char *dst, size_t size) {
     /*
      * Note that int32_t and int16_t need only be "at least" large enough
      * to contain a value of the specified size.  On some systems, like
@@ -91,7 +90,7 @@ inet_ntop6(const unsigned char *src, char *dst, size_t size) {
      * Keep this in mind if you think this function should have been coded
      * to use pointer overlays.  All the world's not a VAX.
      */
-    char tmp[sizeof "ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255"], *tp;
+    char tmp[INET6_NTOP_TEMP_SIZE], *tp;
     struct {
         int base, len;
     } best, cur;
@@ -153,7 +152,7 @@ inet_ntop6(const unsigned char *src, char *dst, size_t size) {
             tp += strlen(tp);
             break;
         }
-        tp += sprintf(tp, "%x", words[i]);
+        tp += snprintf(tp, sizeof(tmp) - (tp - tmp), "%x", words[i]);
     }
     /* Was it a trailing run of 0x00's? */
     if ( best.base != -1 && (best.base + best.len) ==
@@ -168,7 +167,8 @@ inet_ntop6(const unsigned char *src, char *dst, size_t size) {
         errno = ENOSPC;
         return 0;
     }
-    strcpy(dst, tmp);
+    strncpy(dst, tmp, size - 1);
+	dst[size - 1] = 0;
     return 1;
 }
 #endif /* HAVE_IPV6 */

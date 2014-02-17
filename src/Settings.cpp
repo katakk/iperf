@@ -154,19 +154,23 @@ void Settings_Copy( thread_Settings *from, thread_Settings **into ) {
     memcpy( *into, from, sizeof(thread_Settings) );
     if ( from->mHost != NULL ) {
         (*into)->mHost = new char[ strlen(from->mHost) + 1];
-        strcpy( (*into)->mHost, from->mHost );
+        strncpy( (*into)->mHost, from->mHost, strlen(from->mHost) );
+        (*into)->mHost[strlen(from->mHost)] = '\0';
     }
     if ( from->mOutputFileName != NULL ) {
         (*into)->mOutputFileName = new char[ strlen(from->mOutputFileName) + 1];
-        strcpy( (*into)->mOutputFileName, from->mOutputFileName );
+        strncpy( (*into)->mOutputFileName, from->mOutputFileName, strlen(from->mOutputFileName) );
+        (*into)->mOutputFileName[strlen(from->mOutputFileName)] = '\0';
     }
     if ( from->mLocalhost != NULL ) {
         (*into)->mLocalhost = new char[ strlen(from->mLocalhost) + 1];
-        strcpy( (*into)->mLocalhost, from->mLocalhost );
+        strncpy( (*into)->mLocalhost, from->mLocalhost, strlen(from->mLocalhost) );
+        (*into)->mLocalhost[strlen(from->mLocalhost)] = '\0';
     }
     if ( from->mFileName != NULL ) {
         (*into)->mFileName = new char[ strlen(from->mFileName) + 1];
-        strcpy( (*into)->mFileName, from->mFileName );
+        strncpy( (*into)->mFileName, from->mFileName, strlen(from->mFileName) );
+        (*into)->mFileName[strlen(from->mFileName)] = '\0';
     }
     // Zero out certain entries
     (*into)->mTID = thread_zeroid();
@@ -240,7 +244,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 
         case 'c': // client mode w/ server host to connect to
             mExtSettings->mHost = new char[ strlen( optarg ) + 1 ];
-            strcpy( mExtSettings->mHost, optarg );
+            strncpy( mExtSettings->mHost, optarg, strlen( optarg ) );
+            mExtSettings->mHost[strlen( optarg )] = '\0';
 
             if ( mExtSettings->mThreadMode == kMode_Unknown ) {
                 // Test for Multicast
@@ -302,7 +307,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             fprintf( stderr, "not support at win32\n" );
 #endif
             mExtSettings->lossPacketsFileName = new char[strlen(optarg)+1];
-            strcpy( mExtSettings->lossPacketsFileName, optarg);
+            strncpy( mExtSettings->lossPacketsFileName, optarg, strlen(optarg));
+            mExtSettings->lossPacketsFileName[strlen(optarg)] = '\0';
             break;
 
         case 'l': // length of each buffer
@@ -344,7 +350,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 'o' : // output the report and other messages into the file
             unsetSTDOUT( mExtSettings );
             mExtSettings->mOutputFileName = new char[strlen(optarg)+1];
-            strcpy( mExtSettings->mOutputFileName, optarg);
+            strncpy( mExtSettings->mOutputFileName, optarg, strlen(optarg));
+            mExtSettings->mOutputFileName[strlen(optarg)]='\0';
             break;
 
         case 'p': // server port
@@ -457,7 +464,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             // more esoteric options
         case 'B': // specify bind address
             mExtSettings->mLocalhost = new char[ strlen( optarg ) + 1 ];
-            strcpy( mExtSettings->mLocalhost, optarg );
+            strncpy( mExtSettings->mLocalhost, optarg, strlen( optarg ) );
+            mExtSettings->mLocalhost[strlen( optarg )]='\0';
             // Test for Multicast
             iperf_sockaddr temp;
             SockAddr_setHostname( mExtSettings->mLocalhost, &temp,
@@ -489,7 +497,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 
             setFileInput( mExtSettings );
             mExtSettings->mFileName = new char[strlen(optarg)+1];
-            strcpy( mExtSettings->mFileName, optarg);
+            strncpy( mExtSettings->mFileName, optarg, strlen(optarg));
+            mExtSettings->mFileName[strlen(optarg)]='\0';
             break;
 
         case 'I' : // Set the stdin as the input source
@@ -501,7 +510,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             setFileInput( mExtSettings );
             setSTDIN( mExtSettings );
             mExtSettings->mFileName = new char[strlen("<stdin>")+1];
-            strcpy( mExtSettings->mFileName,"<stdin>");
+            strncpy( mExtSettings->mFileName, "<stdin>", strlen("<stdin>"));
+            mExtSettings->mFileName[strlen("<stdin>")]='\0';
             break;
 
         case 'L': // Listen Port (bidirectional testing client-side)
@@ -527,7 +537,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             if(strlen(outarg) < IFNAMSIZ) {
                 setCustInterface ( mExtSettings );
                 mExtSettings->mCustInterface = new char[strlen(optarg)+1];
-                strcpy(mExtSettings->mCustInterface, optarg);
+                strncpy(mExtSettings->mCustInterface, optarg, strlen(optarg));
+                mExtSettings->mCustInterface[strlen(optarg)]='\0';
             } else
                 fprintf( stderr, warn_interface_invalid_ignored, option);
             break;
@@ -610,7 +621,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 #ifdef TCP_CONGESTION
             setCongestionControl( mExtSettings );
             mExtSettings->mCongestion = new char[strlen(optarg)+1];
-            strcpy( mExtSettings->mCongestion, optarg);
+            strncpy( mExtSettings->mCongestion, optarg, strlen(optarg));
+            mExtSettings->mCongestion[strlen(optarg)]='\0';
 #else
             fprintf( stderr, "The -Z option is not available on this operating system\n");
 #endif
@@ -624,7 +636,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 void Settings_GetUpperCaseArg(const char *inarg, char *outarg) {
 
     int len = (int) strlen(inarg);
-    strcpy(outarg,inarg);
+    strncpy(outarg, inarg, len);
+	outarg[len]='\0';
 
     if ( (len > 0) && (inarg[len-1] >='a')
          && (inarg[len-1] <= 'z') )
@@ -634,7 +647,8 @@ void Settings_GetUpperCaseArg(const char *inarg, char *outarg) {
 void Settings_GetLowerCaseArg(const char *inarg, char *outarg) {
 
     int len = (int) strlen(inarg);
-    strcpy(outarg,inarg);
+    strncpy(outarg, inarg, len);
+	outarg[len]='\0';
 
     if ( (len > 0) && (inarg[len-1] >='A')
          && (inarg[len-1] <= 'Z') )
@@ -669,11 +683,13 @@ void Settings_GenerateListenerSettings( thread_Settings *client, thread_Settings
         (*listener)->mThreadMode = kMode_Listener;
         if ( client->mHost != NULL ) {
             (*listener)->mHost = new char[strlen( client->mHost ) + 1];
-            strcpy( (*listener)->mHost, client->mHost );
+            strncpy( (*listener)->mHost, client->mHost, strlen( client->mHost ) );
+            (*listener)->mHost[strlen( client->mHost )]='\0';
         }
         if ( client->mLocalhost != NULL ) {
             (*listener)->mLocalhost = new char[strlen( client->mLocalhost ) + 1];
-            strcpy( (*listener)->mLocalhost, client->mLocalhost );
+            strncpy( (*listener)->mLocalhost, client->mLocalhost, strlen( client->mLocalhost ) );
+            (*listener)->mLocalhost[strlen( client->mLocalhost )]='\0';
         }
     } else {
         *listener = NULL;
@@ -730,7 +746,8 @@ void Settings_GenerateClientSettings( thread_Settings *server,
         (*client)->mThreadMode = kMode_Client;
         if ( server->mLocalhost != NULL ) {
             (*client)->mLocalhost = new char[strlen( server->mLocalhost ) + 1];
-            strcpy( (*client)->mLocalhost, server->mLocalhost );
+            strncpy( (*client)->mLocalhost, server->mLocalhost, strlen( server->mLocalhost ) );
+            (*client)->mLocalhost[strlen( server->mLocalhost )]='\0';
         }
         (*client)->mHost = new char[REPORT_ADDRLEN];
         if ( ((sockaddr*)&server->peer)->sa_family == AF_INET ) {

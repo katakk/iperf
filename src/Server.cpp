@@ -297,12 +297,12 @@ out_noerr:
         fprintf(stderr, "connect error, %s\n", strerror(errno));
         goto out;
     }
-    sprintf((char *) buf, "LOST_GAPS DATAGRAMS_TOTAL %d\n", datagrams);
+    snprintf((char *) buf, buflen,  "LOST_GAPS DATAGRAMS_TOTAL %d\n", datagrams);
     bw = write(lost_sock, (char *) buf, strlen((char *)buf));
     LIST_FOREACH_SAFE(lpi, &mSettings->reporthdr->report.lost_packets, list, ltmp)
     {
         LIST_REMOVE(lpi, list);
-        sprintf((char *)buf, "LOST_GAPS %d %d\n", lpi->from, lpi->to);
+        snprintf((char *)buf, buflen, "LOST_GAPS %d %d\n", lpi->from, lpi->to);
         bw = write(lost_sock, (char *) buf, strlen((char *)buf));
         if (bw < 0)
             fprintf(stderr, "send error %s\n", strerror(errno));
