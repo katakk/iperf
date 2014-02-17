@@ -427,8 +427,9 @@ void Client::Connect( ) {
 
     // connect socket
 #ifdef WIN32
-	rc = WSAConnect( mSettings->mSock, (sockaddr*) &mSettings->peer,
-		SockAddr_get_sizeof_sockaddr( &mSettings->peer ), NULL, NULL, &mSettings->mQOS, NULL);
+    rc = WSAConnect( mSettings->mSock, (sockaddr*) &mSettings->peer,
+                     SockAddr_get_sizeof_sockaddr( &mSettings->peer ),
+                     NULL, NULL, &mSettings->mQOS, NULL);
 #else /* WIN32 */
     rc = connect( mSettings->mSock, (sockaddr*) &mSettings->peer,
                   SockAddr_get_sizeof_sockaddr( &mSettings->peer ));
@@ -522,7 +523,7 @@ void Client::write_UDP_FIN( ) {
     }
     else
     {
-    not_interested_in_packet_loss:
+not_interested_in_packet_loss:
         shdr->lost_port = 0; /* this indicates no interest in logging */
     }
 
