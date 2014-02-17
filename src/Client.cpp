@@ -75,7 +75,8 @@ void Client::RunTCP( void ) {
     max_size_t totLen = 0;
 
 #ifdef WIN32
-    MMRESULT mmtimer = (MMRESULT) NULL;
+    time_t t0;
+    double d0;
 #else
     struct itimerval it;
     int err;
@@ -94,11 +95,11 @@ void Client::RunTCP( void ) {
     reportstruct->packetID = 0;
 
     lastPacketTime.setnow();
-    if ( mMode_Time && mSettings->mAmount != 0 ) {
 
+    //-t0 : infinity
+    if ( mMode_Time && mSettings->mAmount != 0 ) {
 #ifdef WIN32
-        mmtimer = timeSetEvent(mSettings->mAmount * 10, 50,
-                      (LPTIMECALLBACK)Sig_Interupt, 0, TIME_ONESHOT);
+        t0 = time(NULL);
 #else
         memset (&it, 0, sizeof (it));
         it.it_value.tv_sec = (int) ((double)mSettings->mAmount / 100.0);
@@ -142,17 +143,16 @@ void Client::RunTCP( void ) {
                 mSettings->mAmount = 0;
             }
         }
-
-    } while ( ! (sInterupted  ||
-                   (!mMode_Time  &&  0 >= mSettings->mAmount)) && canRead );
-
 #ifdef WIN32
-    if ( mMode_Time && mSettings->mAmount != 0 ) {
-        if( mmtimer ) {
-            timeKillEvent(mmtimer);
+        else if ( mMode_Time && mSettings->mAmount != 0) {
+            d0 = difftime(time(NULL), t0);
+            if( d0 > mSettings->mAmount / 100.0 || d0 < 0) {
+                break;
+            }
         }
-    }
 #endif
+    } while ( ! (sInterupted  ||
+        (!mMode_Time  &&  0 >= mSettings->mAmount)) && canRead );
 
     // stop timing
     gettimeofday( &(reportstruct->packetTime), NULL );
