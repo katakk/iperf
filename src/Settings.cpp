@@ -304,7 +304,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
                 break;
             }
 
-			mExtSettings->lossPacketsFileName = new char[strlen(optarg)+1];
+            mExtSettings->lossPacketsFileName = new char[strlen(optarg)+1];
             strncpy( mExtSettings->lossPacketsFileName, optarg, strlen(optarg));
             mExtSettings->lossPacketsFileName[strlen(optarg)] = '\0';
             break;
@@ -635,7 +635,7 @@ void Settings_GetUpperCaseArg(const char *inarg, char *outarg) {
 
     int len = (int) strlen(inarg);
     strncpy(outarg, inarg, len);
-	outarg[len]='\0';
+    outarg[len]='\0';
 
     if ( (len > 0) && (inarg[len-1] >='a')
          && (inarg[len-1] <= 'z') )
@@ -646,7 +646,7 @@ void Settings_GetLowerCaseArg(const char *inarg, char *outarg) {
 
     int len = (int) strlen(inarg);
     strncpy(outarg, inarg, len);
-	outarg[len]='\0';
+    outarg[len]='\0';
 
     if ( (len > 0) && (inarg[len-1] >='A')
          && (inarg[len-1] <= 'Z') )
