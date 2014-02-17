@@ -187,8 +187,8 @@ void Client::Run( void )
 
     char* readAt = mBuf;
 #ifdef WIN32
-	DWORD dwBytesSent;
-	WSABUF CallerData;
+    DWORD dwBytesSent;
+    WSABUF CallerData;
 #endif
 
 #if HAVE_THREAD
@@ -387,7 +387,7 @@ void Client::InitiateServer() {
 
 void Client::Connect( ) {
 #ifdef WIN32
-	WSAPROTOCOL_INFO *pinfo;
+    WSAPROTOCOL_INFO *pinfo;
 #endif
     int rc;
     SockAddr_remoteAddr( mSettings );
@@ -407,10 +407,10 @@ void Client::Connect( ) {
 
 #ifdef WIN32
     //RSVP TCP サービスプロバイダー を探す。
-	pinfo = FindProtocolInfo(AF_INET, SOCK_STREAM, IPPROTO_TCP, ( mSettings->mTOS ) ? XP1_QOS_SUPPORTED : 0 );
+    pinfo = FindProtocolInfo(AF_INET, SOCK_STREAM, IPPROTO_TCP, ( mSettings->mTOS ) ? XP1_QOS_SUPPORTED : 0 );
     mSettings->mSock = WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, pinfo, 0, 0);
 #else
-	mSettings->mSock = socket( domain, type, 0 );
+    mSettings->mSock = socket( domain, type, 0 );
 #endif
     WARN_errno( mSettings->mSock == INVALID_SOCKET, "socket" );
 
@@ -454,9 +454,9 @@ void Client::write_UDP_FIN( ) {
 
     int lost_ssock = 0, lost_sock, lost_port, buflen=1024, br;
 #ifdef WIN32
-	FILE *log_handler = NULL;
+    FILE *log_handler = NULL;
 #else
-	int log_handler = 0;
+    int log_handler = 0;
 #endif /* WIN32 */
     struct sockaddr_in local_addr;
     socklen_t addr_len = sizeof(struct sockaddr_in);
@@ -468,9 +468,9 @@ void Client::write_UDP_FIN( ) {
     if (mSettings->lossPacketsFileName)
     {
 #ifdef WIN32
-		if ((log_handler = fopen(mSettings->lossPacketsFileName, "w" )))
+        if ((log_handler = fopen(mSettings->lossPacketsFileName, "w" )))
 #else
-		if ((log_handler = open(mSettings->lossPacketsFileName,
+        if ((log_handler = open(mSettings->lossPacketsFileName,
                 (O_CREAT | O_WRONLY | O_TRUNC),
                 (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH))) < 0)
 #endif /* WIN32 */
@@ -616,5 +616,5 @@ out:
         close(lost_ssock);
     if (buf)
         free(buf); /* not really necessary, since exiting */
- }
- // end write_UDP_FIN
+}
+// end write_UDP_FIN

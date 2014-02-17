@@ -178,7 +178,7 @@ void Server::write_UDP_AckFIN( ) {
                     /* list_add inserts the element AFTER the head (second param) */
                     LIST_INSERT_AFTER(lpi, ltmp, list);
                 }
-				LIST_REMOVE(oop, list);
+                LIST_REMOVE(oop, list);
                 free(oop);
             }
         }
@@ -191,7 +191,7 @@ void Server::write_UDP_AckFIN( ) {
         free(oop);
     }
 
-	int count = 0;
+    int count = 0;
     while ( count < 10 ) {
         count++;
 
