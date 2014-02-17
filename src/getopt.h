@@ -36,7 +36,7 @@
 */
 #ifndef GETOPT_H_
 #define GETOPT_H_
-
+#ifndef _GETOPT_DEFINED_
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,7 +55,7 @@ int getopt(int argc, char** argv, char* optstr);
 }
 #endif
 
-
+#endif /* _GETOPT_DEFINED_ */
 #endif /* GETOPT_H_ */
 
 
