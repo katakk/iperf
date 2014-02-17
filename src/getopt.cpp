@@ -34,6 +34,7 @@
 * THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 * DAMAGE.
 */
+#ifndef _GETOPT_DEFINED_
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -245,6 +246,6 @@ int getopt(int argc, char** argv, char* optstr)
     return c;
 }
 
-
+#endif /* _GETOPT_DEFINED_ */
 /* vim:ts=3
 */
