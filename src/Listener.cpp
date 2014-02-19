@@ -55,7 +55,7 @@ Listener::~Listener() {
  * ------------------------------------------------------------------- */
 void Listener::Run( void ) {
 #ifdef WIN32
-    if ( isUDP( mSettings ) && !isSingleUDP( mSettings ) ) {
+    if ( isUDP( mSettings ) && isSingleUDP( mSettings ) ) {
         UDPSingleServer();
     } else
 #else
