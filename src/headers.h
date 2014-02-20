@@ -227,8 +227,3 @@ typedef uint64_t max_size_t;
 
 #endif /* HEADERS_H */
 
-
-
-
-
-

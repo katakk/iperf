@@ -4,7 +4,7 @@
 #include "headers.h"
 #include "Settings.hpp"
 
-/* -------------------------------------------------------------------*/
+/* ------------------------------------------------------------------- */
     void SockAddr_localAddr( thread_Settings *inSettings );
     void SockAddr_remoteAddr( thread_Settings *inSettings );
 

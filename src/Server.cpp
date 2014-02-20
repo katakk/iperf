@@ -129,7 +129,7 @@ void Server::write_UDP_AckFIN( ) {
     struct sockaddr_in local_addr, client_addr;
     int bw;
     SOCKET lost_sock = 0;
-	int lost_port = 0, buflen=1024, datagrams = 0;
+    int lost_port = 0, buflen=1024, datagrams = 0;
     socklen_t addr_len = sizeof(struct sockaddr_in);
     void *buf = NULL;
     fd_set readSet;

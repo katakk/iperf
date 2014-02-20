@@ -328,8 +328,8 @@ void Listener::McastJoin( ) {
                              (char*) &mreq, sizeof(mreq));
         WARN_errno( rc == SOCKET_ERROR, "multicast join" );
     }
-#endif
-#endif
+#endif /* HAVE_IPV6_MULTICAST */
+#endif /* HAVE_MULTICAST */
 }
 // end McastJoin
 

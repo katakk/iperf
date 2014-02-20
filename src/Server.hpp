@@ -11,7 +11,7 @@
 #include "util.h"
 #include "Timestamp.hpp"
 
-/* -------------------------------------------------------------------*/
+/* ------------------------------------------------------------------- */
 class Server {
 public:
     // stores server socket, port and TCP/UDP mode

@@ -225,7 +225,7 @@ void reporter_reportMSS( int inMSS, thread_Settings *inSettings ) {
     if ( inMSS <= 0 ) {
         printf( report_mss_unsupported, inSettings->mSock );
     } else {
-        const char* net;
+        const char* net; /* FIX: compiler warn cast to const char* */
         int mtu = 0;
 
         if ( checkMSS_MTU( inMSS, 1500 ) ) {
