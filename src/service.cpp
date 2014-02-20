@@ -440,7 +440,7 @@ BOOL CmdStartService(int argc, char **argv) {
                 if ( rc != 0 )
                     _tprintf(TEXT("%s started.\n"), TEXT(SZSERVICEDISPLAYNAME) );
             }
-            CloseServiceHandle(schService);            
+            CloseServiceHandle(schService);
         }
         CloseServiceHandle(schSCManager);
     } else
