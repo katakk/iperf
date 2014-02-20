@@ -18,6 +18,7 @@
 
 void SetSocketOptions( thread_Settings *inSettings )
 {
+    int rc = 0;
 
 #ifdef WIN32
     DWORD dwBytesSent;
@@ -36,7 +37,7 @@ void SetSocketOptions( thread_Settings *inSettings )
     if ( isCongestionControl( inSettings ) ) {
 #ifdef TCP_CONGESTION
     Socklen_t len = strlen( inSettings->mCongestion ) + 1;
-    int rc = setsockopt( inSettings->mSock, IPPROTO_TCP, TCP_CONGESTION,
+    rc = setsockopt( inSettings->mSock, IPPROTO_TCP, TCP_CONGESTION,
                  inSettings->mCongestion, len);
     if (rc == SOCKET_ERROR ) {
         fprintf(stderr, "Attempt to set '%s' congestion control failed: %s\n",
@@ -55,7 +56,7 @@ void SetSocketOptions( thread_Settings *inSettings )
     int val = inSettings->mTTL;
 #ifdef HAVE_MULTICAST
     if ( !SockAddr_isIPv6( &inSettings->local ) ) {
-        int rc = setsockopt( inSettings->mSock, IPPROTO_IP, IP_MULTICAST_TTL,
+        rc = setsockopt( inSettings->mSock, IPPROTO_IP, IP_MULTICAST_TTL,
             (const char*) &val, (Socklen_t) sizeof(val));
 
         WARN_errno( rc == SOCKET_ERROR, "multicast ttl" );
@@ -74,7 +75,7 @@ void SetSocketOptions( thread_Settings *inSettings )
     }
 #ifdef HAVE_IPV6_MULTICAST
     else {
-        int rc = setsockopt( inSettings->mSock, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
+        rc = setsockopt( inSettings->mSock, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
             (const void*) &val, (Socklen_t) sizeof(val));
         WARN_errno( rc == SOCKET_ERROR, "multicast ttl" );
         
@@ -135,7 +136,7 @@ void SetSocketOptions( thread_Settings *inSettings )
        if ( !isIPV6( inSettings ) )
        {
           // for IPv4
-          int rc = setsockopt( inSettings->mSock, IPPROTO_IP, IP_TOS,
+          rc = setsockopt( inSettings->mSock, IPPROTO_IP, IP_TOS,
                                (char*) &tos, len );
           WARN_errno( rc == SOCKET_ERROR, "setsockopt IP_TOS" );
        }
@@ -145,7 +146,7 @@ void SetSocketOptions( thread_Settings *inSettings )
 #        define IPV6_TCLASS 67
 #    endif
           // for IPv6 (traffic class)
-          int rc = setsockopt( inSettings->mSock, IPPROTO_IPV6, IPV6_TCLASS,
+          rc = setsockopt( inSettings->mSock, IPPROTO_IPV6, IPV6_TCLASS,
                                (char*) &tos, len );
           WARN_errno( rc == SOCKET_ERROR, "setsockopt IPV6_TCLASS" );
        }
@@ -166,7 +167,7 @@ void SetSocketOptions( thread_Settings *inSettings )
     if ( inSettings->mPriority > 0 ) {
         int  priority = inSettings->mPriority;
         Socklen_t len = sizeof(priority);
-        int rc = setsockopt( inSettings->mSock, SOL_SOCKET, SO_PRIORITY,
+        rc = setsockopt( inSettings->mSock, SOL_SOCKET, SO_PRIORITY,
                              (char*) &priority, len );
         WARN_errno( rc == SOCKET_ERROR, "setsockopt SO_PRIORITY" );
     }
