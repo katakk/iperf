@@ -61,6 +61,8 @@ void SetSocketOptions( thread_Settings *inSettings )
 
 /* ------------------> TCP_CONGESTION ------------------------> */
     if ( isCongestionControl( inSettings ) ) {
+        if(! isUDP( inSettings )) {
+            /* TCP */
 #ifdef TCP_CONGESTION
             len = strlen( inSettings->mCongestion ) + 1;
             rc = setsockopt( inSettings->mSock, IPPROTO_TCP, TCP_CONGESTION,
@@ -73,6 +75,10 @@ void SetSocketOptions( thread_Settings *inSettings )
 #else
             fprintf( stderr, "The -Z option is not available on this operating system\n");
 #endif
+        } else {
+            /* UDP */
+        }
+    
     }
 /* <------------------ TCP_CONGESTION <------------------------ */
 
@@ -199,14 +205,15 @@ void SetSocketOptions( thread_Settings *inSettings )
 
 /* ------------------> TCP_MAXSEG ------------------------> */
     if ( !isUDP( inSettings ) ) {
-        // set the TCP maximum segment size
+        /* set the TCP maximum segment size */
         setsock_tcp_mss( inSettings->mSock, inSettings->mMSS );
     }
 /* <------------------ TCP_MAXSEG <------------------------ */
+
 /* ------------------> TCP_NODELAY ------------------------> */
     if ( !isUDP( inSettings ) ) {
 #ifdef TCP_NODELAY
-        // set TCP nodelay option
+        /* set TCP nodelay option */
         if ( isNoDelay( inSettings ) ) {
             int nodelay = 1;
             Socklen_t len = sizeof(nodelay);
