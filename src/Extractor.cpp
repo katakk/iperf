@@ -65,7 +65,7 @@ void Extractor_Destroy ( thread_Settings *mSettings ) {
  */
 int Extractor_getNextDataBlock ( char *data, thread_Settings *mSettings ) {
     if ( Extractor_canRead( mSettings ) ) {
-        return(fread( data, 1, mSettings->Extractor_size,
+        return (int)(fread( data, 1, mSettings->Extractor_size,
                       mSettings->Extractor_file ));
     }
     return 0;
