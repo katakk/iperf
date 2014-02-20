@@ -16,17 +16,22 @@
  * These are optional performance tuning factors.
  * ------------------------------------------------------------------- */
 
-void SetSocketOptions( thread_Settings *inSettings ) {
+void SetSocketOptions( thread_Settings *inSettings )
+{
+
 #ifdef WIN32
     DWORD dwBytesSent;
 #endif /* WIN32 */
 
+/* ------------------> TCP/UDP window size ------------------------> */
        // set the TCP window size (socket buffer sizes)
     // also the UDP buffer size
     // must occur before call to accept() for large window sizes
     setsock_tcp_windowsize( inSettings->mSock, inSettings->mTCPWin,
                             (inSettings->mThreadMode == kMode_Client ? 1 : 0) );
+/* <------------------ TCP window size <------------------------ */
 
+/* ------------------> TCP_CONGESTION ------------------------> */
     if ( isCongestionControl( inSettings ) ) {
 #ifdef TCP_CONGESTION
     Socklen_t len = strlen( inSettings->mCongestion ) + 1;
@@ -41,7 +46,9 @@ void SetSocketOptions( thread_Settings *inSettings ) {
     fprintf( stderr, "The -Z option is not available on this operating system\n");
 #endif
     }
+/* <------------------ TCP_CONGESTION <------------------------ */
 
+/* ------------------> TTL ------------------------> */
     // check if we're sending multicast, and set TTL
     if ( isMulticast( inSettings ) && ( inSettings->mTTL > 0 ) ) {
     int val = inSettings->mTTL;
@@ -87,11 +94,13 @@ void SetSocketOptions( thread_Settings *inSettings ) {
 #endif
     }
 
+/* <------------------ TTL <------------------------ */
 
+/* ------------------> IP_TOS ------------------------> */
     // set IP TOS (type-of-service) field
     if ( inSettings->mTOS > 0 ) {
-       int  tos = inSettings->mTOS;
-       Socklen_t len = sizeof(tos);
+        int  tos = inSettings->mTOS;
+        Socklen_t len = sizeof(tos);
 
 #ifdef WIN32
 //now testing...
@@ -142,8 +151,9 @@ void SetSocketOptions( thread_Settings *inSettings ) {
 #    endif /* IP_TOS */
 #endif /* WIN32 */
     }
+/* <------------------ IP_TOS <------------------------ */
 
-
+/* ------------------> SO_PRIORITY ------------------------> */
 #ifdef SO_PRIORITY
     /* From socket(7): "Set the protocol-defined priority for all
      * packets to be sent on this socket. Linux uses this value to order
@@ -160,6 +170,10 @@ void SetSocketOptions( thread_Settings *inSettings ) {
         WARN_errno( rc == SOCKET_ERROR, "setsockopt SO_PRIORITY" );
     }
 #endif
+/* <------------------ SO_PRIORITY <------------------------ */
+
+/* ------------------> TCP_MAXSEG ------------------------> */
+/* ------------------> TCP_NODELAY ------------------------> */
 
     if ( !isUDP( inSettings ) ) {
         // set the TCP maximum segment size
@@ -177,5 +191,7 @@ void SetSocketOptions( thread_Settings *inSettings ) {
         }
 #endif
     }
+/* <------------------ TCP_MAXSEG <------------------------ */
+/* <------------------ TCP_NODELAY <------------------------ */
 }
 // end SetSocketOptions
