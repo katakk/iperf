@@ -239,6 +239,8 @@ void Listener::Listen( )
     SOCKET rc;
     int type;
     int protocol = 0;
+    int boolean = 1;
+    Socklen_t len;
 
     SockAddr_localAddr( mSettings );
 
@@ -277,8 +279,8 @@ void Listener::Listen( )
     SetSocketOptions( mSettings );
 
     // reuse the address, so we can run if a former server was killed off
-    int boolean = 1;
-    Socklen_t len = sizeof(boolean);
+    boolean = 1;
+    len = sizeof(boolean);
     setsockopt( mSettings->mSock, SOL_SOCKET, SO_REUSEADDR, (char*) &boolean, len );
 
     // bind socket to server address
