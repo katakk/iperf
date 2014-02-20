@@ -530,7 +530,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 'N': // specify TCP nodelay option (disable Jacobson's Algorithm)
             setNoDelay( mExtSettings );
             break;
-            
+
         case 'O': // specify interface to bind to (multicast)
             if(strlen(outarg) < IFNAMSIZ) {
                 setCustInterface ( mExtSettings );
