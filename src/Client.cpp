@@ -394,6 +394,7 @@ void Client::Connect( ) {
     int rc;
     int type = 0;
     int protocol = 0;
+    int domain;
 
     SockAddr_remoteAddr( mSettings );
 
@@ -402,7 +403,7 @@ void Client::Connect( ) {
     // create an internet socket
     type = ( isUDP( mSettings )  ?  SOCK_DGRAM : SOCK_STREAM);
 
-    int domain = (SockAddr_isIPv6( &mSettings->peer ) ? 
+    domain = (SockAddr_isIPv6( &mSettings->peer ) ? 
 #ifdef HAVE_IPV6
                   AF_INET6
 #else
