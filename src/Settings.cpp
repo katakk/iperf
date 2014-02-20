@@ -46,6 +46,7 @@ m      no_argument          print_mss        IPERF_PRINT_MSS
 n:     required_argument    num              IPERF_NUM
 o:     required_argument    output
 p:     required_argument    port             IPERF_PORT
+q      no_argument                           IPERF_SEQPACKET
 r      no_argument          tradeoff         IPERF_TRADEOFF
 s      no_argument          server           IPERF_SERVER
 t:     required_argument    time             IPERF_TIME
@@ -54,7 +55,7 @@ v      no_argument          version
 w:     required_argument    window           TCP_WINDOW_SIZE
 x:     required_argument    reportexclude    IPERF_REPORTEXCLUDE
 y:     required_argument    reportstyle      IPERF_REPORTSTYLE
-z*     <empty>
+z      no_argument                           IPERF_SEQPACKET
 A*     <empty>
 B:     required_argument    bind             IPERF_BIND
 C      no_argument          compatibility    IPERF_COMPAT
@@ -84,7 +85,7 @@ Z:     required_argument    linux-congestion IPERF_CONGESTION_CONTROL
 *******************************************************************/
 
 const char short_options[] =
- "1b:c:df:hi:k:l:mn:o:p:rst:uvw:x:y:B:CDEF:IL:M:NO:P:Q:RS:T:UVWX:Z:";
+ "1b:c:df:hi:k:l:mn:o:p:qrst:uvw:x:y:zB:CDEF:IL:M:NO:P:Q:RS:T:UVWX:Z:";
 
 /* -------------------------------------------------------------------
  * defaults
@@ -416,6 +417,14 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
                 fprintf( stderr, warn_window_small, mExtSettings->mTCPWin );
             }
             break;
+
+		case 'q': // 
+	 	    setSeqpacket( mExtSettings );
+	 	    break;
+
+		case 'z': // SCTP
+		    if ( !isSCTP( mExtSettings ) ) setSCTP( mExtSettings );
+		    break;
 
         case 'x': // Limit Reports
             while ( *optarg != '\0' ) {
