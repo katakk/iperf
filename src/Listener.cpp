@@ -254,6 +254,7 @@ void Listener::Listen( )
         type = SOCK_DGRAM;
         protocol = 0;
     }
+
     int domain = (SockAddr_isIPv6( &mSettings->local ) ?
 #ifdef HAVE_IPV6
                   AF_INET6
