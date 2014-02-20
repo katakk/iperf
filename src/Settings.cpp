@@ -232,7 +232,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             }
 
             Settings_GetLowerCaseArg(optarg,outarg);
-            mExtSettings->mUDPRate = byte_atoi(outarg);
+            mExtSettings->mUDPRate = (unsigned long) byte_atoi(outarg);
             setUDP( mExtSettings );
 
             // if -l has already been processed, mBufLenSet is true
@@ -311,7 +311,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 
         case 'l': // length of each buffer
             Settings_GetUpperCaseArg(optarg,outarg);
-            mExtSettings->mBufLen = byte_atoi( outarg );
+            mExtSettings->mBufLen = (int) byte_atoi( outarg );
             setBuflenSet( mExtSettings );
             if ( !isUDP( mExtSettings ) ) {
                  if ( mExtSettings->mBufLen < (int) sizeof( client_hdr ) &&
@@ -410,7 +410,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 
         case 'w': // TCP window size (socket buffer size)
             Settings_GetUpperCaseArg(optarg,outarg);
-            mExtSettings->mTCPWin = byte_atoi(outarg);
+            mExtSettings->mTCPWin = (int) byte_atoi(outarg);
 
             if ( mExtSettings->mTCPWin < 2048 ) {
                 fprintf( stderr, warn_window_small, mExtSettings->mTCPWin );
