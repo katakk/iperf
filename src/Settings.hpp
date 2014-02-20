@@ -103,7 +103,7 @@ typedef struct thread_Settings {
     ReportMode mReportMode;
     TestMode mMode;                 // -r or -d
     // Hopefully int64_t's
-    max_size_t mUDPRate;            // -b or -u
+    unsigned long mUDPRate;            // -b or -u
     max_size_t mAmount;             // -n or -t
     max_size_t mBurstRate;          // -E
     // doubles
