@@ -382,7 +382,9 @@ void Client::InitiateServer() {
  * ------------------------------------------------------------------- */
 #if 0 /* template */
 
-    if(! isUDP( mSettings )) {
+    if ( isSCTP( mSettings ) ) {
+        /* SCTP */
+    } else if(! isUDP( mSettings )) {
         /* TCP */
     } else {
         /* UDP */
@@ -390,7 +392,8 @@ void Client::InitiateServer() {
 
 #endif /* template */
 
-void Client::Connect( ) {
+void Client::Connect( )
+{
     int rc;
     int type = 0;
     int protocol = 0;
@@ -401,9 +404,23 @@ void Client::Connect( ) {
     assert( mSettings->inHostname != NULL );
 
     // create an internet socket
-    type = ( isUDP( mSettings )  ?  SOCK_DGRAM : SOCK_STREAM);
 
-    domain = (SockAddr_isIPv6( &mSettings->peer ) ? 
+    if ( isSCTP( mSettings ) ) {
+        type = SOCK_STREAM;
+        protocol = IPPROTO_SCTP;
+    } else if(isUDP( mSettings )) {
+        type = SOCK_DGRAM;
+        protocol = 0;
+    } else {
+        type = SOCK_STREAM;
+        protocol = 0;
+    }
+    /* overwrite */
+    if ( isSeqpacket( mSettings ) ) {
+        type = SOCK_SEQPACKET;
+    }
+
+    domain = (SockAddr_isIPv6( &mSettings->peer ) ?
 #ifdef HAVE_IPV6
                   AF_INET6
 #else
@@ -412,6 +429,7 @@ void Client::Connect( ) {
                   : AF_INET);
 
 #ifdef WIN32
+    // TODO: SCTP
     //RSVP TCP サービスプロバイダー を探す。
     mSettings->mSock = WIN32Socket(mSettings, domain, type, protocol, 0);
 #else

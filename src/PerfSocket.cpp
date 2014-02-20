@@ -17,7 +17,9 @@
  * ------------------------------------------------------------------- */
 #if 0 /* template */
 
-    if(! isUDP( inSettings )) {
+    if ( isSCTP( inSettings ) ) {
+        /* SCTP */
+    } else if(! isUDP( inSettings )) {
         /* TCP */
     } else {
         /* UDP */
@@ -61,7 +63,9 @@ void SetSocketOptions( thread_Settings *inSettings )
 
 /* ------------------> TCP_CONGESTION ------------------------> */
     if ( isCongestionControl( inSettings ) ) {
-        if(! isUDP( inSettings )) {
+        if ( isSCTP( inSettings ) ) {
+            /* SCTP */
+        } else if(! isUDP( inSettings )) {
             /* TCP */
 #ifdef TCP_CONGESTION
             len = strlen( inSettings->mCongestion ) + 1;
@@ -203,15 +207,38 @@ void SetSocketOptions( thread_Settings *inSettings )
 #endif
 /* <------------------ SO_PRIORITY <------------------------ */
 
-/* ------------------> TCP_MAXSEG ------------------------> */
-    if ( !isUDP( inSettings ) ) {
-        /* set the TCP maximum segment size */
-        setsock_tcp_mss( inSettings->mSock, inSettings->mMSS );
+/* ------------------> TCP_MAXSEG ------------------------> */ 
+    if ( inSettings->mMSS > 0 ) {
+        if ( isSCTP( inSettings ) ) {
+            /* set the SCTP maximum segment size */
+            MSS = inSettings->mMSS;
+            Socklen_t len = sizeof(MSS);
+            rc = setsockopt( inSettings->mSock, SOL_SCTP, SCTP_MAXSEG,
+                     (char *) &MSS, len );
+            WARN_errno( rc == SOCKET_ERROR, "setsockopt SCTP_MAXSEG" );
+        } else if(! isUDP( inSettings )) {
+            /* set the TCP maximum segment size */
+            setsock_tcp_mss( inSettings->mSock, inSettings->mMSS );
+            WARN_errno( rc == SOCKET_ERROR, "setsockopt TCP_MAXSEG" );
+        } else {
+            /* UDP */
+        }       
     }
 /* <------------------ TCP_MAXSEG <------------------------ */
 
 /* ------------------> TCP_NODELAY ------------------------> */
-    if ( !isUDP( inSettings ) ) {
+    if ( isSCTP( inSettings ) ) {
+#ifdef SCTP_NODELAY
+        /* set SCTP nodelay option */
+        if ( isNoDelay( inSettings ) ) {
+            int nodelay = 1;
+            Socklen_t len = sizeof(nodelay);
+            int rc = setsockopt( inSettings->mSock, SOL_SCTP, SCTP_NODELAY,
+                     (char *) &nodelay, len );
+            WARN_errno( rc == SOCKET_ERROR, "setsockopt SCTP_NODELAY" );
+        }
+#endif
+    } else if ( !isUDP( inSettings ) ) {
 #ifdef TCP_NODELAY
         /* set TCP nodelay option */
         if ( isNoDelay( inSettings ) ) {

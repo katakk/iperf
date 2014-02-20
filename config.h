@@ -108,4 +108,24 @@
 /* Define if Debugging of sockets is desired */
 /* #undef DBG_MJZ */
 
+/* /usr/include/netinet/tcp.h */
+#ifndef TCP_MAXSEG
+#define TCP_MAXSEG      2
+#endif
+
+#ifndef SCTP_MAXSEG
+#ifdef TCP_MAXSEG
+#define SCTP_MAXSEG TCP_MAXSEG
+#endif
+#endif
+
+#ifndef SOL_SCTP
+#define SOL_SCTP        132
+#endif
+
+/* IPPROTO_SCTP = 132 is a enum /usr/include/netinet/in.h */
+#ifdef WIN32
+#define IPPROTO_SCTP 132
+#endif
+
 #endif /* CONFIG_H */

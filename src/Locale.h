@@ -32,6 +32,8 @@ Client/Server:\n\
   -O    <int>       specify an interface to bind to for multicast\n\
   -Q                set protocol-defined priority i.e. skb_priority\n\
   -V    n           Set the domain to IPv6\n\
+  -z,               use SCTP\n\
+  -q,               use SOCK_SEQPACKET (need SCTP)\n\
 \n\
 Server specific:\n\
   -s                run in server mode\n\
@@ -112,6 +114,9 @@ const char client_datagram_size[] =
 
 const char server_datagram_size[] =
 "Receiving %d byte datagrams\n";
+
+const char sctp_window_size[] =
+"SCTP window size";
 
 const char tcp_window_size[] =
 "TCP window size";

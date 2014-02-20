@@ -111,7 +111,9 @@ void reporter_serverstats( Connection_Info *nused, Transfer_Info *stats ) {
  */
 #if 0 /* template */
 
-    if(! isUDP( mSettings )) {
+    if ( isSCTP( data ) ) {
+        /* SCTP */
+    } else if(! isUDP( data )) {
         /* TCP */
     } else {
         /* UDP */
@@ -128,13 +130,17 @@ void reporter_reportsettings( ReporterData *data ) {
 
     printf("%s", separator_line );
     if ( data->mThreadMode == kMode_Listener ) {
-        if(! isUDP( data )) {
+        if ( isSCTP( data ) ) {
+            printf( server_port, "SCTP", data->mPort );
+        } else if(! isUDP( data )) {
             printf( server_port, "TCP", data->mPort );
         } else {
             printf( server_port, "UDP", data->mPort );
         }
     } else {
-        if(! isUDP( data )) {
+        if ( isSCTP( data ) ) {
+            printf( client_port, "SCTP", data->mPort );
+        } else if(! isUDP( data )) {
             printf( client_port, "TCP", data->mPort );
         } else {
             printf( client_port, "UDP", data->mPort );
@@ -158,7 +164,10 @@ void reporter_reportsettings( ReporterData *data ) {
     byte_snprintf( buffer, sizeof(buffer), win,
                    toupper( data->info.mFormat));
 
-    if(! isUDP( data )) {
+    if ( isSCTP( data ) ) {
+        /* SCTP */
+        printf( "%s: %s", sctp_window_size, buffer );
+    } else if(! isUDP( data )) {
         /* TCP */
         printf( "%s: %s", tcp_window_size, buffer );
     } else {

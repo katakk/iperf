@@ -226,7 +226,9 @@ void Listener::Run( void ) {
  * ------------------------------------------------------------------- */
 #if 0 /* template */
 
-    if(! isUDP( mSettings )) {
+    if ( isSCTP( mSettings ) ) {
+        /* SCTP */
+    } else if(! isUDP( mSettings )) {
         /* TCP */
     } else {
         /* UDP */
@@ -245,7 +247,13 @@ void Listener::Listen( )
     SockAddr_localAddr( mSettings );
 
     // create an internet TCP socket
-	if(! isUDP( mSettings )) {
+
+    /* SCTP */
+    if ( isSCTP( mSettings ) ) {
+        /* SCTP */
+        type = SOCK_STREAM;
+        protocol = IPPROTO_SCTP;
+    } else if(! isUDP( mSettings )) {
         /* TCP */
         type = SOCK_STREAM;
         protocol = 0;
@@ -253,6 +261,10 @@ void Listener::Listen( )
         /* UDP */
         type = SOCK_DGRAM;
         protocol = 0;
+    }
+    /* over write */
+    if ( isSeqpacket( mSettings ) ) {
+        type = SOCK_SEQPACKET;
     }
 
     int domain = (SockAddr_isIPv6( &mSettings->local ) ?
