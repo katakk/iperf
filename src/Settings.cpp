@@ -524,7 +524,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 'M': // specify TCP MSS (maximum segment size)
             Settings_GetUpperCaseArg(optarg,outarg);
 
-            mExtSettings->mMSS = byte_atoi( outarg );
+            mExtSettings->mMSS = (int) byte_atoi( outarg );
             break;
 
         case 'N': // specify TCP nodelay option (disable Jacobson's Algorithm)
