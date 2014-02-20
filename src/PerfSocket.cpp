@@ -28,6 +28,23 @@
 void SetSocketOptions( thread_Settings *inSettings )
 {
     int rc = 0;
+    int MSS;
+    int tos;
+    Socklen_t len;
+    int val;
+#ifdef SO_PRIORITY
+    int  priority;
+#endif
+#ifdef HAVE_MULTICAST
+    int fd;
+    struct ifreq ifr;
+    struct sockaddr_in *int_addr;
+#endif
+#ifdef HAVE_IPV6_MULTICAST
+    int fd6;
+    struct ifreq ifr6;
+    struct sockaddr_in6 *int_addr6;
+#endif
 
 #ifdef WIN32
     DWORD dwBytesSent;
@@ -45,7 +62,7 @@ void SetSocketOptions( thread_Settings *inSettings )
 /* ------------------> TCP_CONGESTION ------------------------> */
     if ( isCongestionControl( inSettings ) ) {
 #ifdef TCP_CONGESTION
-            Socklen_t len = strlen( inSettings->mCongestion ) + 1;
+            len = strlen( inSettings->mCongestion ) + 1;
             rc = setsockopt( inSettings->mSock, IPPROTO_TCP, TCP_CONGESTION,
                          inSettings->mCongestion, len);
             if (rc == SOCKET_ERROR ) {
@@ -62,7 +79,7 @@ void SetSocketOptions( thread_Settings *inSettings )
 /* ------------------> TTL ------------------------> */
     // check if we're sending multicast, and set TTL
     if ( isMulticast( inSettings ) && ( inSettings->mTTL > 0 ) ) {
-        int val = inSettings->mTTL;
+        val = inSettings->mTTL;
 #ifdef HAVE_MULTICAST
         if ( !SockAddr_isIPv6( &inSettings->local ) ) {
             rc = setsockopt( inSettings->mSock, IPPROTO_IP, IP_MULTICAST_TTL,
@@ -70,13 +87,12 @@ void SetSocketOptions( thread_Settings *inSettings )
 
             WARN_errno( rc == SOCKET_ERROR, "multicast ttl" );
             if(isCustInterface ( inSettings ) ) {
-                int fd = socket(AF_INET, SOCK_DGRAM, 0);
-                struct ifreq ifr;
+                fd = socket(AF_INET, SOCK_DGRAM, 0);
                 ifr.ifr_addr.sa_family = AF_INET;
                 strncpy(ifr.ifr_name, inSettings->mCustInterface, IFNAMSIZ-1);
                 if(ioctl(fd, SIOCGIFADDR, &ifr) != -1)
                 {
-                    struct sockaddr_in *int_addr = (struct sockaddr_in *)&ifr.ifr_addr;
+                    int_addr = (struct sockaddr_in *)&ifr.ifr_addr;
                     setsockopt(inSettings->mSock, IPPROTO_IP, IP_MULTICAST_IF, &int_addr->sin_addr, sizeof(int_addr->sin_addr));
                 }
                 close(fd);
@@ -89,16 +105,15 @@ void SetSocketOptions( thread_Settings *inSettings )
             WARN_errno( rc == SOCKET_ERROR, "multicast ttl" );
 
             if(isCustInterface ( inSettings ) ) {
-                int fd = socket(AF_INET6, SOCK_DGRAM, 0);
-                struct ifreq ifr;
-                ifr.ifr_addr.sa_family = AF_INET6;
-                strncpy(ifr.ifr_name, inSettings->mCustInterface, IFNAMSIZ-1);
-                if(ioctl(fd, SIOCGIFADDR, &ifr) == 0)
+                fd6 = socket(AF_INET6, SOCK_DGRAM, 0);
+                ifr6.ifr_addr.sa_family = AF_INET6;
+                strncpy(ifr6.ifr_name, inSettings->mCustInterface, IFNAMSIZ-1);
+                if(ioctl(fd6, SIOCGIFADDR, &ifr6) == 0)
                 {
-                    struct sockaddr_in6 *int_addr = (struct sockaddr_in6 *)&ifr.ifr_addr;
-                    setsockopt(inSettings->mSock, IPPROTO_IPV6, IPV6_MULTICAST_IF, &int_addr->sin6_addr, sizeof(int_addr->sin6_addr));
+                    int_addr6 = (struct sockaddr_in6 *)&ifr6.ifr_addr;
+                    setsockopt(inSettings->mSock, IPPROTO_IPV6, IPV6_MULTICAST_IF, &int_addr6->sin6_addr, sizeof(int_addr6->sin6_addr));
                 }
-                close(fd);
+                close(fd6);
             }
         }
 #endif /* HAVE_IPV6_MULTICAST */
@@ -109,8 +124,8 @@ void SetSocketOptions( thread_Settings *inSettings )
 /* ------------------> IP_TOS ------------------------> */
     // set IP TOS (type-of-service) field
     if ( inSettings->mTOS > 0 ) {
-        int  tos = inSettings->mTOS;
-        Socklen_t len = sizeof(tos);
+        tos = inSettings->mTOS;
+        len = sizeof(tos);
 
 #ifdef WIN32
 //now testing...
@@ -173,7 +188,7 @@ void SetSocketOptions( thread_Settings *inSettings )
      * field for outgoing packets. Setting a priority outside the range 0
      * to 6 requires the CAP_NET_ADMIN capability." */
     if ( inSettings->mPriority > 0 ) {
-        int  priority = inSettings->mPriority;
+        priority = inSettings->mPriority;
         Socklen_t len = sizeof(priority);
         rc = setsockopt( inSettings->mSock, SOL_SOCKET, SO_PRIORITY,
                              (char*) &priority, len );
