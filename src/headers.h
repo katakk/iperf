@@ -106,22 +106,12 @@
         return NULL;
     }
 
-#ifdef HAVE_IPV6
-#define WIN32SocketDomain(setting) (SockAddr_isIPv6( &setting->local ) ? AF_INET6 : AF_INET )
-#else
-#define WIN32SocketDomain(setting) (SockAddr_isIPv6( &setting->local ) ? AF_INET : AF_INET )
-#endif
-
-#define WIN32Socket(setting) \
-        WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, \
-        FindProtocolInfo( WIN32SocketDomain(setting), \
-        (isUDP( setting )  ?  SOCK_DGRAM  : SOCK_STREAM), \
-        (isUDP( setting )  ?  IPPROTO_UDP : IPPROTO_TCP), \
-        ( setting->mTOS ) ? XP1_QOS_SUPPORTED : 0 ), \
-        0, \
-        (SockAddr_isMulticast( &setting->local ) ? \
-            WSA_FLAG_MULTIPOINT_C_LEAF | WSA_FLAG_MULTIPOINT_D_LEAF : 0 ) \
-        )
+#define WIN32Socket(setting, _domain, _type, _protocol, _etc) \
+          WSASocket(FROM_PROTOCOL_INFO, \
+          FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, \
+          FindProtocolInfo( _domain, (_type), (_protocol) , \
+          ( setting->mTOS ) ? XP1_QOS_SUPPORTED : 0 ), \
+          0, (_etc))
 
 /* close, read, and write only work on files in Windows.
  * I get away with #defining them because I don't read files. */

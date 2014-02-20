@@ -412,7 +412,7 @@ void Client::Connect( ) {
 
 #ifdef WIN32
     //RSVP TCP サービスプロバイダー を探す。
-    mSettings->mSock = WIN32Socket(mSettings);
+    mSettings->mSock = WIN32Socket(mSettings, domain, type, protocol, 0);
 #else
     mSettings->mSock = socket( domain, type, protocol );
 #endif
