@@ -35,9 +35,11 @@
 * DAMAGE.
 */
 #ifndef _GETOPT_DEFINED_
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
+#define HEADERS()
+
+#include "headers.h"
+
 #include "getopt.h"
 
 

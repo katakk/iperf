@@ -72,7 +72,8 @@ int inet_pton4(const char *src, unsigned char *dst)
         const char *pch;
 
         if ( (pch = strchr(digits, ch)) != NULL ) {
-            unsigned int n = *tp * 10 + (pch - digits);
+            unsigned int n = (unsigned int)(*tp) * 10
+                           + (unsigned int)(pch - digits);
 
             if ( n > 255 )
                 return(0);
@@ -177,7 +178,7 @@ int inet_pton6(const char *src, unsigned char *dst)
          * Since some memmove()'s erroneously fail to handle
          * overlapping regions, we'll do the shift by hand.
          */
-        const int n = tp - colonp;
+        const int n = (const int)(tp - colonp);
         int i;
 
         for ( i = 1; i <= n; i++ ) {

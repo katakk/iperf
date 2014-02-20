@@ -526,7 +526,7 @@ not_interested_in_packet_loss:
         timeout.tv_sec  = 0;
         timeout.tv_usec = 250000; // quarter second, 250 ms
 
-        rc = select( mSettings->mSock+1, &readSet, NULL, NULL, &timeout );
+        rc = select( (int) (mSettings->mSock+1), &readSet, NULL, NULL, &timeout );
         FAIL_errno( rc == SOCKET_ERROR, "select", mSettings );
 
         if ( rc == 0 ) {
@@ -579,7 +579,7 @@ out_noerr:
             /* the server will send properly formated strings */
             if (log_handler > 0) {
 #ifdef WIN32
-                wc = fwrite(buf, sizeof(const char),  br,log_handler);
+                wc = (int) fwrite(buf, sizeof(const char),  br,log_handler);
 #else
                 wc = write(log_handler, buf, br);
 #endif
