@@ -92,10 +92,9 @@ void SetSocketOptions( thread_Settings *inSettings )
             close(fd);
         }
     }
-#endif
-#endif
+#endif /* HAVE_IPV6_MULTICAST */
+#endif /* HAVE_MULTICAST */
     }
-
 /* <------------------ TTL <------------------------ */
 
 /* ------------------> IP_TOS ------------------------> */
