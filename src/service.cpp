@@ -497,10 +497,10 @@ LPTSTR GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize ) {
  *
  * each time starting the service, this is the entry point of the service.
  * Start the service, certainly it is on server-mode
- * 
+ *
  *-------------------------------------------------------------------- */
 VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv) {
-    
+
     // report the status to the service control manager.
     //
     if ( !ReportStatusToSCMgr(
@@ -536,7 +536,7 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv) {
                              NO_ERROR,              // exit code
                              3000) )                 // wait hint
         goto clean;
-    
+
     // initialize client(s)
     if ( ext_gSettings->mThreadMode == kMode_Client ) {
         client_init( ext_gSettings );
@@ -554,7 +554,7 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv) {
 #endif
         thread_start( into );
     }
-    
+
     // report the status to the service control manager.
     //
     if ( !ReportStatusToSCMgr(
@@ -587,7 +587,7 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv) {
 //    stop code, and return.  Otherwise, the
 //    ServiceControlManager will believe that
 //    the service has stopped responding.
-//    
+//
 VOID ServiceStop() {
 #ifdef HAVE_THREAD
     Sig_Interupt( 1 );
