@@ -301,7 +301,14 @@ void Client::Run( void )
         if (mSettings->mBurstRate) {
             if ((++burstcount >= mSettings->mBurstRate) && (delay > 0))
             {
-                 delay_loop( delay * mSettings->mBurstRate);
+                max_size_t loop = mSettings->mBurstRate;
+                if(loop)
+                {
+                    while(--loop)
+                    {
+                        delay_loop(delay);
+                    }
+                }
             }
             burstcount %= mSettings->mBurstRate;
         }
