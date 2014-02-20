@@ -68,7 +68,7 @@ typedef struct thread_Settings {
     int mThreads;                   // -P
     int mTOS;                       // -S
     int mPriority;                  // -O
-    int mSock;
+    SOCKET mSock;
     int Extractor_size;
     int mBufLen;                    // -l
     int mMSS;                       // -M

@@ -20,7 +20,7 @@
  * returns -1 on error, 0 on no error.
  * ------------------------------------------------------------------- */
 
-int setsock_tcp_windowsize( int inSock, int inTCPWin, int inSend ) {
+int setsock_tcp_windowsize( SOCKET inSock, int inTCPWin, int inSend ) {
 #ifdef SO_SNDBUF
     int rc;
     int newTCPWin;
@@ -96,7 +96,7 @@ int setsock_tcp_windowsize( int inSock, int inTCPWin, int inSend ) {
  * or -1 on error.
  * ------------------------------------------------------------------- */
 
-int getsock_tcp_windowsize( int inSock, int inSend ) {
+int getsock_tcp_windowsize( SOCKET inSock, int inSend ) {
     int theTCPWin = 0;
 
 #ifdef SO_SNDBUF

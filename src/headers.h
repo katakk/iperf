@@ -132,7 +132,7 @@
     /* #define write( s, b, l ) send( s, (char*) b, l, 0 ) */
 
     /* WSA 2.2 */
-    static int read( int s, void * b, size_t l )
+    static int read( SOCKET s, void * b, size_t l )
     {
         WSABUF RecvData;
         DWORD  dwBytesRecv;
@@ -142,7 +142,7 @@
         return dwBytesRecv;
     }
 
-    static int write( int s, void * b, size_t l )
+    static int write( SOCKET s, void * b, size_t l )
     {
         WSABUF SendData;
         DWORD  dwBytesSent;

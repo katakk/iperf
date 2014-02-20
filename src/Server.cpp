@@ -128,7 +128,8 @@ void Server::write_UDP_AckFIN( ) {
     struct lost_packet_interval *lpi, *ltmp;
     struct sockaddr_in local_addr, client_addr;
     int bw;
-    int lost_sock = 0, lost_port = 0, buflen=1024, datagrams = 0;
+    SOCKET lost_sock = 0;
+	int lost_port = 0, buflen=1024, datagrams = 0;
     socklen_t addr_len = sizeof(struct sockaddr_in);
     void *buf = NULL;
     fd_set readSet;
@@ -232,7 +233,7 @@ void Server::write_UDP_AckFIN( ) {
         timeout.tv_sec  = 1;
         timeout.tv_usec = 0;
 
-        rc = (int) select( mSettings->mSock+1, &readSet, NULL, NULL, &timeout );
+        rc = (int) select( (int)mSettings->mSock+1, &readSet, NULL, NULL, &timeout );
         FAIL_errno( rc == SOCKET_ERROR, "select", mSettings );
 
         if ( rc == 0 ) {

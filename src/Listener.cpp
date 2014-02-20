@@ -225,7 +225,7 @@ void Listener::Run( void ) {
  * accept connections on.
  * ------------------------------------------------------------------- */
 void Listener::Listen( ) {
-    int rc;
+    SOCKET rc;
 
     SockAddr_localAddr( mSettings );
 

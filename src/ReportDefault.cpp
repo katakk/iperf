@@ -161,7 +161,7 @@ void reporter_reportsettings( ReporterData *data ) {
 /*
  * Report a socket's peer IP address in default style
  */
-void *reporter_reportpeer( Connection_Info *stats, int ID ) {
+void *reporter_reportpeer( Connection_Info *stats, SOCKET ID ) {
     if ( ID > 0 ) {
         // copy the inet_ntop into temp buffers, to avoid overwriting
         char local_addr[ REPORT_ADDRLEN ];

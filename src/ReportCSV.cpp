@@ -45,7 +45,7 @@ void CSV_stats( Transfer_Info *stats ) {
     }
 }
 
-void *CSV_peer( Connection_Info *stats, int ID ) {
+void *CSV_peer( Connection_Info *stats, SOCKET ID ) {
 
     // copy the inet_ntop into temp buffers, to avoid overwriting
     char local_addr[ REPORT_ADDRLEN ];

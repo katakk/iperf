@@ -37,7 +37,7 @@ typedef struct ReportStruct {
 
 typedef struct Transfer_Info {
     void *reserved_delay;
-    int transferID;
+    SOCKET transferID;
     int groupID;
     int cntError;
     int cntOutofOrder;
@@ -146,7 +146,7 @@ typedef struct ReportHeader {
     struct ReportHeader *next;
 } ReportHeader;
 
-typedef void* (* report_connection)( Connection_Info*, int );
+typedef void* (* report_connection)( Connection_Info*, SOCKET );
 typedef void (* report_settings)( ReporterData* );
 typedef void (* report_statistics)( Transfer_Info* );
 typedef void (* report_serverstatistics)( Connection_Info*, Transfer_Info* );

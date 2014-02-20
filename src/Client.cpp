@@ -383,12 +383,15 @@ void Client::InitiateServer() {
 
 void Client::Connect( ) {
     int rc;
+    int type = 0;
+    int protocol = 0;
+
     SockAddr_remoteAddr( mSettings );
 
     assert( mSettings->inHostname != NULL );
 
     // create an internet socket
-    int type = ( isUDP( mSettings )  ?  SOCK_DGRAM : SOCK_STREAM);
+    type = ( isUDP( mSettings )  ?  SOCK_DGRAM : SOCK_STREAM);
 
     int domain = (SockAddr_isIPv6( &mSettings->peer ) ? 
 #ifdef HAVE_IPV6
@@ -402,7 +405,7 @@ void Client::Connect( ) {
     //RSVP TCP サービスプロバイダー を探す。
     mSettings->mSock = WIN32Socket(mSettings);
 #else
-    mSettings->mSock = socket( domain, type, 0 );
+    mSettings->mSock = socket( domain, type, protocol );
 #endif
     WARN_errno( mSettings->mSock == INVALID_SOCKET, "socket" );
 
@@ -444,7 +447,8 @@ void Client::write_UDP_FIN( ) {
     fd_set readSet;
     struct timeval timeout;
 
-    int lost_ssock = 0, lost_sock, lost_port, buflen=1024, br;
+    SOCKET lost_ssock = 0, lost_sock;
+    int lost_port, buflen=1024, br;
 #ifdef WIN32
     FILE *log_handler = NULL;
 #else

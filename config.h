@@ -17,6 +17,11 @@
 #    define HAVE_PTHREAD 1
 /* #undef HAVE_PTHREAD_CANCEL */
 #    define _REENTRANT 1
+
+#ifndef SOCKET
+#define SOCKET int
+#endif
+
 #endif /* WIN32 */
 
 /* Define if on OSF1 and need special extern "C" around some header files */

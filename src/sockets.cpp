@@ -20,7 +20,7 @@ Setting the MSS may not be implemented on this OS.\n";
 const char warn_mss_notset[] =
 "WARNING: attempt to set TCP maximum segment size to %d, but got %d\n";
 
-void setsock_tcp_mss( int inSock, int inMSS ) {
+void setsock_tcp_mss( SOCKET inSock, int inMSS ) {
 #ifdef TCP_MAXSEG
     int rc;
     int newMSS;
@@ -52,7 +52,7 @@ void setsock_tcp_mss( int inSock, int inMSS ) {
  * returns the TCP maximum segment size
  * ------------------------------------------------------------------- */
 
-int getsock_tcp_mss( int inSock ) {
+int getsock_tcp_mss( SOCKET inSock ) {
     int theMSS = 0;
 
 #ifdef TCP_MAXSEG
@@ -77,7 +77,7 @@ int getsock_tcp_mss( int inSock ) {
  * from Stevens, 1998, section 3.9
  * ------------------------------------------------------------------- */
 
-ssize_t readn( int inSock, void *outBuf, size_t inLen ) {
+ssize_t readn( SOCKET inSock, void *outBuf, size_t inLen ) {
     size_t  nleft;
     int     nread;
     char *ptr;
@@ -114,7 +114,7 @@ ssize_t readn( int inSock, void *outBuf, size_t inLen ) {
  * from Stevens, 1998, section 3.9
  * ------------------------------------------------------------------- */
 
-ssize_t writen( int inSock, const void *inBuf, size_t inLen ) {
+ssize_t writen( SOCKET inSock, const void *inBuf, size_t inLen ) {
     size_t  nleft;
     int     nwritten;
     char    *ptr;

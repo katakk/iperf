@@ -17,11 +17,11 @@
  * set/getsockopt wrappers for SO_RCVBUF and SO_SNDBUF; TCP_MAXSEG
  * socket.c
  * ------------------------------------------------------------------- */
-int setsock_tcp_windowsize( int inSock, int inTCPWin, int inSend );
-int getsock_tcp_windowsize( int inSock, int inSend );
+int setsock_tcp_windowsize( SOCKET inSock, int inTCPWin, int inSend );
+int getsock_tcp_windowsize( SOCKET inSock, int inSend );
 
-void setsock_tcp_mss( int inSock, int inTCPWin );
-int  getsock_tcp_mss( int inSock );
+void setsock_tcp_mss( SOCKET inSock, int inTCPWin );
+int  getsock_tcp_mss( SOCKET inSock );
 
 /* -------------------------------------------------------------------
  * signal handlers
