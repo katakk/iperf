@@ -24,9 +24,10 @@ void SetSocketOptions( thread_Settings *inSettings )
 #endif /* WIN32 */
 
 /* ------------------> TCP/UDP window size ------------------------> */
-       // set the TCP window size (socket buffer sizes)
-    // also the UDP buffer size
-    // must occur before call to accept() for large window sizes
+    /* set the TCP window size (socket buffer sizes)
+     * also the UDP buffer size
+     * must occur before call to accept() for large window sizes
+     */
     setsock_tcp_windowsize( inSettings->mSock, inSettings->mTCPWin,
                             (inSettings->mThreadMode == kMode_Client ? 1 : 0) );
 /* <------------------ TCP window size <------------------------ */

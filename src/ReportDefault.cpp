@@ -157,6 +157,7 @@ void reporter_reportsettings( ReporterData *data ) {
     }
     byte_snprintf( buffer, sizeof(buffer), win,
                    toupper( data->info.mFormat));
+
     if(! isUDP( data )) {
         /* TCP */
         printf( "%s: %s", tcp_window_size, buffer );
