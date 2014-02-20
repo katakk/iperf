@@ -198,7 +198,7 @@ void Client::Run( void )
     bool canRead = true, mMode_Time = isModeTime( mSettings );
 
     // setup termination variables
-    if ( mMode_Time ) {
+    if ( mMode_Time && mSettings->mAmount ) {
         mEndTime.setnow();
         mEndTime.add( mSettings->mAmount / 100.0 );
     }
