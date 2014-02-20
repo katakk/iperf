@@ -312,7 +312,8 @@ void Listener::Listen( )
  * Joins the multicast group, with the default interface.
  * ------------------------------------------------------------------- */
 
-void Listener::McastJoin( ) {
+void Listener::McastJoin( )
+{
 #ifdef HAVE_MULTICAST
     if ( !SockAddr_isIPv6( &mSettings->local ) ) {
         struct ip_mreq mreq;
