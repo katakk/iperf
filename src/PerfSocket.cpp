@@ -183,14 +183,14 @@ void SetSocketOptions( thread_Settings *inSettings )
 /* <------------------ SO_PRIORITY <------------------------ */
 
 /* ------------------> TCP_MAXSEG ------------------------> */
-/* ------------------> TCP_NODELAY ------------------------> */
-
     if ( !isUDP( inSettings ) ) {
         // set the TCP maximum segment size
         setsock_tcp_mss( inSettings->mSock, inSettings->mMSS );
-
+    }
+/* <------------------ TCP_MAXSEG <------------------------ */
+/* ------------------> TCP_NODELAY ------------------------> */
+    if ( !isUDP( inSettings ) ) {
 #ifdef TCP_NODELAY
-
         // set TCP nodelay option
         if ( isNoDelay( inSettings ) ) {
             int nodelay = 1;
@@ -201,7 +201,6 @@ void SetSocketOptions( thread_Settings *inSettings )
         }
 #endif
     }
-/* <------------------ TCP_MAXSEG <------------------------ */
 /* <------------------ TCP_NODELAY <------------------------ */
 }
 // end SetSocketOptions
