@@ -380,6 +380,15 @@ void Client::InitiateServer() {
  * If inLocalhost is not null, bind to that address, specifying
  * which outgoing interface to use.
  * ------------------------------------------------------------------- */
+#if 0 /* template */
+
+    if(! isUDP( mSettings )) {
+        /* TCP */
+    } else {
+        /* UDP */
+    }
+
+#endif /* template */
 
 void Client::Connect( ) {
     int rc;

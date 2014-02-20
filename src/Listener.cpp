@@ -224,13 +224,34 @@ void Listener::Run( void ) {
  * wildcard server address, specifying what incoming interface to
  * accept connections on.
  * ------------------------------------------------------------------- */
-void Listener::Listen( ) {
+#if 0 /* template */
+
+    if(! isUDP( mSettings )) {
+        /* TCP */
+    } else {
+        /* UDP */
+    }
+
+#endif /* template */
+
+void Listener::Listen( )
+{
     SOCKET rc;
+    int type;
+    int protocol = 0;
 
     SockAddr_localAddr( mSettings );
 
     // create an internet TCP socket
-    int type = (isUDP( mSettings )  ?  SOCK_DGRAM  :  SOCK_STREAM);
+	if(! isUDP( mSettings )) {
+        /* TCP */
+        type = SOCK_STREAM;
+        protocol = 0;
+    } else {
+        /* UDP */
+        type = SOCK_DGRAM;
+        protocol = 0;
+    }
     int domain = (SockAddr_isIPv6( &mSettings->local ) ?
 #ifdef HAVE_IPV6
                   AF_INET6
