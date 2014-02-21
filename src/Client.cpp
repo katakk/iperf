@@ -410,10 +410,10 @@ void Client::Connect( )
         protocol = IPPROTO_SCTP;
     } else if(isUDP( mSettings )) {
         type = SOCK_DGRAM;
-        protocol = 0;
+        protocol = IPPROTO_UDP;
     } else {
         type = SOCK_STREAM;
-        protocol = 0;
+        protocol = IPPROTO_TCP;
     }
     /* overwrite */
     if ( isSeqpacket( mSettings ) ) {
@@ -430,7 +430,7 @@ void Client::Connect( )
 
 #ifdef WIN32
     // TODO: SCTP
-    //RSVP TCP ƒT[ƒrƒXƒvƒƒoƒCƒ_[ ‚ð’T‚·B
+    //RSVP TCP ï¿½Tï¿½[ï¿½rï¿½Xï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½[ ï¿½ï¿½Tï¿½ï¿½ï¿½B
     mSettings->mSock = WIN32Socket(mSettings, domain, type, protocol, 0);
 #else
     mSettings->mSock = socket( domain, type, protocol );
