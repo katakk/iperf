@@ -256,11 +256,11 @@ void Listener::Listen( )
     } else if(! isUDP( mSettings )) {
         /* TCP */
         type = SOCK_STREAM;
-        protocol = 0;
+        protocol = IPPROTO_TCP;
     } else {
         /* UDP */
         type = SOCK_DGRAM;
-        protocol = 0;
+        protocol = IPPROTO_UDP;
     }
     /* over write */
     if ( isSeqpacket( mSettings ) ) {
