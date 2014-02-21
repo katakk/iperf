@@ -406,14 +406,17 @@ void Client::Connect( )
     // create an internet socket
 
     if ( isSCTP( mSettings ) ) {
+        /* SCTP */
         type = SOCK_STREAM;
         protocol = IPPROTO_SCTP;
-    } else if(isUDP( mSettings )) {
-        type = SOCK_DGRAM;
-        protocol = IPPROTO_UDP;
-    } else {
+    } else if(! isUDP( mSettings )) {
+        /* TCP */
         type = SOCK_STREAM;
         protocol = IPPROTO_TCP;
+    } else {
+        /* UDP */
+        type = SOCK_DGRAM;
+        protocol = IPPROTO_UDP;
     }
     /* overwrite */
     if ( isSeqpacket( mSettings ) ) {
