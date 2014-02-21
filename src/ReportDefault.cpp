@@ -139,11 +139,11 @@ void reporter_reportsettings( ReporterData *data ) {
         }
     } else {
         if ( isSCTP( data ) ) {
-            printf( client_port, "SCTP", data->mPort );
+            printf( client_port, "SCTP", data->mHost, data->mPort );
         } else if(! isUDP( data )) {
-            printf( client_port, "TCP", data->mPort );
+            printf( client_port, "TCP", data->mHost, data->mPort );
         } else {
-            printf( client_port, "UDP", data->mPort );
+            printf( client_port, "UDP", data->mHost, data->mPort );
         }
     }
     if ( data->mLocalhost != NULL ) {
