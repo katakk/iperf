@@ -380,7 +380,6 @@ void Client::InitiateServer() {
  * If inLocalhost is not null, bind to that address, specifying
  * which outgoing interface to use.
  * ------------------------------------------------------------------- */
-<<<<<<< HEAD
 #if 0 /* template */
 
     if ( isSCTP( mSettings ) ) {
@@ -392,8 +391,6 @@ void Client::InitiateServer() {
     }
 
 #endif /* template */
-=======
->>>>>>> parent of c9cb886... hatena kill
 
 void Client::Connect( )
 {
