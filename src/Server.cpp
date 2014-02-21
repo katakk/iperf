@@ -88,6 +88,11 @@ void Server::Run( void ) {
             }
             if ( isUDP (mSettings))
                 ReportPacket( mSettings->reporthdr, reportstruct );
+            else if ( !isUDP (mSettings) && mSettings->mInterval > 0) {
+                reportstruct->packetLen = currLen;
+                gettimeofday( &(reportstruct->packetTime), NULL );
+                ReportPacket( mSettings->reporthdr, reportstruct );
+            }
         } while ( currLen > 0 );
 
         // stop timing
