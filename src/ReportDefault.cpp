@@ -109,6 +109,7 @@ void reporter_serverstats( Connection_Info *nused, Transfer_Info *stats ) {
 /*
  * Report the client or listener Settings in default style
  */
+<<<<<<< HEAD
 #if 0 /* template */
 
     if ( isSCTP( data ) ) {
@@ -121,6 +122,8 @@ void reporter_serverstats( Connection_Info *nused, Transfer_Info *stats ) {
 
 #endif /* template */
 
+=======
+>>>>>>> parent of c9cb886... hatena kill
 void reporter_reportsettings( ReporterData *data ) {
     int win, win_requested;
 
@@ -130,6 +133,7 @@ void reporter_reportsettings( ReporterData *data ) {
 
     printf("%s", separator_line );
     if ( data->mThreadMode == kMode_Listener ) {
+<<<<<<< HEAD
         if ( isSCTP( data ) ) {
             printf( server_port, "SCTP", data->mPort );
         } else if(! isUDP( data )) {
@@ -145,6 +149,16 @@ void reporter_reportsettings( ReporterData *data ) {
         } else {
             printf( client_port, "UDP", data->mPort );
         }
+=======
+        printf( server_port,
+                (isUDP( data ) ? "UDP" : "TCP"),
+                data->mPort );
+    } else {
+        printf( client_port,
+                data->mHost,
+                (isUDP( data ) ? "UDP" : "TCP"),
+                data->mPort );
+>>>>>>> parent of c9cb886... hatena kill
     }
     if ( data->mLocalhost != NULL ) {
         printf( bind_address, data->mLocalhost );
@@ -163,6 +177,7 @@ void reporter_reportsettings( ReporterData *data ) {
     }
     byte_snprintf( buffer, sizeof(buffer), win,
                    toupper( data->info.mFormat));
+<<<<<<< HEAD
 
     if ( isSCTP( data ) ) {
         /* SCTP */
@@ -174,6 +189,10 @@ void reporter_reportsettings( ReporterData *data ) {
         /* UDP */
         printf( "%s: %s", udp_buffer_size, buffer );
     }
+=======
+    printf( "%s: %s", (isUDP( data ) ?
+                                udp_buffer_size : tcp_window_size), buffer );
+>>>>>>> parent of c9cb886... hatena kill
 
     if ( win_requested == 0 ) {
         printf( " %s", window_default );

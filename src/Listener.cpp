@@ -224,6 +224,7 @@ void Listener::Run( void ) {
  * wildcard server address, specifying what incoming interface to
  * accept connections on.
  * ------------------------------------------------------------------- */
+<<<<<<< HEAD
 #if 0 /* template */
 
     if ( isSCTP( mSettings ) ) {
@@ -243,10 +244,15 @@ void Listener::Listen( )
     int protocol = 0;
     int boolean = 1;
     Socklen_t len;
+=======
+void Listener::Listen( ) {
+    SOCKET rc;
+>>>>>>> parent of c9cb886... hatena kill
 
     SockAddr_localAddr( mSettings );
 
     // create an internet TCP socket
+<<<<<<< HEAD
 
     /* SCTP */
     if ( isSCTP( mSettings ) ) {
@@ -267,6 +273,9 @@ void Listener::Listen( )
         type = SOCK_SEQPACKET;
     }
 
+=======
+    int type = (isUDP( mSettings )  ?  SOCK_DGRAM  :  SOCK_STREAM);
+>>>>>>> parent of c9cb886... hatena kill
     int domain = (SockAddr_isIPv6( &mSettings->local ) ?
 #ifdef HAVE_IPV6
                   AF_INET6
