@@ -1,12 +1,12 @@
 ##iperf2.0.5 p27 那月ちゃんセーフティモード
 
+* `BSD``MIT`ライクライセンス
 * 速度測定用のツール。`iperf 2.0.5` のローカルコピー   
+* Windows 用 GUIの追加
+* VC++2005でビルド通したきゅん `iperf.sln`
 * パッチ当て済 `27`まで完了 https://github.com/katakk/iperf/issues/3  
 * コンパイルは `$ make  ` インストールは ` $ cp ./src/iperf  /usr/local/bin/iperf ` きゅん    
-* `BSD`ライセンス
 * 不要ファイル削除
-* VC++2005でビルド通したきゅん
-* プロジェ`iperf.vcproj`, `iperf.sln` バイナリ `iperf.exe` 
 
 ####使い方
 
