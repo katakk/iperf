@@ -8,6 +8,8 @@
 * コンパイルは `$ make  ` インストールは ` $ cp ./src/iperf  /usr/local/bin/iperf ` きゅん    
 * 不要ファイル削除
 
+![iperfgui](https://raw.github.com/katakk/iperf/master/iperfgui.png)
+
 ####使い方
 
 * サーバ(送信側) `iperf -c 10.0.0.1 -w256k -i1 -t60` 
