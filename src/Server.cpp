@@ -99,7 +99,6 @@ void Server::Run( void ) {
         gettimeofday( &(reportstruct->packetTime), NULL );
         if ( !isUDP (mSettings)) {
             reportstruct->packetLen = totLen;
-            ReportPacket( mSettings->reporthdr, reportstruct );
         }
         CloseReport( mSettings->reporthdr, reportstruct );
 
