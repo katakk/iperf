@@ -2,7 +2,7 @@
 #include "iperfgui.h"
 #include "iperfguiDlg.h"
 #include "IperfThread.h"
-#include ".\iperfguidlg.h"
+#include "iperfguidlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -82,6 +82,7 @@ BOOL CiperfguiDlg::OnInitDialog()
     SetIcon(m_hIcon, TRUE);
     SetIcon(m_hIcon, FALSE);
 
+	m_view.SubclassDlgItem(IDC_IPERFVIEW,this);
     return TRUE;
 }
 

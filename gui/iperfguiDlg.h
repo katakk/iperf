@@ -1,5 +1,6 @@
 #pragma once
 #include "afxwin.h"
+#include "IperfView.h"
 
 #define WM_CONSOLE_MESG       (WM_USER+200)
 class CiperfguiDlg : public CDialog
@@ -12,6 +13,7 @@ public:
     virtual void DoDataExchange(CDataExchange* pDX);
 
 protected:
+	CIperfView m_view;
     HICON m_hIcon;
     CPtrArray pThList;
 

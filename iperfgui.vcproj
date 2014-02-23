@@ -134,6 +134,9 @@
 				RelativePath=".\gui\IperfThread.cpp">
 			</File>
 			<File
+				RelativePath=".\gui\IperfView.cpp">
+			</File>
+			<File
 				RelativePath=".\gui\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -161,6 +164,9 @@
 			</File>
 			<File
 				RelativePath=".\gui\IperfThread.h">
+			</File>
+			<File
+				RelativePath=".\gui\IperfView.h">
 			</File>
 			<File
 				RelativePath=".\gui\Resource.h">
