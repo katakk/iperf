@@ -80,7 +80,7 @@ void CIperfThread::ReadIperfPipe(HANDLE hPipe)
 
 }
 
-BOOL CALLBACK WindowHidden(HWND hWnd, LPARAM)
+BOOL WindowShowOrHidden(HWND hWnd, int nCmdShow)
 {
 	TCHAR moduleName[ _MAX_PATH * 2 ];
 	TCHAR szclass[_MAX_PATH * 2];
@@ -94,9 +94,19 @@ BOOL CALLBACK WindowHidden(HWND hWnd, LPARAM)
 		GetWindowText( hWnd, szname, 255 );
 
 		if( _tcscmp( szname, moduleName ) == 0 )
-			::ShowWindow( hWnd, SW_HIDE );
+			::ShowWindow( hWnd, nCmdShow );
 	}
 	return TRUE;
+}
+
+BOOL CALLBACK WindowHidden(HWND hWnd, LPARAM)
+{
+	return WindowShowOrHidden(hWnd, SW_HIDE);
+}
+
+BOOL CALLBACK WindowShow(HWND hWnd, LPARAM)
+{
+	return WindowShowOrHidden(hWnd, SW_SHOWNORMAL);
 }
 
 BOOL CIperfThread::InitInstance()
@@ -131,6 +141,7 @@ BOOL CIperfThread::InitInstance()
 int CIperfThread::ExitInstance()
 {
 	// TODO:  スレッドごとの後処理をここで実行します。
+	EnumWindows(WindowShow, NULL);
 	return CWinThread::ExitInstance();
 }
 
@@ -153,6 +164,7 @@ int CIperfThread::Run()
 	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	WaitForSingleObject(m_ProcessInfo.hProcess, INFINITE);
 	CloseHandle(m_ProcessInfo.hProcess);
+	EnumWindows(WindowShow, NULL);
 	ExitThread(0);
 
 	return CWinThread::Run();
