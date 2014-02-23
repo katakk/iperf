@@ -36,7 +36,7 @@ END_MESSAGE_MAP()
 
 CiperfguiDlg::CiperfguiDlg(CWnd* pParent /*=NULL*/)
     : CDialog(CiperfguiDlg::IDD, pParent)
-    , m_cmdline(_T("iperf -c 192.168.0.195 -i1 -w1m"))
+    , m_cmdline(_T("iperf -c 192.168.0.195 -i1 -w1m -t60"))
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -159,6 +159,7 @@ void CiperfguiDlg::OnBnClickedOk()
 void CiperfguiDlg::Parse(double start,double end, double speed)
 {
 	TRACE("l:%s p:%s %f - %f bps:%f\n", m_local, m_peer, start, end, speed );
+	m_view.AddItem(m_peer, start, speed);
 }
 
 //ƒp[ƒXˆ—

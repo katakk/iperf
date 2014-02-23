@@ -40,3 +40,7 @@
 #include <afxcmn.h>         // MFC の Windows コモン コントロール サポート
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
+#include "afxwin.h"
+#include "afxtempl.h"
+#include <math.h>
+

@@ -1,5 +1,5 @@
 #pragma once
-#include "afxwin.h"
+
 #include "IperfView.h"
 
 #define WM_CONSOLE_MESG       (WM_USER+200)
