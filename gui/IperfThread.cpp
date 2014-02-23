@@ -73,9 +73,7 @@ void CIperfThread::ReadIperfPipe(HANDLE hPipe)
 	{
 		ReadFile(hPipe,str,BytesRead,&dwByte,NULL);
 		str[dwByte] = '\0';
-		CString adds(str); // ASCII to MBSTR or UNICODE
-//		TRACE0(adds);
-		m_hParent->SendMessage(WM_CONSOLE_MESG, 0, (LPARAM)(LPCTSTR)adds);
+		m_hParent->SendMessage(WM_CONSOLE_MESG, m_nThreadID, (LPARAM)str);
 	}
 
 }

@@ -156,18 +156,24 @@ void CiperfguiDlg::OnBnClickedOk()
     UpdateData(FALSE);
 }
 
-void CiperfguiDlg::Parse(double start,double end, double speed)
+WORD mkhash(LPCTSTR peer)
 {
-	TRACE("l:%s p:%s %f - %f bps:%f\n", m_local, m_peer, start, end, speed );
-	m_view.AddItem(m_peer, start, speed);
+	WORD hash = 0;
+	LPCTSTR p = peer;
+	for(; *p == _T('\0'); p++)
+		hash += (WORD) *p;
+	return hash;
 }
 
 //パース処理
-void CiperfguiDlg::ParseLine(CString line)
+void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 {
+//	int process;
 	double start =0;
 	double end = 0;
-	double bps = 0.0;
+	double speed = 0.0;
+
+
 
 	if( line == _T("")) return;
 	if( line == _T("[ ID] Interval       Transfer     Bandwidth")) return;
@@ -177,7 +183,13 @@ void CiperfguiDlg::ParseLine(CString line)
 	int _t = _s.Find(_T(_f)); \
 	if( _t != -1 ) _t +=(int) _tcslen(_T(_f));
 
-	FindNextWord(t, line, "] ");
+	FindNextWord(t1, line, "[");
+	FindNextWord(t2, line, "] ");
+
+	// サーバモード時は同一threadなのでiperf pidを使用
+	if(m_cmdline.Find("-s")) {
+		wParam = _tstoi( line.Mid(t1, line.GetLength() - t2));
+	}
 
 	do {
 		FindNextWord(s1, line, "local ");
@@ -185,14 +197,23 @@ void CiperfguiDlg::ParseLine(CString line)
 		FindNextWord(s3, line, "connected with ");
 
 		if( s2 != -1 && s3 != -1 ) {
+			CString local;
+			CString peer;
 			if(m_cmdline.Find("-c")) {
-				m_peer = line.Mid(s1, line.GetLength() - s3);
-				m_local = line.Mid(s3, line.GetLength() - s3);
+				peer = line.Mid(s1, line.GetLength() - s3 - 2);
+				local = line.Mid(s3, line.GetLength() - s3);
 			}
 			if(m_cmdline.Find("-s")) {
-				m_local = line.Mid(s1, line.GetLength() - s3);
-				m_peer = line.Mid(s3, line.GetLength() - s3);
+				local = line.Mid(s1, line.GetLength() - s3 - 2);
+				peer = line.Mid(s3, line.GetLength() - s3);
+				//mkhash(peer);
+			//	process
 			}
+				m_view.AddItemPeer(wParam, peer);
+				m_view.AddItemLocal(wParam, local);
+
+
+		//	m_Process[process] = peer + _T("/") + local;
 			//TRACE("l:%s p:%s\n", local, peer );
 		}
 	}while(0);
@@ -201,7 +222,7 @@ void CiperfguiDlg::ParseLine(CString line)
 		FindNextWord(k, line, "sec ");
 		if( k != -1 )
 		{
-			CString sec = line.Mid( t, k - t - _tcslen(_T("sec ")) );
+			CString sec = line.Mid( t2, k - t2 - (int)_tcslen(_T("sec ")) );
 			int sec_s = sec.Find(_T("-"));
 			if ( sec_s != -1) {
 				start = _tcstod( sec.Left( sec_s ), NULL );
@@ -217,25 +238,31 @@ void CiperfguiDlg::ParseLine(CString line)
 		//	TRACE("4:%d 5:%d\n", s4, s5 );
 		if( s4 != -1 && s5 != -1 ) {
 			if( s4 < s5 ) {
-				CString speed = line.Mid( s4, s5 -s4 - _tcslen(_T("bits/sec")) );
-				speed.Trim(_T(" "));
-				int len = speed.GetLength() - 1;
-				TCHAR unite = speed[len]; // M K 
-				bps = _tcstod( speed.Left(len), NULL );
+				CString tmp = line.Mid( s4, s5 -s4 - (int)_tcslen(_T("bits/sec")) );
+				tmp.Trim(_T(" "));
+				int len = tmp.GetLength() - 1;
+				TCHAR unite = tmp[len]; // M K 
+				speed = _tcstod( tmp.Left(len), NULL );
 				switch(unite)
 				{
-					case 'G':bps *= (1024 * 1024);break;
-					case 'M':bps *= 1024;break;
-					case 'K':bps *= 1.024;break;
-					case 'g':bps *= (1000 * 1000);break;
-					case 'm':bps *= 1000;break;
-					case 'k':bps *= 1;break;
-					case ' ':bps *= 0;break;
-					case '\0':bps *= 0;break;
+					case 'G':speed *= (1024 * 1024);break;
+					case 'M':speed *= 1024;break;
+					case 'K':speed *= 1.024;break;
+					case 'g':speed *= (1000 * 1000);break;
+					case 'm':speed *= 1000;break;
+					case 'k':speed *= 1;break;
+					case ' ':speed *= 0;break;
+					case '\0':speed *= 0;break;
 				}
 
-				Parse(start, end, bps);
-			//TRACE("bps:%f\n", bps );
+				m_view.AddItem(wParam, start, speed);
+
+				CIperfViewItem *item = m_view.FindItem(wParam);
+				CString log;
+				log.Format(_T("%s->%s %s\r\n"), item->m_local, item->m_peer,
+					line.Mid(t2, line.GetLength() - t2 ));
+				m_log.SetSel(m_log.GetWindowTextLength(), -1);
+				m_log.ReplaceSel((LPCTSTR)log);
 
 			}
 		}
@@ -281,19 +308,18 @@ int CiperfguiDlg::Split( const TCHAR *pattern, TCHAR *expr, TCHAR **param, int p
 LRESULT CiperfguiDlg::OnIperfMessage(WPARAM wParam, LPARAM lParam)
 {
 	TCHAR *param[1024];
-  //  TRACE0((LPCTSTR)(lParam));
-    m_log.SetSel(m_log.GetWindowTextLength(), -1);
-    m_log.ReplaceSel((LPCTSTR)(lParam));
-
 	CString lines;
-	lines += (LPCTSTR)(lParam);
+	lines += (LPCTSTR)(lParam); // ASCII to MBSTR or UNICODE
+  //  m_log.SetSel(m_log.GetWindowTextLength(), -1);
+ //   m_log.ReplaceSel((LPCTSTR)lines);
+
 	int elem = Split( _T("\r\n"), lines.GetBuffer(), param, 1024, 1024 );
 	if( elem > 0 )
 	{
 		for( int i = 0; i < elem ; i ++)
 		{
-		//	TRACE("%d: %s\n", i, param[i] );
-			ParseLine(param[i]);
+			TRACE("%d: %s\n", i, param[i] );
+			ParseLine(wParam, param[i]);
 		}
 	}
 	//後続の\nなしとか保持しないといけないんだけど省略

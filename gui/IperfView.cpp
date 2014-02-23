@@ -6,32 +6,10 @@
 #include "IperfView.h"
 #include "iperfview.h"
 
-class CIperfViewItemMap : public CMap< double, double, double, double > { };
+#define HEIGHT 150000.0
 
-// CIperfViewItem
-class CIperfViewItem
-{
-public:
-	CIperfViewItem()
-	{
-	};
-	virtual ~CIperfViewItem()
-	{
-	};
 
-	CIperfViewItemMap m_map;
 
-	void Set( double time, double speed )
-	{ m_map.SetAt( time, speed ); };
-
-	void GetNextAssoc(POSITION& rNextPosition, double& time, double& speed) const
-	{ m_map.GetNextAssoc( rNextPosition, time, speed ); };
-
-	BOOL Lookup( double time, double& speed) const
-	{ return m_map.Lookup( time, speed ); };
-
-	CString m_peer;
-};
 
 // CIperfView
 
@@ -44,7 +22,7 @@ CIperfView::~CIperfView()
 {
 	CIperfViewItem *pa;
 	POSITION pos;
-	CString key;
+	WORD key;
 
 	for( pos = m_transaction.GetStartPosition(); pos != NULL; )
 	{
@@ -63,109 +41,144 @@ END_MESSAGE_MAP()
 
 
 // CIperfView メッセージ ハンドラ
-void CIperfView::PaintItems(CPaintDC *pDC, CIperfViewItem *pa)
+void CIperfView::PaintItems(CPaintDC &dc, CIperfViewItem *pa)
 {
-	COLORREF col = 0;
 	POSITION pos;
 	INT_PTR count = pa->m_map.GetCount();
-	CIperfViewItemMap bn[2];
-	double b[2];
 
 	INT_PTR idx = 0;
 	double x = 0, y = 0;
-//	CPen* pOldPen = pDC->SelectObject(&pen);
-
-//	pDC->SelectObject(pOldPen);
-	CPen pen(PS_SOLID, 1 /*px*/, col);
-	CPen* pOldPen = pDC->SelectObject(&pen);
-	pDC->SetTextColor(col);
 
 	CRect rect;
 	GetClientRect(&rect);
 	double xstep = rect.Width() / 60.0;
-	double ystep = rect.Height() / 300000.0; // 300M ?
+	double ystep = rect.Height() / HEIGHT;
 
+	CPen pen(PS_SOLID, 1, (COLORREF)pa->m_color);
+//	CBrush brush((COLORREF)pa->m_color);//色おかしい
+//	CBrush* pOldBrush = dc.SelectObject(&brush);
+	CPen* pOldPen = dc.SelectObject(&pen);
 
 	double time;
 	double speed;
+	int fast = 0;
 	for( pos = pa->m_map.GetStartPosition(); pos != NULL; )
 	{
-		pa->GetNextAssoc( pos, time, speed );
+		pa->GetNextAssoc( pos, time, speed);
 		x = time * xstep;
 		y = rect.Height() - speed * ystep;
 
 		// point set
-		CRect rect( x-2,y-2,x+2,y+2);
-		CBrush brush(col);
-		CBrush* pOldBrush = pDC->SelectObject(&brush);
+		CRect rect( (int)x-2, (int)y-2, (int)x+2, (int)y+2);
 
-		pDC->Ellipse(rect);
-		pDC->MoveTo(CPoint(x,y));
-		pDC->LineTo(CPoint(x,y));
-		//pDC->TextOut(x,y,strValue);
-		pDC->SelectObject(pOldBrush);
-
-		TRACE("%f[%f] : %f x %f[%f]\n", time, x, speed, ystep, y);
+		dc.Ellipse(rect);
+	//ソート必要
+	//	if( fast++ == 0 ) 
+	//		dc.MoveTo(CPoint((int)x,(int)y));
+	//	dc.LineTo(CPoint((int)x,(int)y));
+		if(0) if(pos == NULL) {
+			CString strValue;
+			strValue.Format(_T("%3.0f"), speed / 1024);
+			dc.SetTextColor(pa->m_color);
+			dc.TextOut( (int)x, (int)y,strValue);
+		}
 	}
-
+//	dc.SelectObject(pOldBrush);
+	dc.SelectObject(pOldPen);
 }
 
 void CIperfView::OnPaint()
 {
 	CIperfViewItem *pa;
 	POSITION pos;
-	CString key;
+	WORD key;
 
 	CPaintDC dc(this); // device context for painting
 	// TODO : ここにメッセージ ハンドラ コードを追加します。
 	// 描画メッセージで CWnd::OnPaint() を呼び出さないでください。
+	CRect rect;
+	GetClientRect(&rect);
 
 	CPen pen(PS_SOLID, 1, RGB(240,240,240));
 	CPen* pOldPen = dc.SelectObject(&pen);
 
-	CFont* pOldFont = dc.SelectObject(GetFont());
-	dc.SetBkColor(RGB(255,255,255));
-	dc.SetBkMode(OPAQUE);
+//	CFont* pOldFont = dc.SelectObject(GetFont());
+//	dc.SetTextColor(RGB(120,120,120));
+//	dc.SetBkColor(RGB(255,255,255));
+//	dc.SetBkMode(OPAQUE);
 
-	CRect rect;
-	GetClientRect(&rect);
 	dc.Rectangle(rect);
+//	CString strValue;
 
-	double xstep = rect.Width() / 60.0;//メモリ 60 sec
-	double ystep =  rect.Height() / 300000.0 * 10000.0; // メモリ10M
+	double xstep = rect.Width() / 60.0 * 2;
+	double ystep =  rect.Height() / HEIGHT * 10000.0; // メモリ10M
 	for(double x =0.0; x < rect.Width() ; x += xstep)
 	{
-		dc.MoveTo(CPoint(x,0));
-		dc.LineTo(CPoint(x,rect.Height()));
+		//strValue.Format(_T("%3.0f"), x / xstep * 2 );
+		//dc.TextOut(x + xstep / 2 , rect.Height() - ystep, strValue);
+		dc.MoveTo(CPoint( (int)x, 0));
+		dc.LineTo(CPoint( (int)x, (int)rect.Height()));
 	}
 
 	for(double y =0.0; y < rect.Height() ; y += ystep)
 	{
-		dc.MoveTo(CPoint(0,y));
-		dc.LineTo(CPoint(rect.Width(),y));
+		//strValue.Format(_T("%3.0f"), (rect.Height() - y - ystep) / ystep * HEIGHT  );
+		//dc.TextOut( 0, y,strValue);
+		dc.MoveTo(CPoint( 0, (int)y));
+		dc.LineTo(CPoint( (int)rect.Width(), (int)y));
 	}
+
+
 
 	for( pos = m_transaction.GetStartPosition(); pos != NULL; )
 	{
 		m_transaction.GetNextAssoc( pos, key, (CObject*&)pa );
-		PaintItems(&dc, pa);
+		PaintItems(dc, pa);
 	}
+	dc.SelectObject(pOldPen);
 
 }
+	const COLORREF cols[] = {
+		RGB(240,0,0), RGB(0,0,240), RGB(0,240,0), RGB(192,192,0),
+		RGB(240,0,240), RGB(0,240,240),RGB(0,240,240), RGB(0,240,240), 
+		RGB(128,0,0), RGB(0,0,128), RGB(0,128,0), RGB(128,0,128), 
+		RGB(0,128,128),
+	};
 
-int CIperfView::AddItem(LPCTSTR peer, double time,double speed)
+
+	
+CIperfViewItem * CIperfView::FindItem(WORD process)
 {
 	CIperfViewItem *item;
-
-	if( m_transaction.Lookup(peer, ( CObject*& )item) == FALSE )
+	if( m_transaction.Lookup(process, ( CObject*& )item) == FALSE )
 	{
+		static unsigned char hash = 0;//
 		item = new CIperfViewItem;
-		item->m_peer = peer;
+		item->m_process = process;
+		item->m_color = cols[ hash++ % (sizeof(cols)/sizeof(cols[0])) ];
+		m_transaction.SetAt(process, ( CObject*& )item);
 	}
+	return item;
+}
 
+int CIperfView::AddItemLocal(WORD process, LPCTSTR local)
+{
+	CIperfViewItem *item = FindItem(process);
+	item->m_local = local;
+	return 0;
+}
+
+int CIperfView::AddItemPeer(WORD process, LPCTSTR peer)
+{
+	CIperfViewItem *item = FindItem(process);
+	item->m_peer = peer;
+	return 0;
+}
+
+int CIperfView::AddItem(WORD process, double time,double speed)
+{
+	CIperfViewItem *item = FindItem(process);
 	item->Set( time, speed);
-	m_transaction.SetAt(peer, ( CObject*& )item);
-
 	Invalidate();
 	return 0;
 }
