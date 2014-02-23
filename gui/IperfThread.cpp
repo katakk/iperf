@@ -139,7 +139,7 @@ BOOL CIperfThread::InitInstance()
 int CIperfThread::ExitInstance()
 {
 	// TODO:  スレッドごとの後処理をここで実行します。
-	EnumWindows(WindowShow, NULL);
+	FreeConsole();
 	return CWinThread::ExitInstance();
 }
 
@@ -162,7 +162,7 @@ int CIperfThread::Run()
 	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	WaitForSingleObject(m_ProcessInfo.hProcess, INFINITE);
 	CloseHandle(m_ProcessInfo.hProcess);
-	EnumWindows(WindowShow, NULL);
+	FreeConsole();
 	ExitThread(0);
 
 	return CWinThread::Run();
