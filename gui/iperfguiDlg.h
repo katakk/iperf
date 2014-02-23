@@ -21,6 +21,10 @@ protected:
     afx_msg HCURSOR OnQueryDragIcon();
     DECLARE_MESSAGE_MAP()
     afx_msg LRESULT OnIperfMessage(WPARAM wParam, LPARAM lParam);
+	CString m_peer, m_local;
+	int Split( const TCHAR *pattern, TCHAR *expr, TCHAR **param, int param_size, int limit );
+    void ParseLine(CString line);
+    void Parse(double start,double end, double speed);
 
 public:
     afx_msg void OnBnClickedOk();
