@@ -126,7 +126,7 @@ BOOL CIperfThread::InitInstance()
 
 	CreateIperfPipe();
 
-	if(CreateProcessA(NULL, m_CmdLine, NULL, NULL, TRUE, 0, NULL, NULL, &si, &m_ProcessInfo) == FALSE ) {
+	if(CreateProcess(NULL, m_CmdLine, NULL, NULL, TRUE, 0, NULL, NULL, &si, &m_ProcessInfo) == FALSE ) {
 		return FALSE;
 	}
 	SetStdHandle(STD_OUTPUT_HANDLE,hOldOut);
@@ -162,6 +162,7 @@ int CIperfThread::Run()
 	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	WaitForSingleObject(m_ProcessInfo.hProcess, INFINITE);
 	CloseHandle(m_ProcessInfo.hProcess);
+	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	FreeConsole();
 	ExitThread(0);
 
