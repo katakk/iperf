@@ -8,8 +8,8 @@
 #define IDD_IPERFGUI_DIALOG             102
 #define IDR_MAINFRAME                   128
 #define IDB_IPERFVIEW                   1000
-#define IDC_IPERFVIEW                   1002
 #define IDC_EDITLOG                     1001
+#define IDC_IPERFVIEW                   1002
 #define IDC_CMDLINE                     1003
 
 // Next default values for new objects
