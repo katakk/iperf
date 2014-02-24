@@ -254,7 +254,7 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 					case '\0':speed *= 0;break;
 				}
 
-				m_view.AddItem(wParam, start, speed);
+				m_view.AddItem(uniqid, start, end, speed);
 
 				CIperfViewItem *item = m_view.FindItem(wParam);
 				CString log;

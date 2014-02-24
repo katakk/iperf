@@ -1,6 +1,18 @@
 #pragma once
 
-class CIperfViewItemMap : public CMap< double, double, double, double > { };
+// CIperfViewItemNode
+class CIperfViewItemNode
+{
+public:
+	CIperfViewItemNode()
+	{
+	};
+
+	double t0;
+	double t1;
+	double speed;
+
+};
 
 // CIperfViewItem
 class CIperfViewItem
@@ -12,17 +24,7 @@ public:
 	virtual ~CIperfViewItem()
 	{
 	};
-
-	CIperfViewItemMap m_map;
-
-	void Set( double time, double speed )
-	{ m_map.SetAt( time, speed ); };
-
-	void GetNextAssoc(POSITION& rNextPosition, double& time, double& speed) const
-	{ m_map.GetNextAssoc( rNextPosition, time, speed ); };
-
-	BOOL Lookup( double time, double& speed) const
-	{ return m_map.Lookup( time, speed ); };
+	CList<CIperfViewItemNode,CIperfViewItemNode&> m_List;
 
 	WORD m_process;
 	COLORREF m_color;
@@ -50,7 +52,7 @@ public:
 	CIperfViewItem * FindItem(WORD process);
 	int AddItemLocal(WORD process, LPCTSTR local);
 	int AddItemPeer(WORD process, LPCTSTR peer);
-	int AddItem(WORD process, double time,double speed);
+	int AddItem(WORD process, double t0, double t1, double speed);
 };
 
 

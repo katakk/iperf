@@ -167,7 +167,7 @@ int CIperfThread::OnIdle(LONG lCount)
 	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	WaitForSingleObject(m_ProcessInfo.hProcess, INFINITE);
 	CloseHandle(m_ProcessInfo.hProcess);
-	TerminateProcess(m_ProcessInfo.hProcess, 0);
+	//TerminateProcess(m_ProcessInfo.hProcess, 0);
 	FreeConsole();
 
 	return CWinThread::Run();

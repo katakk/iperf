@@ -58,46 +58,48 @@ END_MESSAGE_MAP()
 void CIperfView::PaintItems(CPaintDC &dc, CIperfViewItem *pa)
 {
 	POSITION pos;
-	INT_PTR count = pa->m_map.GetCount();
-
+	INT_PTR count;
 	INT_PTR idx = 0;
-	double x = 0, y = 0;
-
-	CRect rect;
-	GetClientRect(&rect);
-	double xstep = rect.Width() / 60.0;
-	double ystep = rect.Height() / HEIGHT;
-
-	CPen pen(PS_SOLID, 1, (COLORREF)pa->m_color);
-//	CBrush brush((COLORREF)pa->m_color);//色おかしい
-//	CBrush* pOldBrush = dc.SelectObject(&brush);
-	CPen* pOldPen = dc.SelectObject(&pen);
-
-	double time;
+	double x0 = 0, x1 = 0, y = 0;
+	double t0, t1;
+	double xstep, ystep;
 	double speed;
 	int fast = 0;
-	for( pos = pa->m_map.GetStartPosition(); pos != NULL; )
-	{
-		pa->GetNextAssoc( pos, time, speed);
-		x = time * xstep;
+	CRect rect;
+
+	count = pa->m_List.GetCount();
+	GetClientRect(&rect);
+
+    xstep = rect.Width() / 60.0;
+    ystep = rect.Height() / HEIGHT;
+
+	CPen pen(PS_SOLID, 1, (COLORREF)pa->m_color);
+	CPen* pOldPen = dc.SelectObject(&pen);
+
+
+    for ( pos = pa->m_List.GetHeadPosition(); pos != NULL; pa->m_List.GetNext( pos ) )
+    {
+		t0 = pa->m_List.GetAt( pos ).t0;
+		t1 = pa->m_List.GetAt( pos ).t1;
+		speed = pa->m_List.GetAt( pos ).speed;
+
+		//
+		x0 = t0 * xstep;
+		x1 = t1 * xstep;
 		y = rect.Height() - speed * ystep;
 
 		// point set
-		CRect rect( (int)x-2, (int)y-2, (int)x+2, (int)y+2);
+		CRect rect0( (int)x0-2, (int)y-2, (int)x0+2, (int)y+2);
+		CRect rect1( (int)x1-2, (int)y-2, (int)x1+2, (int)y+2);
 
-		dc.Ellipse(rect);
-	//ソート必要
-	//	if( fast++ == 0 ) 
-	//		dc.MoveTo(CPoint((int)x,(int)y));
-	//	dc.LineTo(CPoint((int)x,(int)y));
-		if(0) if(pos == NULL) {
-			CString strValue;
-			strValue.Format(_T("%3.0f"), speed / 1024);
-			dc.SetTextColor(pa->m_color);
-			dc.TextOut( (int)x, (int)y,strValue);
-		}
+		//dc.Ellipse(rect0);
+		dc.Ellipse(rect1);
+
+		if(fast++ == 0)
+			dc.MoveTo(CPoint((int)x0,(int)y));
+		dc.LineTo(CPoint((int)x1,(int)y));
+
 	}
-//	dc.SelectObject(pOldBrush);
 	dc.SelectObject(pOldPen);
 }
 
@@ -174,10 +176,14 @@ int CIperfView::AddItemPeer(WORD process, LPCTSTR peer)
 	return 0;
 }
 
-int CIperfView::AddItem(WORD process, double time,double speed)
+int CIperfView::AddItem(WORD process, double t0, double t1, double speed)
 {
-	CIperfViewItem *item = AddItem(process);
-	item->Set( time, speed);
+	CIperfViewItem *pa = AddItem(process);
+	CIperfViewItemNode node;
+	node.t0 = t0;
+	node.t1 = t1;
+	node.speed = speed;
+	pa->m_List.AddTail(node);
 	Invalidate();
 	return 0;
 }
