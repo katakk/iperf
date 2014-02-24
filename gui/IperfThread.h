@@ -12,7 +12,6 @@ public:
     void ReadIperfPipe(HANDLE hPipe);
     virtual BOOL InitInstance();
     virtual int ExitInstance();
-    CWnd *m_hParent;
     char m_CmdLine[1024];
 
 protected:

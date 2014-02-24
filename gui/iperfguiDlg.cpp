@@ -148,7 +148,7 @@ void CiperfguiDlg::OnBnClickedOk()
 
     CRuntimeClass *pRuntime = RUNTIME_CLASS(CIperfThread);
     pThread = (CIperfThread *)pRuntime->CreateObject();
-    pThread->m_hParent = this;
+    pThread->m_pMainWnd = this;
     strcpy(pThread->m_CmdLine, m_cmdline);
     pThread->CreateThread(0, 0, NULL);
     pThList.Add(pThread);
