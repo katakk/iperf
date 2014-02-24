@@ -7,12 +7,9 @@
 #define IDS_ABOUTBOX                    101
 #define IDD_IPERFGUI_DIALOG             102
 #define IDR_MAINFRAME                   128
-#define IDC_EDIT1                       1000
 #define IDB_IPERFVIEW                   1000
-#define IDC_EDIT2                       1001
-#define IDC_EDITCMD                     1001
 #define IDC_IPERFVIEW                   1002
-#define IDC_COMBO1                      1003
+#define IDC_EDITLOG                     1001
 #define IDC_CMDLINE                     1003
 
 // Next default values for new objects

@@ -46,7 +46,7 @@ CiperfguiDlg::CiperfguiDlg(CWnd* pParent /*=NULL*/)
 void CiperfguiDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_EDIT1, m_log);
+    DDX_Control(pDX, IDC_EDITLOG, m_log);
 	DDX_Control(pDX, IDC_CMDLINE, m_combo);
 }
 
