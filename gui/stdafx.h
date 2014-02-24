@@ -4,6 +4,8 @@
 
 #pragma once
 
+#define _CRT_SECURE_NO_DEPRECATE
+
 #ifndef VC_EXTRALEAN
 #define VC_EXTRALEAN        // Windows ヘッダーから使用されていない部分を除外します。
 #endif
