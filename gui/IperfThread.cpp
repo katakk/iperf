@@ -74,7 +74,7 @@ void CIperfThread::ReadIperfPipe(HANDLE hPipe)
 	{
 		ReadFile(hPipe,str,BytesRead,&dwByte,NULL);
 		str[dwByte] = '\0';
-		m_pMainWnd->SendMessage(WM_CONSOLE_MESG, m_nThreadID, (LPARAM)str);
+		m_pMainWnd->SendMessage(WM_CONSOLE_MESG, m_uniqid, (LPARAM)str);
 	}
 
 }
@@ -121,6 +121,9 @@ BOOL CIperfThread::InitInstance()
 	memset(&si,0,sizeof(STARTUPINFO));
 	si.cb = sizeof(STARTUPINFO);
 
+	m_uniqid = mkhash(m_CmdLine, m_uniqid) ;
+	m_uniqid += (WORD)m_nThreadID;
+	m_uniqid += (WORD)m_nThreadID >> 4;
 
 	FreeConsole();
 	AllocConsole();

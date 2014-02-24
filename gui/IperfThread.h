@@ -20,6 +20,8 @@ protected:
     HANDLE m_hPipeErr;
     HANDLE m_hPipeIn;
     PROCESS_INFORMATION m_ProcessInfo;
+	WORD m_uniqid;
+	
 public:
     virtual BOOL OnIdle(LONG lCount);
 };
