@@ -8,7 +8,21 @@
 
 #define HEIGHT 150000.0
 
-
+const struct {
+	COLORREF c;
+	LPCTSTR name;
+} cols[] = {
+	RGB(237,26,61), _T("red"),
+	RGB(0,103,191), _T("blue"), 
+	RGB(243,152,0), _T("orange"),
+	RGB(0,128,0),  _T("green"),
+	RGB(167,87,168),  _T("purpure"),
+	RGB(70,130,180), _T("steelblue"),
+	RGB(128,0,0),  _T("maroon"),
+	RGB(75,0,130),  _T("indigo"),
+	RGB(255,105,180), _T("pink"),
+	RGB(128,128,0), _T("olive"),
+};
 
 
 // CIperfView
@@ -138,13 +152,6 @@ void CIperfView::OnPaint()
 	dc.SelectObject(pOldPen);
 
 }
-	const COLORREF cols[] = {
-		RGB(240,0,0), RGB(0,0,240), RGB(0,240,0), RGB(192,192,0),
-		RGB(240,0,240), RGB(0,240,240),RGB(0,240,240), RGB(0,240,240), 
-		RGB(128,0,0), RGB(0,0,128), RGB(0,128,0), RGB(128,0,128), 
-		RGB(0,128,128),
-	};
-
 
 	
 CIperfViewItem * CIperfView::FindItem(WORD process)
@@ -153,9 +160,12 @@ CIperfViewItem * CIperfView::FindItem(WORD process)
 	if( m_transaction.Lookup(process, ( CObject*& )item) == FALSE )
 	{
 		static unsigned char hash = 0;//
+		int index = hash++ % (sizeof(cols)/sizeof(cols[0]));
+
 		item = new CIperfViewItem;
 		item->m_process = process;
-		item->m_color = cols[ hash++ % (sizeof(cols)/sizeof(cols[0])) ];
+		item->m_color = cols[index].c;
+		item->m_colorname = cols[index].name;
 		m_transaction.SetAt(process, ( CObject*& )item);
 	}
 	return item;

@@ -26,6 +26,7 @@ public:
 
 	WORD m_process;
 	COLORREF m_color;
+	LPCTSTR m_colorname;
 	CString m_local;
 	CString m_peer;
 };
