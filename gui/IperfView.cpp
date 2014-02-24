@@ -113,24 +113,16 @@ void CIperfView::OnPaint()
 	CRect rect;
 	GetClientRect(&rect);
 
-	CPen pen(PS_SOLID, 1, RGB(240,240,240));
-	CPen* pOldPen = dc.SelectObject(&pen);
-	dc.Rectangle(rect);
-	
-	double xstep = rect.Width() / 60.0 * 2;
-	double ystep =  rect.Height() / HEIGHT * 10000.0; // ÉÅÉÇÉä10M
-	for(double x =0.0; x < rect.Width() ; x += xstep)
+	CDC dcImage;
+    if (dcImage.CreateCompatibleDC(&dc))
 	{
-		//strValue.Format(_T("%3.0f"), x / xstep * 2 );
-		//dc.TextOut(x + xstep / 2 , rect.Height() - ystep, strValue);
-		dc.MoveTo(CPoint( (int)x, 0));
-		dc.LineTo(CPoint( (int)x, (int)rect.Height()));
-	}
-
-	for(double y =0.0; y < rect.Height() ; y += ystep)
-	{
-		dc.MoveTo(CPoint( 0, (int)y));
-		dc.LineTo(CPoint( (int)rect.Width(), (int)y));
+		CBitmap m_bitmap;
+        BITMAP bm;
+		m_bitmap.LoadBitmap(IDB_IPERFVIEW);
+        m_bitmap.GetBitmap(&bm);
+        CBitmap* pOldBitmap = dcImage.SelectObject(&m_bitmap);
+        dc.BitBlt(0, 0, bm.bmWidth, bm.bmHeight, &dcImage, 0, 0, SRCCOPY);
+        dcImage.SelectObject(pOldBitmap);
 	}
 
 	for( pos = m_transaction.GetStartPosition(); pos != NULL; )
@@ -138,8 +130,6 @@ void CIperfView::OnPaint()
 		m_transaction.GetNextAssoc( pos, key, (CObject*&)pa );
 		PaintItems(dc, pa);
 	}
-	dc.SelectObject(pOldPen);
-
 }
 
 CIperfViewItem * CIperfView::FindItem(WORD process)

@@ -82,18 +82,18 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,178,7,50,16,WS_GROUP
 END
 
-IDD_IPERFGUI_DIALOG DIALOGEX 0, 0, 318, 239
+IDD_IPERFGUI_DIALOG DIALOGEX 0, 0, 347, 287
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
     WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "iperfgui"
 FONT 9, "MS UI Gothic", 0, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,261,7,50,16
-    EDITTEXT        IDC_EDIT1,7,128,304,104,ES_MULTILINE | ES_AUTOHSCROLL | 
+    DEFPUSHBUTTON   "OK",IDOK,290,7,50,16
+    EDITTEXT        IDC_EDIT1,6,149,334,131,ES_MULTILINE | ES_AUTOHSCROLL | 
                     WS_VSCROLL
-    EDITTEXT        IDC_EDITCMD,7,7,250,15,ES_AUTOHSCROLL
-    CONTROL         "",IDC_IPERFVIEW,"Static",SS_OWNERDRAW,7,29,304,95
+    EDITTEXT        IDC_EDITCMD,6,7,280,15,ES_AUTOHSCROLL
+    CONTROL         1000,IDC_IPERFVIEW,"Static",SS_BITMAP,0,27,347,119
 END
 
 
@@ -154,14 +154,22 @@ BEGIN
 
     IDD_IPERFGUI_DIALOG, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 311
+        RIGHTMARGIN, 318
+        VERTGUIDE, 6
+        VERTGUIDE, 340
         TOPMARGIN, 7
-        BOTTOMMARGIN, 232
+        BOTTOMMARGIN, 280
     END
 END
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_IPERFVIEW           BITMAP                  "res\\bitmap1.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
