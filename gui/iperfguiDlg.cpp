@@ -304,19 +304,13 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 			if(m_cmdline.Find("-s")) {
 				local = line.Mid(s1, s3 - s1 - (int)_tcslen(_T("connected with ")));
 				peer = line.Mid(s3, line.GetLength() - s3);
-				//mkhash(peer);
-			//	process
 			}
 			local.Replace(_T(" port "),_T(":"));
 			peer.Replace(_T(" port "),_T(":"));
-				m_view.AddItemPeer(wParam, peer);
-				m_view.AddItemLocal(wParam, local);
 
+			m_view.AddItemPeer(uniqid, peer);
+			m_view.AddItemLocal(uniqid, local);
 
-		//	m_Process[process] = peer + _T("/") + local;
-			//TRACE("l:%s p:%s\n", local, peer );
-
-			//
 			item = m_view.FindItem(uniqid);
 			if(item)
 			{
