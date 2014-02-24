@@ -367,8 +367,12 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 				if(item)
 				{
 				CString log;
-				log.Format(_T("%s->%s %s\r\n"), item->m_local, item->m_peer,
-					line.Mid(t2, line.GetLength() - t2 ));
+				CTime timeData = CTime::GetTickCount();
+				log.Format(_T("%s(%s)%s %s\r\n"), 
+					timeData.Format("[%Y/%m/%d %H:%M:%S]"),
+					item->m_colorname,
+					item->m_peer,
+					line.Mid(s4, line.GetLength() - s4 ));
 				m_log.SetSel(m_log.GetWindowTextLength(), -1);
 				m_log.ReplaceSel((LPCTSTR)log);
 				}
