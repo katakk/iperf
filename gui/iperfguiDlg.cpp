@@ -38,7 +38,7 @@ END_MESSAGE_MAP()
 
 CiperfguiDlg::CiperfguiDlg(CWnd* pParent /*=NULL*/)
     : CDialog(CiperfguiDlg::IDD, pParent)
-    , m_cmdline(DEFAULT_CMDLINE)
+
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -85,7 +85,95 @@ BOOL CiperfguiDlg::OnInitDialog()
     SetIcon(m_hIcon, FALSE);
 
 	m_view.SubclassDlgItem(IDC_IPERFVIEW,this);
+
+	GetHistory();
+	UpdateData(FALSE);
     return TRUE;
+}
+
+//コマンド経歴
+void CiperfguiDlg::GetHistory()
+{
+	TCHAR *param[1024];
+	CMapStringToOb temp;
+	CString str;
+	CObject *pob;
+	POSITION pos;
+	int i;
+
+	CString lines;
+
+	// 入力データを積んでいく
+	lines += m_cmdline;
+	lines += _T("\r\n");
+	// pull comboxtext
+	m_combo.GetWindowText(str);
+	lines += str;
+	lines += _T("\r\n");
+	for(i = 0; i < m_combo.GetCount(); i++)
+	{
+		m_combo.GetLBText(i, str) ;
+		lines += str;
+		lines += _T("\r\n");
+	}
+	// from file
+	TRY {
+		CStdioFile f(_T("iperfcmd.txt"), CFile::typeText | CFile::modeRead | CFile::modeNoTruncate ); 
+		// uniq
+		while( f.ReadString(str) ) {
+			lines += str;
+			lines += _T("\r\n");
+		}
+	} CATCH (CFileException, e) { }
+    END_CATCH
+
+	lines += _T("\r\n"); //番兵
+	int elem = Split( _T("\r\n"), lines.GetBuffer(), param, 1024, 1024 );
+	if( elem > 0 )
+	{
+		for( int i = 0; i < elem ; i ++)
+		{
+			//TRACE("%d: %s\n", i, param[i] );
+			temp.SetAt(param[i], NULL );
+		}
+	}
+	temp.RemoveKey(_T(""));
+
+
+	//コマンド経歴に書き込む
+	TRY {
+		CStdioFile f(_T("iperfcmd.txt"), CFile::typeText | CFile::modeCreate | CFile::modeWrite); 
+
+		for(pos = temp.GetStartPosition( );pos != NULL;)
+		{
+			temp.GetNextAssoc( pos, str, pob );
+			if(! str.IsEmpty() ) {
+				f.WriteString(str);
+				f.WriteString(_T("\r\n"));
+			}
+		}
+
+	} CATCH (CFileException, e) { }
+    END_CATCH
+
+	// コンボボックスをリセット
+	m_combo.ResetContent();
+	for( pos = temp.GetStartPosition( ); pos != NULL; )
+	{
+		temp.GetNextAssoc( pos, str, pob );
+		if(! str.IsEmpty() ) {
+			m_combo.AddString(str);
+			m_combo.SetWindowText(str);
+		}
+	}
+	//セットがなければ初期値
+	m_combo.GetWindowText(str);
+	if( str == _T("") )
+	{
+		m_cmdline = DEFAULT_CMDLINE;
+		m_combo.AddString(m_cmdline);
+	}
+	m_combo.SetWindowText(m_cmdline);
 }
 
 BOOL CiperfguiDlg::DestroyWindow()
@@ -147,6 +235,7 @@ void CiperfguiDlg::OnBnClickedOk()
     // TODO : ここにコントロール通知ハンドラ コードを追加します。
     CIperfThread *pThread; 
     UpdateData(TRUE);
+	m_combo.GetWindowText(m_cmdline);
 
     CRuntimeClass *pRuntime = RUNTIME_CLASS(CIperfThread);
     pThread = (CIperfThread *)pRuntime->CreateObject();
@@ -155,6 +244,10 @@ void CiperfguiDlg::OnBnClickedOk()
     pThread->CreateThread(0, 0, NULL);
     pThList.Add(pThread);
 
+	GetHistory();
+	CString str;
+	str.Format(_T("%s [%s]"), AfxGetApp()->m_pszAppName, m_cmdline);
+	SetWindowText(str);
     UpdateData(FALSE);
 }
 

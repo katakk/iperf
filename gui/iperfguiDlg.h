@@ -18,7 +18,7 @@ protected:
 	CIperfView m_view;
     HICON m_hIcon;
     CPtrArray pThList;
-
+	void GetHistory();
     virtual BOOL OnInitDialog();
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnPaint();
