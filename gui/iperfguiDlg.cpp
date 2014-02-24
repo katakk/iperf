@@ -203,11 +203,12 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 			CString local;
 			CString peer;
 			if(m_cmdline.Find("-c")) {
-				peer = line.Mid(s1, line.GetLength() - s3 - 2);
+
+				peer = line.Mid(s1, s3 - s1 - (int)_tcslen(_T("connected with ")));
 				local = line.Mid(s3, line.GetLength() - s3);
 			}
 			if(m_cmdline.Find("-s")) {
-				local = line.Mid(s1, line.GetLength() - s3 - 2);
+				local = line.Mid(s1, s3 - s1 - (int)_tcslen(_T("connected with ")));
 				peer = line.Mid(s3, line.GetLength() - s3);
 				//mkhash(peer);
 			//	process
