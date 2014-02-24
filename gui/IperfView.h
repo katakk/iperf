@@ -46,6 +46,7 @@ protected:
 public:
 	void PaintItems(CPaintDC &dc, CIperfViewItem *pa);
 	afx_msg void OnPaint();
+	CIperfViewItem * AddItem(WORD process);
 	CIperfViewItem * FindItem(WORD process);
 	int AddItemLocal(WORD process, LPCTSTR local);
 	int AddItemPeer(WORD process, LPCTSTR peer);

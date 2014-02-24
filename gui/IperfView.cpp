@@ -151,11 +151,21 @@ void CIperfView::OnPaint()
 
 }
 
-	
 CIperfViewItem * CIperfView::FindItem(WORD process)
 {
 	CIperfViewItem *item;
 	if( m_transaction.Lookup(process, ( CObject*& )item) == FALSE )
+	{
+		return NULL;
+	}
+	return item;
+}
+
+
+CIperfViewItem * CIperfView::AddItem(WORD process)
+{
+	CIperfViewItem *item = FindItem(process);
+	if( item == NULL )
 	{
 		static unsigned char hash = 0;//
 		int index = hash++ % (sizeof(cols)/sizeof(cols[0]));
@@ -171,21 +181,21 @@ CIperfViewItem * CIperfView::FindItem(WORD process)
 
 int CIperfView::AddItemLocal(WORD process, LPCTSTR local)
 {
-	CIperfViewItem *item = FindItem(process);
+	CIperfViewItem *item = AddItem(process);
 	item->m_local = local;
 	return 0;
 }
 
 int CIperfView::AddItemPeer(WORD process, LPCTSTR peer)
 {
-	CIperfViewItem *item = FindItem(process);
+	CIperfViewItem *item = AddItem(process);
 	item->m_peer = peer;
 	return 0;
 }
 
 int CIperfView::AddItem(WORD process, double time,double speed)
 {
-	CIperfViewItem *item = FindItem(process);
+	CIperfViewItem *item = AddItem(process);
 	item->Set( time, speed);
 	Invalidate();
 	return 0;
