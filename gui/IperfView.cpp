@@ -115,15 +115,8 @@ void CIperfView::OnPaint()
 
 	CPen pen(PS_SOLID, 1, RGB(240,240,240));
 	CPen* pOldPen = dc.SelectObject(&pen);
-
-//	CFont* pOldFont = dc.SelectObject(GetFont());
-//	dc.SetTextColor(RGB(120,120,120));
-//	dc.SetBkColor(RGB(255,255,255));
-//	dc.SetBkMode(OPAQUE);
-
 	dc.Rectangle(rect);
-//	CString strValue;
-
+	
 	double xstep = rect.Width() / 60.0 * 2;
 	double ystep =  rect.Height() / HEIGHT * 10000.0; // ÉÅÉÇÉä10M
 	for(double x =0.0; x < rect.Width() ; x += xstep)
@@ -136,8 +129,6 @@ void CIperfView::OnPaint()
 
 	for(double y =0.0; y < rect.Height() ; y += ystep)
 	{
-		//strValue.Format(_T("%3.0f"), (rect.Height() - y - ystep) / ystep * HEIGHT  );
-		//dc.TextOut( 0, y,strValue);
 		dc.MoveTo(CPoint( 0, (int)y));
 		dc.LineTo(CPoint( (int)rect.Width(), (int)y));
 	}
