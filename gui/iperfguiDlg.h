@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IperfView.h"
+#include "afxwin.h"
 
 #define WM_CONSOLE_MESG       (WM_USER+200)
 class CiperfguiDlg : public CDialog
@@ -33,4 +34,6 @@ public:
     CEdit m_log;
     CString m_cmdline;
 	CComboBox m_combo;
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	CButton m_submit;
 };

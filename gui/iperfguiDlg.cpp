@@ -3,6 +3,7 @@
 #include "iperfguiDlg.h"
 #include "IperfThread.h"
 #include "iperfguidlg.h"
+#include ".\iperfguidlg.h"
 
 #define DEFAULT_CMDLINE _T("iperf -c 192.168.0.195 -i1 -w1m -t60")
 
@@ -45,9 +46,10 @@ CiperfguiDlg::CiperfguiDlg(CWnd* pParent /*=NULL*/)
 
 void CiperfguiDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialog::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_EDITLOG, m_log);
+	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDITLOG, m_log);
 	DDX_Control(pDX, IDC_CMDLINE, m_combo);
+	DDX_Control(pDX, IDOK, m_submit);
 }
 
 BEGIN_MESSAGE_MAP(CiperfguiDlg, CDialog)
@@ -57,6 +59,7 @@ BEGIN_MESSAGE_MAP(CiperfguiDlg, CDialog)
     //}}AFX_MSG_MAP
     ON_BN_CLICKED(IDOK, OnBnClickedOk)
     ON_MESSAGE(WM_CONSOLE_MESG,OnIperfMessage)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -428,3 +431,27 @@ LRESULT CiperfguiDlg::OnIperfMessage(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+
+void CiperfguiDlg::OnSize(UINT nType, int cx, int cy)
+{
+	CDialog::OnSize(nType, cx, cy);
+
+    if (IsWindow(GetSafeHwnd()))
+    {
+		// TODO : ここにメッセージ ハンドラ コードを追加します。
+		int sx = 1, sy = 1;
+		const combo = 24;
+		const button = 64;
+		cy --;
+		cx --;
+		cx --;
+		m_combo.MoveWindow(sx, sy, cx - button, cy/2); // heigth はひらいたときの
+		m_submit.MoveWindow(cx - button + 3, sy, button - 3, combo);
+		sy += combo;
+		cy/=2;
+        m_view.MoveWindow(sx, sy, cx, cy);
+		sy += cy;
+		cy -= combo;
+        m_log.MoveWindow(sx, sy, cx, cy);
+    }
+}
