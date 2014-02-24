@@ -161,7 +161,7 @@ void CiperfguiDlg::OnBnClickedOk()
 //パース処理
 void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 {
-//	int process;
+	CIperfViewItem *item;
 	double start =0;
 	double end = 0;
 	double speed = 0.0;
@@ -178,10 +178,20 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 	FindNextWord(t1, line, "[");
 	FindNextWord(t2, line, "] ");
 
+	// item を探す。
 	// サーバモード時は同一threadなのでiperf pidを使用
-	if(m_cmdline.Find("-s")) {
-		wParam = _tstoi( line.Mid(t1, line.GetLength() - t2));
+	// 上記ハッシュに対するものは peer, localアドレスのみ
+	// 計測結果に対する ハッシュはpeer + local も加えuniq さを上げる
+	//
+	//item = m_view.FindItem(uniqid);
+	uniqid |= _tstoi( line.Mid(t1, line.GetLength() - t2));
+	item = m_view.FindItem(uniqid);
+	if(item)
+	{
+		uniqid = mkhash(item->m_peer, uniqid) ;
+		uniqid = mkhash(item->m_local, uniqid) ;
 	}
+	item = m_view.FindItem(uniqid);
 
 	// アドレス引きを行う
 	do {
@@ -208,6 +218,16 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 
 		//	m_Process[process] = peer + _T("/") + local;
 			//TRACE("l:%s p:%s\n", local, peer );
+
+			//
+			item = m_view.FindItem(uniqid);
+			if(item)
+			{
+				wParam = mkhash(item->m_peer, uniqid) ;
+				wParam = mkhash(item->m_local, uniqid) ;
+				m_view.AddItemPeer(uniqid, peer);
+				m_view.AddItemLocal(uniqid, local);
+			}
 		}
 	}while(0);
 
@@ -247,13 +267,14 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 
 				m_view.AddItem(uniqid, start, end, speed);
 
-				CIperfViewItem *item = m_view.FindItem(wParam);
+				if(item)
+				{
 				CString log;
 				log.Format(_T("%s->%s %s\r\n"), item->m_local, item->m_peer,
 					line.Mid(t2, line.GetLength() - t2 ));
 				m_log.SetSel(m_log.GetWindowTextLength(), -1);
 				m_log.ReplaceSel((LPCTSTR)log);
-
+				}
 			}
 		}
 	}while(0);
