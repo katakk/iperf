@@ -22,5 +22,5 @@ protected:
     HANDLE m_hPipeIn;
     PROCESS_INFORMATION m_ProcessInfo;
 public:
-    virtual int Run();
+    virtual BOOL OnIdle(LONG lCount);
 };

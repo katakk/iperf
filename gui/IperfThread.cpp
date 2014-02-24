@@ -143,7 +143,7 @@ int CIperfThread::ExitInstance()
 	return CWinThread::ExitInstance();
 }
 
-int CIperfThread::Run()
+int CIperfThread::OnIdle(LONG lCount)
 {
 	// TODO : ここに特定なコードを追加するか、もしくは基本クラスを呼び出してください。
 	do {
