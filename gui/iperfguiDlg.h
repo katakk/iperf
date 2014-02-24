@@ -32,4 +32,5 @@ protected:
 public:
     CEdit m_log;
     CString m_cmdline;
+	CComboBox m_combo;
 };

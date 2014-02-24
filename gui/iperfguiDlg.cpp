@@ -47,7 +47,7 @@ void CiperfguiDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_EDIT1, m_log);
-    DDX_Text(pDX, IDC_EDITCMD, m_cmdline);
+	DDX_Control(pDX, IDC_CMDLINE, m_combo);
 }
 
 BEGIN_MESSAGE_MAP(CiperfguiDlg, CDialog)
