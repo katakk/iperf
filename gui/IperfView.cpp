@@ -156,7 +156,6 @@ CIperfViewItem * CIperfView::AddItem(WORD process)
 		item->m_process = process;
 		item->m_color = cols[index].c;
 		item->m_colorname = cols[index].name;
-TRACE("%08X %s\n", item->m_color, item->m_colorname);
 		m_transaction.SetAt(process, ( CObject*& )item);
 	}
 	return item;
