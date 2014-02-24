@@ -158,15 +158,6 @@ void CiperfguiDlg::OnBnClickedOk()
     UpdateData(FALSE);
 }
 
-WORD mkhash(LPCTSTR peer)
-{
-	WORD hash = 0;
-	LPCTSTR p = peer;
-	for(; *p == _T('\0'); p++)
-		hash += (WORD) *p;
-	return hash;
-}
-
 //ÉpÅ[ÉXèàóù
 void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 {
