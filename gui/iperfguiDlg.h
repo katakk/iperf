@@ -7,6 +7,7 @@ class CiperfguiDlg : public CDialog
 {
 public:
     CiperfguiDlg(CWnd* pParent = NULL);
+    afx_msg void OnBnClickedOk();
     enum { IDD = IDD_IPERFGUI_DIALOG };
 
     protected:
@@ -28,7 +29,6 @@ protected:
     void ParseLine(WPARAM wParam, CString line);
 
 public:
-    afx_msg void OnBnClickedOk();
     CEdit m_log;
     CString m_cmdline;
     virtual BOOL DestroyWindow();

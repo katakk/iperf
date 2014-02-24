@@ -142,8 +142,6 @@ void CIperfView::OnPaint()
 		dc.LineTo(CPoint( (int)rect.Width(), (int)y));
 	}
 
-
-
 	for( pos = m_transaction.GetStartPosition(); pos != NULL; )
 	{
 		m_transaction.GetNextAssoc( pos, key, (CObject*&)pa );

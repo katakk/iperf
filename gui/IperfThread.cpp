@@ -169,7 +169,6 @@ int CIperfThread::OnIdle(LONG lCount)
 	CloseHandle(m_ProcessInfo.hProcess);
 	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	FreeConsole();
-	ExitThread(0);
 
 	return CWinThread::Run();
 }

@@ -174,8 +174,7 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 	double start =0;
 	double end = 0;
 	double speed = 0.0;
-
-
+	WORD uniqid = (WORD)wParam;
 
 	if( line == _T("")) return;
 	if( line == _T("[ ID] Interval       Transfer     Bandwidth")) return;
@@ -193,6 +192,7 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 		wParam = _tstoi( line.Mid(t1, line.GetLength() - t2));
 	}
 
+	// アドレス引きを行う
 	do {
 		FindNextWord(s1, line, "local ");
 		FindNextWord(s2, line, "port ");
@@ -220,6 +220,7 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 		}
 	}while(0);
 
+	//[xxxx] 59.0-60.0 sec  11.3 MBytes  94.4 Mbits/sec
 	do {
 		FindNextWord(k, line, "sec ");
 		if( k != -1 )
@@ -232,12 +233,8 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 			}
 		}
 
-	}while(0);
-
-	do {
 		FindNextWord(s4, line, "Bytes ");
 		FindNextWord(s5, line, "bits/sec");
-		//	TRACE("4:%d 5:%d\n", s4, s5 );
 		if( s4 != -1 && s5 != -1 ) {
 			if( s4 < s5 ) {
 				CString tmp = line.Mid( s4, s5 -s4 - (int)_tcslen(_T("bits/sec")) );
@@ -312,15 +309,11 @@ LRESULT CiperfguiDlg::OnIperfMessage(WPARAM wParam, LPARAM lParam)
 	TCHAR *param[1024];
 	CString lines;
 	lines += (LPCTSTR)(lParam); // ASCII to MBSTR or UNICODE
-  //  m_log.SetSel(m_log.GetWindowTextLength(), -1);
- //   m_log.ReplaceSel((LPCTSTR)lines);
-
 	int elem = Split( _T("\r\n"), lines.GetBuffer(), param, 1024, 1024 );
 	if( elem > 0 )
 	{
 		for( int i = 0; i < elem ; i ++)
 		{
-			TRACE("%d: %s\n", i, param[i] );
 			ParseLine(wParam, param[i]);
 		}
 	}
