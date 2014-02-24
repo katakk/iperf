@@ -12,18 +12,17 @@ const struct {
 	COLORREF c;
 	LPCTSTR name;
 } cols[] = {
-	RGB(237,26,61), _T("red"),
-	RGB(0,103,191), _T("blue"), 
-	RGB(243,152,0), _T("orange"),
-	RGB(0,128,0),  _T("green"),
-	RGB(167,87,168),  _T("purpure"),
-	RGB(70,130,180), _T("steelblue"),
-	RGB(128,0,0),  _T("maroon"),
-	RGB(75,0,130),  _T("indigo"),
-	RGB(255,105,180), _T("pink"),
-	RGB(128,128,0), _T("olive"),
+	0x000067BF, _T("blue"),
+	0x00ED1A3D, _T("red"),
+	0x00F39800, _T("orange"),
+	0x00008000, _T("green"),
+	0x00A757A8, _T("purpure"),
+	0x004682B4, _T("steelblue"),
+	0x00800000, _T("maroon"),
+	0x004B0082, _T("indigo"),
+	0x00FF69B4, _T("pink"),
+	0x00808000, _T("olive"),
 };
-
 
 // CIperfView
 
@@ -73,7 +72,7 @@ void CIperfView::PaintItems(CPaintDC &dc, CIperfViewItem *pa)
     xstep = rect.Width() / 60.0;
     ystep = rect.Height() / HEIGHT;
 
-	CPen pen(PS_SOLID, 1, (COLORREF)pa->m_color);
+	CPen pen(PS_SOLID, 1, pa->m_color);
 	CPen* pOldPen = dc.SelectObject(&pen);
 
 
@@ -157,6 +156,7 @@ CIperfViewItem * CIperfView::AddItem(WORD process)
 		item->m_process = process;
 		item->m_color = cols[index].c;
 		item->m_colorname = cols[index].name;
+TRACE("%08X %s\n", item->m_color, item->m_colorname);
 		m_transaction.SetAt(process, ( CObject*& )item);
 	}
 	return item;
