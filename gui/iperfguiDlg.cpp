@@ -307,6 +307,8 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 				//mkhash(peer);
 			//	process
 			}
+			local.Replace(_T(" port "),_T(":"));
+			peer.Replace(_T(" port "),_T(":"));
 				m_view.AddItemPeer(wParam, peer);
 				m_view.AddItemLocal(wParam, local);
 
