@@ -304,7 +304,7 @@ int CiperfguiDlg::Split( const TCHAR *pattern, TCHAR *expr, TCHAR **param, int p
 				break;
 			if( param_pos >= param_size ) 
 				break;
-			*p = '\0';
+			*p = _T('\0');
 			s =  p + 1;
 		}
 	}
