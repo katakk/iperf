@@ -68,7 +68,8 @@ void CIperfThread::ReadIperfPipe(HANDLE hPipe)
 	DWORD dwByte;
 
 	FlushFileBuffers(hPipe);
-	PeekNamedPipe(hPipe, str, TotalBytes, &BytesRead, &TotalBytesAvail, &BytesLeftThisMessage );
+	PeekNamedPipe(hPipe, str, TotalBytes, &BytesRead,
+          &TotalBytesAvail, &BytesLeftThisMessage );
 	if( BytesRead > 0 )
 	{
 		ReadFile(hPipe,str,BytesRead,&dwByte,NULL);
@@ -88,7 +89,9 @@ BOOL WindowShowOrHidden(HWND hWnd, int nCmdShow)
 	if( _tcscmp( szclass, _T("ConsoleWindowClass") ) == 0 )
 	{
 		CWinApp *pApp = ::AfxGetApp();
-		::GetModuleFileName( ::GetModuleHandle( pApp->m_pszExeName ), moduleName, sizeof( moduleName ) ); 
+		::GetModuleFileName(
+			::GetModuleHandle( pApp->m_pszExeName ),
+			 moduleName, sizeof( moduleName ) ); 
 		GetWindowText( hWnd, szname, 255 );
 
 		if( _tcscmp( szname, moduleName ) == 0 )
@@ -109,12 +112,10 @@ BOOL CALLBACK WindowShow(HWND hWnd, LPARAM)
 
 BOOL CIperfThread::InitInstance()
 {
-	//m_pThreadParams
 	// TODO:  スレッドごとの初期化をここで実行します。
 	HANDLE hOldIn = GetStdHandle(STD_INPUT_HANDLE);
 	HANDLE hOldOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	HANDLE hOldErr = GetStdHandle(STD_ERROR_HANDLE);
-
 
 	STARTUPINFOA si;
 	memset(&si,0,sizeof(STARTUPINFO));
@@ -126,7 +127,8 @@ BOOL CIperfThread::InitInstance()
 
 	CreateIperfPipe();
 
-	if(CreateProcess(NULL, m_CmdLine, NULL, NULL, TRUE, 0, NULL, NULL, &si, &m_ProcessInfo) == FALSE ) {
+	if(CreateProcess(NULL, m_CmdLine, NULL, NULL, TRUE, 0,
+	    NULL, NULL, &si, &m_ProcessInfo) == FALSE ) {
 		return FALSE;
 	}
 	SetStdHandle(STD_OUTPUT_HANDLE,hOldOut);

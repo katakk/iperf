@@ -4,6 +4,8 @@
 #include "IperfThread.h"
 #include "iperfguidlg.h"
 
+#define DEFAULT_CMDLINE _T("iperf -c 192.168.0.195 -i1 -w1m -t60")
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -36,7 +38,7 @@ END_MESSAGE_MAP()
 
 CiperfguiDlg::CiperfguiDlg(CWnd* pParent /*=NULL*/)
     : CDialog(CiperfguiDlg::IDD, pParent)
-    , m_cmdline(_T("iperf -c 192.168.0.195 -i1 -w1m -t60"))
+    , m_cmdline(DEFAULT_CMDLINE)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }

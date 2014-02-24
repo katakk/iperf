@@ -16,3 +16,11 @@ public:
 };
 
 extern CiperfguiApp theApp;
+
+static WORD mkhash(LPCTSTR peer, WORD seed)
+{
+	LPCTSTR p = peer;
+	for(; *p == _T('\0'); p++)
+		seed += (WORD) *p;
+	return seed;
+}
