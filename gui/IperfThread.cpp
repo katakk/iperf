@@ -144,22 +144,6 @@ BOOL CIperfThread::InitInstance()
 int CIperfThread::ExitInstance()
 {
 	// TODO:  スレッドごとの後処理をここで実行します。
-	FreeConsole();
-	return CWinThread::ExitInstance();
-}
-
-int CIperfThread::OnIdle(LONG lCount)
-{
-	// TODO : ここに特定なコードを追加するか、もしくは基本クラスを呼び出してください。
-	do {
-		FlushFileBuffers(m_hPipeOut);
-		FlushFileBuffers(m_hPipeErr);
-		FlushFileBuffers(m_hPipeIn);
-
-		ReadIperfPipe(m_hPipeOut);
-		ReadIperfPipe(m_hPipeErr);
-
-	} while(WaitForSingleObject(m_ProcessInfo.hProcess, 100) != WAIT_OBJECT_0) ;
 
 	CloseHandle(m_ProcessInfo.hThread);
 
@@ -167,10 +151,28 @@ int CIperfThread::OnIdle(LONG lCount)
 	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	WaitForSingleObject(m_ProcessInfo.hProcess, INFINITE);
 	CloseHandle(m_ProcessInfo.hProcess);
-	//TerminateProcess(m_ProcessInfo.hProcess, 0);
+	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	FreeConsole();
+	return CWinThread::ExitInstance();
+}
 
-	return CWinThread::Run();
+int CIperfThread::OnIdle(LONG lCount)
+{
+	// TODO : ここに特定なコードを追加するか、もしくは基本クラスを呼び出してください。
+	DWORD BytesLeftThisMessage = 0;
+
+	if(WaitForSingleObject(m_ProcessInfo.hProcess, 100) != WAIT_OBJECT_0) 
+	{
+		FlushFileBuffers(m_hPipeOut);
+		FlushFileBuffers(m_hPipeErr);
+		FlushFileBuffers(m_hPipeIn);
+
+		ReadIperfPipe(m_hPipeOut);
+		ReadIperfPipe(m_hPipeErr);
+
+		return 1;
+	}
+	return 0;
 }
 
 
