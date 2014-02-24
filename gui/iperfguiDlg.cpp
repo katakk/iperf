@@ -445,7 +445,7 @@ void CiperfguiDlg::OnSize(UINT nType, int cx, int cy)
 		cy --;
 		cx --;
 		cx --;
-		m_combo.MoveWindow(sx, sy, cx - button, cy/2); // heigth ‚Í‚Ð‚ç‚¢‚½‚Æ‚«‚Ì
+		m_combo.MoveWindow(sx + 2, sy + 2, cx - button - 2, cy/2); // heigth ‚Í‚Ð‚ç‚¢‚½‚Æ‚«‚Ì
 		m_submit.MoveWindow(cx - button + 3, sy, button - 3, combo);
 		sy += combo;
 		cy/=2;
