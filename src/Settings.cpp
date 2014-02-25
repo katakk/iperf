@@ -44,7 +44,7 @@ m      no_argument          print_mss        IPERF_PRINT_MSS
 n:     required_argument    num              IPERF_NUM
 o:     required_argument    output
 p:     required_argument    port             IPERF_PORT
-q      no_argument                           IPERF_SEQPACKET
+q      no_argument          seqpacket        IPERF_SEQPACKET
 r      no_argument          tradeoff         IPERF_TRADEOFF
 s      no_argument          server           IPERF_SERVER
 t:     required_argument    time             IPERF_TIME
@@ -53,7 +53,7 @@ v      no_argument          version
 w:     required_argument    window           TCP_WINDOW_SIZE
 x:     required_argument    reportexclude    IPERF_REPORTEXCLUDE
 y:     required_argument    reportstyle      IPERF_REPORTSTYLE
-z      no_argument                           IPERF_SEQPACKET
+z      no_argument          sctp             IPERF_SEQPACKET
 A*     <empty>
 B:     required_argument    bind             IPERF_BIND
 C      no_argument          compatibility    IPERF_COMPAT
@@ -113,6 +113,8 @@ const struct option long_options[] =
 {"window",     required_argument, NULL, 'w'},
 {"reportexclude", required_argument, NULL, 'x'},
 {"reportstyle",required_argument, NULL, 'y'},
+{"sctp",             no_argument, NULL, 'z'},
+{"seqpacket",        no_argument, NULL, 'q'},
 
 // more esoteric options
 {"bind",       required_argument, NULL, 'B'},

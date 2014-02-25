@@ -16,58 +16,58 @@ Usage: iperf [-s|-c host] [options]\n\
        iperf [-h|--help] [-v|--version]\n\
 \n\
 Client/Server:\n\
-  -f    [kmKM]      format to report: Kbits, Mbits, KBytes, MBytes\n\
-  -i    #           seconds between periodic bandwidth reports\n\
-  -k    <logfile>   logging characterizing the loss pattern\n\
-  -l    #[KM]       length of buffer to read or write (default 128 KB)\n\
-  -m                print TCP maximum segment size (MTU - TCP/IP header)\n\
-  -o    <filename>  output the report or error message to this specified file\n\
-  -p    #           server port to listen on/connect to\n\
-  -u                use UDP rather than TCP\n\
-  -w    #[KM]       TCP window size (socket buffer size)\n\
-  -B    <host>      bind to <host>, an interface or multicast address\n\
-  -C                for use with older versions does not sent extra msgs\n\
-  -M    #           set TCP maximum segment size (MTU - 40 bytes)\n\
-  -N                set TCP no delay, disabling Nagle's Algorithm\n\
-  -O    <int>       specify an interface to bind to for multicast\n\
-  -Q                set protocol-defined priority i.e. skb_priority\n\
-  -V    n           Set the domain to IPv6\n\
-  -z,               use SCTP\n\
-  -q,               use SOCK_SEQPACKET (need SCTP)\n\
+  -f, --format    [kmKM]   format to report: Kbits, Mbits, KBytes, MBytes\n\
+  -i, --interval  #        seconds between periodic bandwidth reports\n\
+  -k, --losspacketslog <logfile> logging characterizing the loss pattern\n\
+  -l, --len       #[KM]    length of buffer to read or write (default 128 KB)\n\
+  -m, --print_mss          print TCP maximum segment size (MTU - TCP/IP header)\n\
+  -o, --output    <filename> output the report or error message to this specified file\n\
+  -p, --port      #        server port to listen on/connect to\n\
+  -u, --udp                use UDP rather than TCP\n\
+  -w, --window    #[KM]    TCP window size (socket buffer size)\n\
+  -B, --bind      <host>   bind to <host>, an interface or multicast address\n\
+  -C, --compatibility      for use with older versions does not sent extra msgs\n\
+  -M, --mss       #        set TCP maximum segment size (MTU - 40 bytes)\n\
+  -N, --nodelay            set TCP no delay, disabling Nagle's Algorithm\n\
+  -O, --interface <int>    specify an interface to bind to for multicast\n\
+  -Q, --priority           set protocol-defined priority i.e. skb_priority\n\
+  -V, --IPv6Version        Set the domain to IPv6\n\
+  -z, --sctp               use SCTP\n\
+  -q, --seqpacket          use SOCK_SEQPACKET (need SCTP)\n\
 \n\
 Server specific:\n\
-  -s                run in server mode\n\
-  -U                run in single threaded UDP mode\n\
-  -D                run the server as a daemon\n"
+  -s, --server             run in server mode\n\
+  -U, --single_udp         run in single threaded UDP mode\n\
+  -D, --daemon             run the server as a daemon\n"
 #ifdef WIN32
-"  -R                remove service in win32\n"
+"  -R, --remove             remove service in win32\n"
 #endif
 ;
 
 const char usage_long2[] = "\
 \n\
 Client specific:\n\
-  -b    #[KM]       for UDP, bandwidth to send at in bits/sec\n\
-                              (default 1 Mbit/sec, implies -u)\n\
-  -c    <host>      run in client mode, connecting to <host>\n\
-  -d                Do a bidirectional test simultaneously\n\
-  -n    #[KM]       number of bytes to transmit (instead of -t)\n\
-  -r                Do a bidirectional test individually\n\
-  -t    #           time in seconds to transmit for (default 10 secs)\n\
-  -F    <name>      input the data to be transmitted from a file\n\
-  -I                input the data to be transmitted from stdin\n\
-  -L    #           port to receive bidirectional tests back on\n\
-  -P    #           number of parallel client threads to run\n\
-  -T    #           time-to-live, for multicast (default 1)\n\
-  -Z                <algo>  set TCP congestion control algorithm (Linux only)\n\
-  -E    #           Poisson interarrival times, for udp (default 0)\n\
-  -X    #           specify number of datagrams to be sent consecutively\n\
+  -b, --bandwidth #[KM]    for UDP, bandwidth to send at in bits/sec\n\
+                           (default 1 Mbit/sec, implies -u)\n\
+  -c, --client    <host>   run in client mode, connecting to <host>\n\
+  -d, --dualtest           Do a bidirectional test simultaneously\n\
+  -n, --num       #[KM]    number of bytes to transmit (instead of -t)\n\
+  -r, --tradeoff           Do a bidirectional test individually\n\
+  -t, --time      #        time in seconds to transmit for (default 10 secs)\n\
+  -F, --fileinput <name>   input the data to be transmitted from a file\n\
+  -I, --stdin              input the data to be transmitted from stdin\n\
+  -L, --listenport #       port to receive bidirectional tests back on\n\
+  -P, --parallel  #        number of parallel client threads to run\n\
+  -T, --ttl       #        time-to-live, for multicast (default 1)\n\
+  -Z, --linux-congestion <algo>  set TCP congestion control algorithm (Linux only)\n\
+  -E, --poisson   #        Poisson interarrival times, for udp (default 0)\n\
+  -X, --burstrate #        specify number of datagrams to be sent consecutively\n\
 \n\
 Miscellaneous:\n\
-  -x,  [CDMSV]      exclude C(connection) D(data) M(multicast) S(settings) V(server) reports\n\
-  -y   C            report as a Comma-Separated Values\n\
-  -h                print this message and quit\n\
-  -v                print version information and quit\n\
+  -x, --reportexclude [CDMSV]   exclude C(connection) D(data) M(multicast) S(settings) V(server) reports\n\
+  -y, --reportstyle C      report as a Comma-Separated Values\n\
+  -h, --help               print this message and quit\n\
+  -v, --version            print version information and quit\n\
 \n\
 [KM] Indicates options that support a K or M suffix for kilo- or mega-\n\
 \n\
