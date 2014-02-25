@@ -342,7 +342,7 @@ void Listener::McastJoin( )
             int fd = socket(AF_INET, SOCK_DGRAM, 0);
             struct ifreq ifr;
             ifr.ifr_addr.sa_family = AF_INET;
-            obsd_strlcpy(ifr.ifr_name, mSettings->mCustInterface, IFNAMSIZ-1);
+            strncpy(ifr.ifr_name, mSettings->mCustInterface, IFNAMSIZ-1);
             if(ioctl(fd, SIOCGIFADDR, &ifr) != -1)
             {
                 struct sockaddr_in *int_addr = (struct sockaddr_in *)&ifr.ifr_addr;

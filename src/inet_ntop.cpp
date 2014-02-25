@@ -71,7 +71,8 @@ inet_ntop4(const unsigned char *src, char *dst, size_t size) {
     if ( (size_t)snprintf(tmp, INET_NTOP_TEMP_SIZE, fmt, src[0], src[1], src[2], src[3]) >= size ) {
         return 0;
     }
-    obsd_strlcpy(dst, tmp, size - 1);
+    strncpy(dst, tmp, size - 1);
+    dst[size - 1] = 0;
     return 1;
 }
 
@@ -169,7 +170,8 @@ inet_ntop6(const unsigned char *src, char *dst, size_t size) {
         errno = ENOSPC;
         return 0;
     }
-    obsd_strlcpy(dst, tmp, size - 1);
+    strncpy(dst, tmp, size - 1);
+    dst[size - 1] = 0;
     return 1;
 }
 #endif /* HAVE_IPV6 */

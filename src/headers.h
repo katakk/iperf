@@ -55,8 +55,6 @@ obsd_strlcat(char *dst, const char *src, size_t siz);
 size_t
 obsd_strlcpy(char *dst, const char *src, size_t siz);
 
-
-
 #ifdef WIN32
     struct itimerval { struct timeval it_interval; struct timeval it_value; };
     #define IFNAMSIZ 32
