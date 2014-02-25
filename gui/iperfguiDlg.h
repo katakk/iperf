@@ -23,6 +23,9 @@ protected:
     CPtrArray pThList;
 	void GetHistory();
     virtual BOOL OnInitDialog();
+    virtual void OnOK();
+	virtual void OnCancel();
+	afx_msg void OnClose();
     afx_msg LRESULT OnIperfQuit(WPARAM wParam, LPARAM lParam);
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnPaint();

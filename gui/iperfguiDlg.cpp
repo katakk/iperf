@@ -56,9 +56,10 @@ BEGIN_MESSAGE_MAP(CiperfguiDlg, CDialog)
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     //}}AFX_MSG_MAP
-    ON_BN_CLICKED(IDOK, OnBnClickedOk)
     ON_MESSAGE(WM_CONSOLE_MESG,OnIperfMessage)
+    ON_MESSAGE(WM_CONSOLE_QUIT,OnIperfQuit)
 	ON_WM_SIZE()
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -231,7 +232,7 @@ HCURSOR CiperfguiDlg::OnQueryDragIcon()
     return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CiperfguiDlg::OnBnClickedOk()
+void CiperfguiDlg::OnOK()
 {
     CIperfThread *pThread; 
     UpdateData(TRUE);
@@ -479,5 +480,16 @@ void CiperfguiDlg::OnSize(UINT nType, int cx, int cy)
 		cy -= combo;
         m_log.MoveWindow(sx, sy, cx, cy);
     }
+}
+
+// ESC ÉLÅ[ÇæÇØÇ≈ï¬Ç∂ÇøÇ·Ç§ÇÃÇÕÇ«Ç§Ç©Ç∆
+void CiperfguiDlg::OnClose()
+{
+	EndDialog(IDCANCEL);
+	CDialog::OnClose();
+}
+void CiperfguiDlg::OnCancel()
+{
+	//CDialog::OnCancel();
 }
 
