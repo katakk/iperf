@@ -1,7 +1,7 @@
 ##iperf2.0.5 p27 那月ちゃんセーフティモード
 
-* `BSD``MIT`ライクライセンス
 * 速度測定用のツール。`iperf 2.0.5` のローカルコピー   
+* `BSD``MIT`ライクライセンス`getoptとkernellistはopenbsd由来に変更`
 * Windows 用 GUIの追加
 * VC++2005でビルド通したきゅん `iperf.sln`
 * パッチ当て済 `27`まで完了 https://github.com/katakk/iperf/issues/3  
