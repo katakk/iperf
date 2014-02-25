@@ -250,6 +250,7 @@ void CiperfguiDlg::OnOK()
 	GetThreadTitle();
     UpdateData(FALSE);
 
+	//CDialog::OnOK();
 }
 
 void CiperfguiDlg::GetThreadTitle()

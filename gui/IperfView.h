@@ -41,18 +41,18 @@ class CIperfView : public CWnd
 public:
 	CIperfView();
 	virtual ~CIperfView();
-
-protected:
-	CMapWordToOb m_transaction;
-	DECLARE_MESSAGE_MAP()
-public:
-	void PaintItems(CPaintDC &dc, CIperfViewItem *pa);
-	afx_msg void OnPaint();
-	CIperfViewItem * AddItem(WORD process);
 	CIperfViewItem * FindItem(WORD process);
 	int AddItemLocal(WORD process, LPCTSTR local);
 	int AddItemPeer(WORD process, LPCTSTR peer);
 	int AddItem(WORD process, double t0, double t1, double speed);
+
+protected:
+	CMapWordToOb m_transaction;
+	DECLARE_MESSAGE_MAP()
+	void PaintItems(CPaintDC &dc, CIperfViewItem *pa);
+	afx_msg void OnPaint();
+	CIperfViewItem * AddItem(WORD process);
+
 };
 
 
