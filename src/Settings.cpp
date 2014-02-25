@@ -13,8 +13,6 @@
 
 #include "util.h"
 
-#include "getopt.h"
-
 void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtSettings );
 
 /*******************************************************************
@@ -155,23 +153,19 @@ void Settings_Copy( thread_Settings *from, thread_Settings **into ) {
     memcpy( *into, from, sizeof(thread_Settings) );
     if ( from->mHost != NULL ) {
         (*into)->mHost = new char[ strlen(from->mHost) + 1];
-        strncpy( (*into)->mHost, from->mHost, strlen(from->mHost) );
-        (*into)->mHost[strlen(from->mHost)] = '\0';
+        obsd_strlcpy( (*into)->mHost, from->mHost, strlen(from->mHost) );
     }
     if ( from->mOutputFileName != NULL ) {
         (*into)->mOutputFileName = new char[ strlen(from->mOutputFileName) + 1];
-        strncpy( (*into)->mOutputFileName, from->mOutputFileName, strlen(from->mOutputFileName) );
-        (*into)->mOutputFileName[strlen(from->mOutputFileName)] = '\0';
+        obsd_strlcpy( (*into)->mOutputFileName, from->mOutputFileName, strlen(from->mOutputFileName) );
     }
     if ( from->mLocalhost != NULL ) {
         (*into)->mLocalhost = new char[ strlen(from->mLocalhost) + 1];
-        strncpy( (*into)->mLocalhost, from->mLocalhost, strlen(from->mLocalhost) );
-        (*into)->mLocalhost[strlen(from->mLocalhost)] = '\0';
+        obsd_strlcpy( (*into)->mLocalhost, from->mLocalhost, strlen(from->mLocalhost) );
     }
     if ( from->mFileName != NULL ) {
         (*into)->mFileName = new char[ strlen(from->mFileName) + 1];
-        strncpy( (*into)->mFileName, from->mFileName, strlen(from->mFileName) );
-        (*into)->mFileName[strlen(from->mFileName)] = '\0';
+        obsd_strlcpy( (*into)->mFileName, from->mFileName, strlen(from->mFileName) );
     }
     // Zero out certain entries
     (*into)->mTID = thread_zeroid();
@@ -198,7 +192,7 @@ void Settings_Destroy( thread_Settings *mSettings) {
 void Settings_ParseCommandLine( int argc, char **argv, thread_Settings *mSettings ) {
     int option;
     while ( (option =
-             getopt( argc, argv, (char *) short_options )) != EOF ) {
+             obsd_getopt( argc, argv, (char *) short_options )) != EOF ) {
         Settings_Interpret( option, optarg, mSettings );
     }
 
@@ -245,8 +239,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 
         case 'c': // client mode w/ server host to connect to
             mExtSettings->mHost = new char[ strlen( optarg ) + 1 ];
-            strncpy( mExtSettings->mHost, optarg, strlen( optarg ) );
-            mExtSettings->mHost[strlen( optarg )] = '\0';
+            obsd_strlcpy( mExtSettings->mHost, optarg, strlen( optarg ) );
 
             if ( mExtSettings->mThreadMode == kMode_Unknown ) {
                 // Test for Multicast
@@ -306,8 +299,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             }
 
             mExtSettings->lossPacketsFileName = new char[strlen(optarg)+1];
-            strncpy( mExtSettings->lossPacketsFileName, optarg, strlen(optarg));
-            mExtSettings->lossPacketsFileName[strlen(optarg)] = '\0';
+            obsd_strlcpy( mExtSettings->lossPacketsFileName, optarg, strlen(optarg));
             break;
 
         case 'l': // length of each buffer
@@ -349,8 +341,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 'o' : // output the report and other messages into the file
             unsetSTDOUT( mExtSettings );
             mExtSettings->mOutputFileName = new char[strlen(optarg)+1];
-            strncpy( mExtSettings->mOutputFileName, optarg, strlen(optarg));
-            mExtSettings->mOutputFileName[strlen(optarg)]='\0';
+            obsd_strlcpy( mExtSettings->mOutputFileName, optarg, strlen(optarg));
             break;
 
         case 'p': // server port
@@ -471,8 +462,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             // more esoteric options
         case 'B': // specify bind address
             mExtSettings->mLocalhost = new char[ strlen( optarg ) + 1 ];
-            strncpy( mExtSettings->mLocalhost, optarg, strlen( optarg ) );
-            mExtSettings->mLocalhost[strlen( optarg )]='\0';
+            obsd_strlcpy( mExtSettings->mLocalhost, optarg, strlen( optarg ) );
             // Test for Multicast
             iperf_sockaddr temp;
             SockAddr_setHostname( mExtSettings->mLocalhost, &temp,
@@ -504,8 +494,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 
             setFileInput( mExtSettings );
             mExtSettings->mFileName = new char[strlen(optarg)+1];
-            strncpy( mExtSettings->mFileName, optarg, strlen(optarg));
-            mExtSettings->mFileName[strlen(optarg)]='\0';
+            obsd_strlcpy( mExtSettings->mFileName, optarg, strlen(optarg));
             break;
 
         case 'I' : // Set the stdin as the input source
@@ -517,8 +506,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             setFileInput( mExtSettings );
             setSTDIN( mExtSettings );
             mExtSettings->mFileName = new char[strlen("<stdin>")+1];
-            strncpy( mExtSettings->mFileName, "<stdin>", strlen("<stdin>"));
-            mExtSettings->mFileName[strlen("<stdin>")]='\0';
+            obsd_strlcpy( mExtSettings->mFileName, "<stdin>", strlen("<stdin>"));
             break;
 
         case 'L': // Listen Port (bidirectional testing client-side)
@@ -544,8 +532,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             if(strlen(outarg) < IFNAMSIZ) {
                 setCustInterface ( mExtSettings );
                 mExtSettings->mCustInterface = new char[strlen(optarg)+1];
-                strncpy(mExtSettings->mCustInterface, optarg, strlen(optarg));
-                mExtSettings->mCustInterface[strlen(optarg)]='\0';
+                obsd_strlcpy(mExtSettings->mCustInterface, optarg, strlen(optarg));
             } else
                 fprintf( stderr, warn_interface_invalid_ignored, option);
             break;
@@ -628,8 +615,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 #ifdef TCP_CONGESTION
             setCongestionControl( mExtSettings );
             mExtSettings->mCongestion = new char[strlen(optarg)+1];
-            strncpy( mExtSettings->mCongestion, optarg, strlen(optarg));
-            mExtSettings->mCongestion[strlen(optarg)]='\0';
+            obsd_strlcpy( mExtSettings->mCongestion, optarg, strlen(optarg));
 #else
             fprintf( stderr, "The -Z option is not available on this operating system\n");
 #endif
@@ -643,8 +629,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 void Settings_GetUpperCaseArg(const char *inarg, char *outarg) {
 
     int len = (int) strlen(inarg);
-    strncpy(outarg, inarg, len);
-    outarg[len]='\0';
+    obsd_strlcpy(outarg, inarg, len);
 
     if ( (len > 0) && (inarg[len-1] >='a')
          && (inarg[len-1] <= 'z') )
@@ -654,8 +639,7 @@ void Settings_GetUpperCaseArg(const char *inarg, char *outarg) {
 void Settings_GetLowerCaseArg(const char *inarg, char *outarg) {
 
     int len = (int) strlen(inarg);
-    strncpy(outarg, inarg, len);
-    outarg[len]='\0';
+    obsd_strlcpy(outarg, inarg, len);
 
     if ( (len > 0) && (inarg[len-1] >='A')
          && (inarg[len-1] <= 'Z') )
@@ -690,13 +674,11 @@ void Settings_GenerateListenerSettings( thread_Settings *client, thread_Settings
         (*listener)->mThreadMode = kMode_Listener;
         if ( client->mHost != NULL ) {
             (*listener)->mHost = new char[strlen( client->mHost ) + 1];
-            strncpy( (*listener)->mHost, client->mHost, strlen( client->mHost ) );
-            (*listener)->mHost[strlen( client->mHost )]='\0';
+            obsd_strlcpy( (*listener)->mHost, client->mHost, strlen( client->mHost ) );
         }
         if ( client->mLocalhost != NULL ) {
             (*listener)->mLocalhost = new char[strlen( client->mLocalhost ) + 1];
-            strncpy( (*listener)->mLocalhost, client->mLocalhost, strlen( client->mLocalhost ) );
-            (*listener)->mLocalhost[strlen( client->mLocalhost )]='\0';
+            obsd_strlcpy( (*listener)->mLocalhost, client->mLocalhost, strlen( client->mLocalhost ) );
         }
     } else {
         *listener = NULL;
@@ -753,8 +735,7 @@ void Settings_GenerateClientSettings( thread_Settings *server,
         (*client)->mThreadMode = kMode_Client;
         if ( server->mLocalhost != NULL ) {
             (*client)->mLocalhost = new char[strlen( server->mLocalhost ) + 1];
-            strncpy( (*client)->mLocalhost, server->mLocalhost, strlen( server->mLocalhost ) );
-            (*client)->mLocalhost[strlen( server->mLocalhost )]='\0';
+            obsd_strlcpy( (*client)->mLocalhost, server->mLocalhost, strlen( server->mLocalhost ) );
         }
         (*client)->mHost = new char[REPORT_ADDRLEN];
         if ( ((sockaddr*)&server->peer)->sa_family == AF_INET ) {

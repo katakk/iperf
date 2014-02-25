@@ -99,7 +99,7 @@ void SetSocketOptions( thread_Settings *inSettings )
             if(isCustInterface ( inSettings ) ) {
                 fd = socket(AF_INET, SOCK_DGRAM, 0);
                 ifr.ifr_addr.sa_family = AF_INET;
-                strncpy(ifr.ifr_name, inSettings->mCustInterface, IFNAMSIZ-1);
+                obsd_strlcpy(ifr.ifr_name, inSettings->mCustInterface, IFNAMSIZ-1);
                 if(ioctl(fd, SIOCGIFADDR, &ifr) != -1)
                 {
                     int_addr = (struct sockaddr_in *)&ifr.ifr_addr;
@@ -117,7 +117,7 @@ void SetSocketOptions( thread_Settings *inSettings )
             if(isCustInterface ( inSettings ) ) {
                 fd6 = socket(AF_INET6, SOCK_DGRAM, 0);
                 ifr6.ifr_addr.sa_family = AF_INET6;
-                strncpy(ifr6.ifr_name, inSettings->mCustInterface, IFNAMSIZ-1);
+                obsd_strlcpy(ifr6.ifr_name, inSettings->mCustInterface, IFNAMSIZ-1);
                 if(ioctl(fd6, SIOCGIFADDR, &ifr6) == 0)
                 {
                     int_addr6 = (struct sockaddr_in6 *)&ifr6.ifr_addr;

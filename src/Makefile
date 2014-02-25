@@ -5,7 +5,8 @@ EXE=iperf
 
 OBJS=Client.o Extractor.o Launch.o List.o Listener.o Locale.o PerfSocket.o ReportCSV.o \
      ReportDefault.o Reporter.o Server.o Settings.o SocketAddr.o \
-     getopt.o main.o service.o sockets.o \
+     obsd_getopt_long.o obsd_strlcpy.o obsd_strlcat \
+     main.o service.o sockets.o \
      stdio.o tcp_window_size.o \
      Thread.o error.o delay.o gettimeofday.o inet_ntop.o inet_pton.o signal.o snprintf.o string.o
 

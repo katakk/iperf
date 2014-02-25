@@ -125,7 +125,7 @@
 				RelativePath=".\src\Extractor.cpp">
 			</File>
 			<File
-				RelativePath=".\src\getopt.cpp">
+				RelativePath=".\src\obsd_getopt_long.cpp">
 			</File>
 			<File
 				RelativePath=".\src\gettimeofday.cpp">

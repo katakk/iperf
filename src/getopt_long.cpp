@@ -477,7 +477,7 @@ start:
  * [eventually this will replace the BSD getopt]
  */
 int
-getopt(int nargc, char * const *nargv, const char *options)
+obsd_getopt(int nargc, char * const *nargv, const char *options)
 {
 
 	/*
@@ -496,7 +496,7 @@ getopt(int nargc, char * const *nargv, const char *options)
  *	Parse argc/argv argument vector.
  */
 int
-getopt_long(int nargc, char * const *nargv, const char *options,
+obsd_getopt_long(int nargc, char * const *nargv, const char *options,
     const struct option *long_options, int *idx)
 {
 

@@ -46,6 +46,19 @@
 #include <time.h>
 #include <math.h>
 
+/* obsd_getopt_long.c */
+int obsd_getopt(int nargc, char * const *nargv, const char *options);
+int obsd_getopt_long(int nargc, char * const *nargv, const char *options,
+    const struct option *long_options, int *idx);
+/* obsd_strlcat.c */
+size_t
+obsd_strlcat(char *dst, const char *src, size_t siz);
+/* obsd_strlcpy.c */
+size_t
+obsd_strlcpy(char *dst, const char *src, size_t siz);
+
+
+
 #ifdef WIN32
     struct itimerval { struct timeval it_interval; struct timeval it_value; };
     #define IFNAMSIZ 32
