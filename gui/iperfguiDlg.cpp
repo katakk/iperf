@@ -372,6 +372,18 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 					line.Mid(s4, line.GetLength() - s4 ));
 				m_log.SetSel(m_log.GetWindowTextLength(), -1);
 				m_log.ReplaceSel((LPCTSTR)log);
+
+
+					// LOGGING
+					CString filename;
+					filename.Format(_T("%s.log"), timeData.Format(_T("%Y%m%d")));
+					TRY {
+						CStdioFile f(filename, CFile::typeText | CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite); 
+
+						f.SeekToEnd();
+						f.WriteString(log);
+					} CATCH (CFileException, e) { }
+					END_CATCH
 				}
 			}
 		}
