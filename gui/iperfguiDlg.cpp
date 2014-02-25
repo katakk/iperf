@@ -108,16 +108,16 @@ void CiperfguiDlg::GetHistory()
 
 	// “ü—Íƒf[ƒ^‚ğÏ‚ñ‚Å‚¢‚­
 	lines += m_cmdline;
-	lines += _T("\r\n");
+	lines += _T("\n");
 	// pull comboxtext
 	m_combo.GetWindowText(str);
 	lines += str;
-	lines += _T("\r\n");
+	lines += _T("\n");
 	for(i = 0; i < m_combo.GetCount(); i++)
 	{
 		m_combo.GetLBText(i, str) ;
 		lines += str;
-		lines += _T("\r\n");
+		lines += _T("\n");
 	}
 	// from file
 	TRY {
@@ -125,12 +125,12 @@ void CiperfguiDlg::GetHistory()
 		// uniq
 		while( f.ReadString(str) ) {
 			lines += str;
-			lines += _T("\r\n");
+			lines += _T("\n");
 		}
 	} CATCH (CFileException, e) { }
     END_CATCH
 
-	lines += _T("\r\n"); //”Ô•º
+	lines += _T("\n"); //”Ô•º
 	int elem = Split( _T("\r\n"), lines.GetBuffer(), param, 1024, 1024 );
 	if( elem > 0 )
 	{
@@ -152,7 +152,7 @@ void CiperfguiDlg::GetHistory()
 			temp.GetNextAssoc( pos, str, pob );
 			if(! str.IsEmpty() ) {
 				f.WriteString(str);
-				f.WriteString(_T("\r\n"));
+				f.WriteString(_T("\n"));
 			}
 		}
 
@@ -365,7 +365,7 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 				{
 				CString log;
 				CTime timeData = CTime::GetTickCount();
-				log.Format(_T("%s(%s)%s %s\r\n"), 
+				log.Format(_T("%s(%s)%s %s\n"), 
 					timeData.Format("[%Y/%m/%d %H:%M:%S]"),
 					item->m_colorname,
 					item->m_peer,
