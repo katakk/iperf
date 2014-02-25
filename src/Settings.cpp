@@ -193,10 +193,10 @@ void Settings_ParseCommandLine( int argc, char **argv, thread_Settings *mSetting
     int option;
     while ( (option =
              obsd_getopt( argc, argv, (char *) short_options )) != EOF ) {
-        Settings_Interpret( option, optarg, mSettings );
+        Settings_Interpret( option, obsd_optarg, mSettings );
     }
 
-    for ( int i = optind; i < argc; i++ ) {
+    for ( int i = obsd_optind; i < argc; i++ ) {
         fprintf( stderr, "%s: ignoring extra argument -- %s\n", argv[0], argv[i] );
     }
 } // end ParseCommandLine
@@ -206,7 +206,7 @@ void Settings_ParseCommandLine( int argc, char **argv, thread_Settings *mSetting
  * or from environment variables.
  * ------------------------------------------------------------------- */
 
-void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtSettings ) {
+void Settings_Interpret( char option, const char *obsd_optarg, thread_Settings *mExtSettings ) {
     char outarg[100];
 
     switch ( option ) {
@@ -214,7 +214,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             setSingleClient( mExtSettings );
             break;
         case 'X':
-            mExtSettings->mBurstRate = atoi(optarg);
+            mExtSettings->mBurstRate = atoi(obsd_optarg);
             break;
         case 'b': // UDP bandwidth
             if ( !isUDP( mExtSettings ) ) {
@@ -226,7 +226,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
                 break;
             }
 
-            Settings_GetLowerCaseArg(optarg,outarg);
+            Settings_GetLowerCaseArg(obsd_optarg,outarg);
             mExtSettings->mUDPRate = (unsigned long) byte_atoi(outarg);
             setUDP( mExtSettings );
 
@@ -238,8 +238,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             break;
 
         case 'c': // client mode w/ server host to connect to
-            mExtSettings->mHost = new char[ strlen( optarg ) + 1 ];
-            obsd_strlcpy( mExtSettings->mHost, optarg, strlen( optarg ) );
+            mExtSettings->mHost = new char[ strlen( obsd_optarg ) + 1 ];
+            obsd_strlcpy( mExtSettings->mHost, obsd_optarg, strlen( obsd_optarg ) );
 
             if ( mExtSettings->mThreadMode == kMode_Unknown ) {
                 // Test for Multicast
@@ -271,7 +271,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             break;
 
         case 'f': // format to print in
-            mExtSettings->mFormat = (*optarg);
+            mExtSettings->mFormat = (*obsd_optarg);
             break;
 
         case 'h': // print help and exit
@@ -281,7 +281,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             break;
 
         case 'i': // specify interval between periodic bw reports
-            mExtSettings->mInterval = atof( optarg );
+            mExtSettings->mInterval = atof( obsd_optarg );
             if ( mExtSettings->mInterval < 0.5 ) {
                 fprintf (stderr, report_interval_small, mExtSettings->mInterval);
                 mExtSettings->mInterval = 0.5;
@@ -298,12 +298,12 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
                 break;
             }
 
-            mExtSettings->lossPacketsFileName = new char[strlen(optarg)+1];
-            obsd_strlcpy( mExtSettings->lossPacketsFileName, optarg, strlen(optarg));
+            mExtSettings->lossPacketsFileName = new char[strlen(obsd_optarg)+1];
+            obsd_strlcpy( mExtSettings->lossPacketsFileName, obsd_optarg, strlen(obsd_optarg));
             break;
 
         case 'l': // length of each buffer
-            Settings_GetUpperCaseArg(optarg,outarg);
+            Settings_GetUpperCaseArg(obsd_optarg,outarg);
             mExtSettings->mBufLen = (int) byte_atoi( outarg );
             setBuflenSet( mExtSettings );
             if ( !isUDP( mExtSettings ) ) {
@@ -334,18 +334,18 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 'n': // bytes of data
             // amount mode (instead of time mode)
             unsetModeTime( mExtSettings );
-            Settings_GetUpperCaseArg(optarg,outarg);
+            Settings_GetUpperCaseArg(obsd_optarg,outarg);
             mExtSettings->mAmount = byte_atoi( outarg );
             break;
 
         case 'o' : // output the report and other messages into the file
             unsetSTDOUT( mExtSettings );
-            mExtSettings->mOutputFileName = new char[strlen(optarg)+1];
-            obsd_strlcpy( mExtSettings->mOutputFileName, optarg, strlen(optarg));
+            mExtSettings->mOutputFileName = new char[strlen(obsd_optarg)+1];
+            obsd_strlcpy( mExtSettings->mOutputFileName, obsd_optarg, strlen(obsd_optarg));
             break;
 
         case 'p': // server port
-            mExtSettings->mPort = atoi( optarg );
+            mExtSettings->mPort = atoi( obsd_optarg );
             break;
 
         case 'r': // test mode tradeoff
@@ -372,7 +372,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 't': // seconds to write for
             // time mode (instead of amount mode)
             setModeTime( mExtSettings );
-            mExtSettings->mAmount = (int) (atof( optarg ) * 100.0);
+            mExtSettings->mAmount = (int) (atof( obsd_optarg ) * 100.0);
             break;
 
         case 'u': // UDP instead of TCP
@@ -401,7 +401,7 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             break;
 
         case 'w': // TCP window size (socket buffer size)
-            Settings_GetUpperCaseArg(optarg,outarg);
+            Settings_GetUpperCaseArg(obsd_optarg,outarg);
             mExtSettings->mTCPWin = (int) byte_atoi(outarg);
 
             if ( mExtSettings->mTCPWin < 2048 ) {
@@ -418,8 +418,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
 		    break;
 
         case 'x': // Limit Reports
-            while ( *optarg != '\0' ) {
-                switch ( *optarg ) {
+            while ( *obsd_optarg != '\0' ) {
+                switch ( *obsd_optarg ) {
                     case 's':
                     case 'S':
                         setNoSettReport( mExtSettings );
@@ -441,28 +441,28 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
                         setNoMultReport( mExtSettings );
                         break;
                     default:
-                        fprintf(stderr, warn_invalid_report, *optarg);
+                        fprintf(stderr, warn_invalid_report, *obsd_optarg);
                 }
-                optarg++;
+                obsd_optarg++;
             }
             break;
 
         case 'y': // Reporting Style
-            switch ( *optarg ) {
+            switch ( *obsd_optarg ) {
                 case 'c':
                 case 'C':
                     mExtSettings->mReportMode = kReport_CSV;
                     break;
                 default:
-                    fprintf( stderr, warn_invalid_report_style, optarg );
+                    fprintf( stderr, warn_invalid_report_style, obsd_optarg );
             }
             break;
 
 
             // more esoteric options
         case 'B': // specify bind address
-            mExtSettings->mLocalhost = new char[ strlen( optarg ) + 1 ];
-            obsd_strlcpy( mExtSettings->mLocalhost, optarg, strlen( optarg ) );
+            mExtSettings->mLocalhost = new char[ strlen( obsd_optarg ) + 1 ];
+            obsd_strlcpy( mExtSettings->mLocalhost, obsd_optarg, strlen( obsd_optarg ) );
             // Test for Multicast
             iperf_sockaddr temp;
             SockAddr_setHostname( mExtSettings->mLocalhost, &temp,
@@ -493,8 +493,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             }
 
             setFileInput( mExtSettings );
-            mExtSettings->mFileName = new char[strlen(optarg)+1];
-            obsd_strlcpy( mExtSettings->mFileName, optarg, strlen(optarg));
+            mExtSettings->mFileName = new char[strlen(obsd_optarg)+1];
+            obsd_strlcpy( mExtSettings->mFileName, obsd_optarg, strlen(obsd_optarg));
             break;
 
         case 'I' : // Set the stdin as the input source
@@ -515,11 +515,11 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
                 break;
             }
 
-            mExtSettings->mListenPort = atoi( optarg );
+            mExtSettings->mListenPort = atoi( obsd_optarg );
             break;
 
         case 'M': // specify TCP MSS (maximum segment size)
-            Settings_GetUpperCaseArg(optarg,outarg);
+            Settings_GetUpperCaseArg(obsd_optarg,outarg);
 
             mExtSettings->mMSS = (int) byte_atoi( outarg );
             break;
@@ -531,20 +531,20 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 'O': // specify interface to bind to (multicast)
             if(strlen(outarg) < IFNAMSIZ) {
                 setCustInterface ( mExtSettings );
-                mExtSettings->mCustInterface = new char[strlen(optarg)+1];
-                obsd_strlcpy(mExtSettings->mCustInterface, optarg, strlen(optarg));
+                mExtSettings->mCustInterface = new char[strlen(obsd_optarg)+1];
+                obsd_strlcpy(mExtSettings->mCustInterface, obsd_optarg, strlen(obsd_optarg));
             } else
                 fprintf( stderr, warn_interface_invalid_ignored, option);
             break;
 
         case 'P': // number of client threads
 #ifdef HAVE_THREAD
-            mExtSettings->mThreads = atoi( optarg );
+            mExtSettings->mThreads = atoi( obsd_optarg );
 #else
             if ( mExtSettings->mThreadMode != kMode_Server ) {
                 fprintf( stderr, warn_invalid_single_threaded, option );
             } else {
-                mExtSettings->mThreads = atoi( optarg );
+                mExtSettings->mThreads = atoi( obsd_optarg );
             }
 #endif
             break;
@@ -557,17 +557,17 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
             // TODO use a function that understands base-2
             // the zero base here allows the user to specify
             // "0x#" hex, "0#" octal, and "#" decimal numbers
-            mExtSettings->mTOS = strtol( optarg, NULL, 0 );
+            mExtSettings->mTOS = strtol( obsd_optarg, NULL, 0 );
             break;
 
         case 'Q': // protocol-defined priority
             // the zero base here allows the user to specify
             // "0x#" hex, "0#" octal, and "#" decimal numbers
-            mExtSettings->mPriority = strtol( optarg, NULL, 0 );
+            mExtSettings->mPriority = strtol( obsd_optarg, NULL, 0 );
             break;
 
         case 'T': // time-to-live for multicast
-            mExtSettings->mTTL = atoi( optarg );
+            mExtSettings->mTTL = atoi( obsd_optarg );
             break;
 
         case 'U': // single threaded UDP server
@@ -614,8 +614,8 @@ void Settings_Interpret( char option, const char *optarg, thread_Settings *mExtS
         case 'Z':
 #ifdef TCP_CONGESTION
             setCongestionControl( mExtSettings );
-            mExtSettings->mCongestion = new char[strlen(optarg)+1];
-            obsd_strlcpy( mExtSettings->mCongestion, optarg, strlen(optarg));
+            mExtSettings->mCongestion = new char[strlen(obsd_optarg)+1];
+            obsd_strlcpy( mExtSettings->mCongestion, obsd_optarg, strlen(obsd_optarg));
 #else
             fprintf( stderr, "The -Z option is not available on this operating system\n");
 #endif

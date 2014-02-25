@@ -46,10 +46,8 @@
 #include <time.h>
 #include <math.h>
 
-/* obsd_getopt_long.c */
-int obsd_getopt(int nargc, char * const *nargv, const char *options);
-int obsd_getopt_long(int nargc, char * const *nargv, const char *options,
-    const struct option *long_options, int *idx);
+#include "obsd_getopt.h"
+
 /* obsd_strlcat.c */
 size_t
 obsd_strlcat(char *dst, const char *src, size_t siz);

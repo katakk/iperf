@@ -125,9 +125,6 @@
 				RelativePath=".\src\Extractor.cpp">
 			</File>
 			<File
-				RelativePath=".\src\obsd_getopt_long.cpp">
-			</File>
-			<File
 				RelativePath=".\src\gettimeofday.cpp">
 			</File>
 			<File
@@ -150,6 +147,18 @@
 			</File>
 			<File
 				RelativePath=".\src\main.cpp">
+			</File>
+			<File
+				RelativePath=".\src\obsd_getopt_long.cpp">
+			</File>
+			<File
+				RelativePath=".\src\obsd_getsubopt.cpp">
+			</File>
+			<File
+				RelativePath=".\src\obsd_strlcat.cpp">
+			</File>
+			<File
+				RelativePath=".\src\obsd_strlcpy.cpp">
 			</File>
 			<File
 				RelativePath=".\src\PerfSocket.cpp">
@@ -245,6 +254,9 @@
 			</File>
 			<File
 				RelativePath=".\src\Mutex.h">
+			</File>
+			<File
+				RelativePath=".\src\obsd_getopt.h">
 			</File>
 			<File
 				RelativePath=".\src\PerfSocket.hpp">
