@@ -11,7 +11,6 @@ OBJS=Client.o Extractor.o Launch.o List.o Listener.o Locale.o PerfSocket.o Repor
      stdio.o tcp_window_size.o \
      Thread.o error.o delay.o gettimeofday.o inet_ntop.o inet_pton.o signal.o snprintf.o string.o
 
-
 all: $(EXE)
 
 clean:
