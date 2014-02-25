@@ -494,6 +494,7 @@ void CiperfguiDlg::OnSize(UINT nType, int cx, int cy)
 		sy += cy;
 		cy -= combo;
         m_log.MoveWindow(sx, sy, cx, cy);
+		Invalidate();
     }
 }
 
