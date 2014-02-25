@@ -4,6 +4,8 @@
 #include "afxwin.h"
 
 #define WM_CONSOLE_MESG       (WM_USER+200)
+#define WM_CONSOLE_QUIT       (WM_USER+201)
+
 class CiperfguiDlg : public CDialog
 {
 public:
@@ -21,6 +23,7 @@ protected:
     CPtrArray pThList;
 	void GetHistory();
     virtual BOOL OnInitDialog();
+    afx_msg LRESULT OnIperfQuit(WPARAM wParam, LPARAM lParam);
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();

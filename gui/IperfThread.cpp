@@ -13,6 +13,7 @@ IMPLEMENT_DYNCREATE(CIperfThread, CWinThread)
 
 CIperfThread::CIperfThread()
 {
+	m_bAutoDelete = TRUE;
 }
 
 CIperfThread::~CIperfThread()
@@ -144,7 +145,6 @@ BOOL CIperfThread::InitInstance()
 int CIperfThread::ExitInstance()
 {
 	// TODO:  スレッドごとの後処理をここで実行します。
-
 	CloseHandle(m_ProcessInfo.hThread);
 
 	WaitForSingleObject(m_ProcessInfo.hProcess, 200);
@@ -153,7 +153,14 @@ int CIperfThread::ExitInstance()
 	CloseHandle(m_ProcessInfo.hProcess);
 	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	FreeConsole();
-	return CWinThread::ExitInstance();
+	
+	CWinThread::ExitInstance();
+	
+	// post exit
+	m_pMainWnd->SendMessage(WM_CONSOLE_QUIT, m_uniqid, (LPARAM)this);
+	delete this;
+
+	return 0; 
 }
 
 int CIperfThread::OnIdle(LONG lCount)
@@ -172,7 +179,28 @@ int CIperfThread::OnIdle(LONG lCount)
 
 		return 1;
 	}
+
 	return 0;
 }
 
+// やっぱオーバライドしないと動きおかしい
+int CIperfThread::Run()
+{
+	ASSERT_VALID(this);
+	_AFX_THREAD_STATE* pState = AfxGetThreadState();
 
+	// for tracking the idle time state
+	BOOL bIdle = TRUE;
+	LONG lIdleCount = 0;
+
+	// check to see if we can do idle work
+	while (bIdle &&
+		!::PeekMessage(&(pState->m_msgCur), NULL, NULL, NULL, PM_NOREMOVE))
+	{
+		// call OnIdle while in bIdle state
+		if (!OnIdle(lIdleCount++))
+			bIdle = FALSE; // assume "no idle" state
+	}
+	ExitInstance();
+	return 0;
+}

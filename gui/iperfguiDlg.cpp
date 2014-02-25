@@ -412,6 +412,22 @@ int CiperfguiDlg::Split( const TCHAR *pattern, TCHAR *expr, TCHAR **param, int p
 
 	return param_pos;
 }
+// Iperf 終了
+LRESULT CiperfguiDlg::OnIperfQuit(WPARAM wParam, LPARAM lParam)
+{
+	CIperfThread *pThread = (CIperfThread *) lParam; 
+
+    for(int i = 0 ; i < pThList.GetSize() ; i ++ )
+    {
+        if( pThread == (CIperfThread*) pThList.ElementAt(i) )
+		{
+			pThList.RemoveAt(i);
+			GetThreadTitle();
+			return 0;
+		}
+    }
+	return 0;
+}
 
 // Iperf からのメッセージはここに来る
 LRESULT CiperfguiDlg::OnIperfMessage(WPARAM wParam, LPARAM lParam)

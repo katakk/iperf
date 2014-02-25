@@ -5,23 +5,21 @@ class CIperfThread : public CWinThread
 
 protected:
     CIperfThread();
+    virtual BOOL OnIdle(LONG lCount);
+	virtual int Run();
     virtual ~CIperfThread();
-
-public:
-    void CreateIperfPipe();
-    void ReadIperfPipe(HANDLE hPipe);
-    virtual BOOL InitInstance();
-    virtual int ExitInstance();
-    char m_CmdLine[1024];
-
-protected:
     DECLARE_MESSAGE_MAP()
     HANDLE m_hPipeOut;
     HANDLE m_hPipeErr;
     HANDLE m_hPipeIn;
     PROCESS_INFORMATION m_ProcessInfo;
 	WORD m_uniqid;
-	
+    void CreateIperfPipe();
+    void ReadIperfPipe(HANDLE hPipe);
+
 public:
-    virtual BOOL OnIdle(LONG lCount);
+    virtual BOOL InitInstance();
+    virtual int ExitInstance();
+    char m_CmdLine[1024];
 };
+
