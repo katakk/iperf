@@ -226,9 +226,6 @@
 				RelativePath=".\src\Extractor.h">
 			</File>
 			<File
-				RelativePath=".\src\getopt.h">
-			</File>
-			<File
 				RelativePath=".\src\gettimeofday.h">
 			</File>
 			<File
