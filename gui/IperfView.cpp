@@ -145,7 +145,6 @@ void CIperfView::OnPaint()
 		m_transaction.GetNextAssoc( pos, key, (CObject*&)pa );
 		PaintItems(dc, pa);
 	}
-
 }
 
 CIperfViewItem * CIperfView::FindItem(WORD process)

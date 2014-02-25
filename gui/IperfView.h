@@ -32,8 +32,8 @@ public:
 	CString m_local;
 	CString m_peer;
 };
-// CIperfView
 
+// CIperfView
 class CIperfView : public CWnd
 {
 	DECLARE_DYNAMIC(CIperfView)

@@ -3,13 +3,12 @@
 #include "iperfguiDlg.h"
 #include "IperfThread.h"
 #include "iperfguidlg.h"
-#include ".\iperfguidlg.h"
-
-#define DEFAULT_CMDLINE _T("iperf -c 192.168.0.195 -i1 -w1m -t60")
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
+#define DEFAULT_CMDLINE _T("iperf -c 192.168.0.195 -i1 -w1m -t60")
 
 class CAboutDlg : public CDialog
 {
@@ -136,7 +135,6 @@ void CiperfguiDlg::GetHistory()
 	{
 		for( int i = 0; i < elem ; i ++)
 		{
-			//TRACE("%d: %s\n", i, param[i] );
 			temp.SetAt(param[i], NULL );
 		}
 	}
@@ -235,7 +233,6 @@ HCURSOR CiperfguiDlg::OnQueryDragIcon()
 
 void CiperfguiDlg::OnBnClickedOk()
 {
-    // TODO : ここにコントロール通知ハンドラ コードを追加します。
     CIperfThread *pThread; 
     UpdateData(TRUE);
 	m_combo.GetWindowText(m_cmdline);
@@ -363,16 +360,15 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 
 				if(item)
 				{
-				CString log;
-				CTime timeData = CTime::GetTickCount();
-				log.Format(_T("%s(%s)%s %s\n"), 
-					timeData.Format("[%Y/%m/%d %H:%M:%S]"),
-					item->m_colorname,
-					item->m_peer,
-					line.Mid(s4, line.GetLength() - s4 ));
-				m_log.SetSel(m_log.GetWindowTextLength(), -1);
-				m_log.ReplaceSel((LPCTSTR)log);
-
+					CString log;
+					CTime timeData = CTime::GetTickCount();
+					log.Format(_T("%s(%s)%s %s\n"), 
+						timeData.Format("[%Y/%m/%d %H:%M:%S]"),
+						item->m_colorname,
+						item->m_peer,
+						line.Mid(s4, line.GetLength() - s4 ));
+					m_log.SetSel(m_log.GetWindowTextLength(), -1);
+					m_log.ReplaceSel((LPCTSTR)log);
 
 					// LOGGING
 					CString filename;
@@ -446,6 +442,7 @@ LRESULT CiperfguiDlg::OnIperfMessage(WPARAM wParam, LPARAM lParam)
 {
 	TCHAR *param[1024];
 	CString lines;
+
 	lines += (LPCTSTR)(lParam); // ASCII to MBSTR or UNICODE
 	int elem = Split( _T("\r\n"), lines.GetBuffer(), param, 1024, 1024 );
 	if( elem > 0 )
@@ -483,3 +480,4 @@ void CiperfguiDlg::OnSize(UINT nType, int cx, int cy)
         m_log.MoveWindow(sx, sy, cx, cy);
     }
 }
+
