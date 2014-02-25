@@ -251,6 +251,21 @@ void CiperfguiDlg::OnOK()
 	str.Format(_T("%s [%s]"), AfxGetApp()->m_pszAppName, m_cmdline);
 	SetWindowText(str);
     UpdateData(FALSE);
+
+}
+
+void CiperfguiDlg::GetThreadTitle()
+{
+	CIperfThread *pThread;
+	CString str =  AfxGetApp()->m_pszAppName;
+    for(int i = 0 ; i < pThList.GetSize() ; i ++ )
+    {
+        pThread =(CIperfThread*)pThList.ElementAt(i);
+		str += _T(" [");
+		str += pThread->m_CmdLine;
+		str += _T("]");
+    }
+	SetWindowText(str);
 }
 
 //ÉpÅ[ÉXèàóù
@@ -443,6 +458,7 @@ LRESULT CiperfguiDlg::OnIperfMessage(WPARAM wParam, LPARAM lParam)
 {
 	TCHAR *param[1024];
 	CString lines;
+	GetThreadTitle();
 
 	lines += (LPCTSTR)(lParam); // ASCII to MBSTR or UNICODE
 	int elem = Split( _T("\r\n"), lines.GetBuffer(), param, 1024, 1024 );

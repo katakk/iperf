@@ -27,6 +27,7 @@ protected:
 	virtual void OnCancel();
 	afx_msg void OnClose();
     afx_msg LRESULT OnIperfQuit(WPARAM wParam, LPARAM lParam);
+	void GetThreadTitle();
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();
