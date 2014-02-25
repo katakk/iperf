@@ -481,8 +481,8 @@ void CiperfguiDlg::OnSize(UINT nType, int cx, int cy)
     {
 		// TODO : ここにメッセージ ハンドラ コードを追加します。
 		int sx = 1, sy = 1;
-		const combo = 24;
-		const button = 64;
+		const int combo = 24;
+		const int button = 64;
 		cy --;
 		cx --;
 		cx --;
