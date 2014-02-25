@@ -247,9 +247,7 @@ void CiperfguiDlg::OnOK()
     pThList.Add(pThread);
 
 	GetHistory();
-	CString str;
-	str.Format(_T("%s [%s]"), AfxGetApp()->m_pszAppName, m_cmdline);
-	SetWindowText(str);
+	GetThreadTitle();
     UpdateData(FALSE);
 
 }
