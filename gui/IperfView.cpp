@@ -6,7 +6,7 @@
 #include "IperfView.h"
 #include "iperfview.h"
 
-#define HEIGHT 150000.0
+#define HEIGHT (10*log10(30000000.0))
 
 const struct {
 	COLORREF c;
@@ -80,7 +80,7 @@ void CIperfView::PaintItems(CPaintDC &dc, CIperfViewItem *pa)
     {
 		t0 = pa->m_List.GetAt( pos ).t0;
 		t1 = pa->m_List.GetAt( pos ).t1;
-		speed = pa->m_List.GetAt( pos ).speed;
+		speed = 10*log10(pa->m_List.GetAt( pos ).speed);
 
 		//
 		x0 = t0 * xstep;
@@ -104,6 +104,7 @@ void CIperfView::PaintItems(CPaintDC &dc, CIperfViewItem *pa)
 
 void CIperfView::OnPaint()
 {
+	double x, y, xstep, ystep, k, j;
 	CIperfViewItem *pa;
 	POSITION pos;
 	WORD key;
@@ -116,10 +117,8 @@ void CIperfView::OnPaint()
 
 	dc.Rectangle(rect);
 	
-	int i;
-	double x, y;
-	double xstep = rect.Width() / 60.0 * 2;
-	double ystep =  rect.Height() / HEIGHT * 10000.0; // ÉÅÉÇÉä10M
+	xstep = rect.Width() / 60.0 * 2;
+	ystep =  rect.Height() / HEIGHT;
 	for(x =0.0; x < rect.Width() ; x += xstep)
 	{
 		CPen pen(PS_SOLID, 1, RGB(240,240,240));
@@ -130,15 +129,20 @@ void CIperfView::OnPaint()
 		dc.SelectObject(pOldPen);
 	}
 
-	for(y =0.0, i = 0; y < rect.Height() ; y += ystep, i++)
+	for(j = 1; j < 10000000000; j*=10)
 	{
-		CPen pen(PS_SOLID, 1, ((i % 5) ? RGB(240,240,240) : RGB(120,120,120)) );
-		CPen* pOldPen = dc.SelectObject(&pen);
-
-		dc.MoveTo(CPoint( 1, (int)y));
-		dc.LineTo(CPoint( (int)rect.Width() -1, (int)y));
-		dc.SelectObject(pOldPen);
+		for(k = 1; k < 10; k++)
+		{
+			y = rect.Height() - 10*log10(k*j) * ystep;
+			if(y < 0) goto over;
+			CPen pen(PS_SOLID, 1, ((k != 1) ? RGB(240,240,240) : RGB(120,120,120)) );
+			CPen* pOldPen = dc.SelectObject(&pen);
+			dc.MoveTo(CPoint( 1, (int)y));
+			dc.LineTo(CPoint( (int)rect.Width() -1, (int)y));
+			dc.SelectObject(pOldPen);
+		}
 	}
+over:
 
 	for( pos = m_transaction.GetStartPosition(); pos != NULL; )
 	{
