@@ -314,8 +314,8 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 			item = m_view.FindItem(uniqid);
 			if(item)
 			{
-				wParam = mkhash(item->m_peer, uniqid) ;
-				wParam = mkhash(item->m_local, uniqid) ;
+				uniqid = mkhash(item->m_peer, uniqid) ;
+				uniqid = mkhash(item->m_local, uniqid) ;
 				m_view.AddItemPeer(uniqid, peer);
 				m_view.AddItemLocal(uniqid, local);
 			}
