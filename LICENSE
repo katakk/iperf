@@ -134,7 +134,7 @@ obsd_strlcat.cpp
 obsd_strlcpy.cpp
 obsd_getopt.h
 obsd_getopt_long.cpp
-obsd_getsu4bopt.cpp
+obsd_getsubopt.cpp
 
 
 ========================================================
