@@ -234,9 +234,12 @@ HCURSOR CiperfguiDlg::OnQueryDragIcon()
 
 void CiperfguiDlg::OnOK()
 {
+	CString tmp;
     CIperfThread *pThread; 
     UpdateData(TRUE);
 	m_combo.GetWindowText(m_cmdline);
+	tmp.Format(_T("プログラム'%s' は開始しました -->\r\n"), m_cmdline);
+	m_log.SetWindowText(tmp);
 
     CRuntimeClass *pRuntime = RUNTIME_CLASS(CIperfThread);
     pThread = (CIperfThread *)pRuntime->CreateObject();
@@ -382,8 +385,6 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 						item->m_colorname,
 						item->m_peer,
 						line.Mid(s4, line.GetLength() - s4 ));
-					m_log.SetSel(m_log.GetWindowTextLength(), -1);
-					m_log.ReplaceSel((LPCTSTR)log);
 
 					// LOGGING
 					CString filename;
@@ -444,7 +445,12 @@ LRESULT CiperfguiDlg::OnIperfQuit(WPARAM wParam, LPARAM lParam)
     {
         if( pThread == (CIperfThread*) pThList.ElementAt(i) )
 		{
+			CString tmp;
+			tmp.Format(_T("<-- プログラム'%s' はコード %d (%x) で終了しました"),
+				pThread->m_CmdLine, pThread->m_exitCode, pThread->m_exitCode);
 			pThList.RemoveAt(i);
+			m_log.SetSel(m_log.GetWindowTextLength(), -1);
+			m_log.ReplaceSel((LPCTSTR)tmp);
 			GetThreadTitle();
 			return 0;
 		}
@@ -459,7 +465,10 @@ LRESULT CiperfguiDlg::OnIperfMessage(WPARAM wParam, LPARAM lParam)
 	CString lines;
 	GetThreadTitle();
 
-	lines += (LPCTSTR)(lParam); // ASCII to MBSTR or UNICODE
+	lines = (LPCTSTR)(lParam); // ASCII to MBSTR or UNICODE
+	m_log.SetSel(m_log.GetWindowTextLength(), -1);
+	m_log.ReplaceSel((LPCTSTR)lines);
+
 	int elem = Split( _T("\r\n"), lines.GetBuffer(), param, 1024, 1024 );
 	if( elem > 0 )
 	{

@@ -135,6 +135,8 @@ BOOL CIperfThread::InitInstance()
 	    NULL, NULL, &si, &m_ProcessInfo) == FALSE ) {
 		return FALSE;
 	}
+
+	WaitForInputIdle(m_ProcessInfo.hProcess, INFINITE);
 	SetStdHandle(STD_OUTPUT_HANDLE,hOldOut);
 	SetStdHandle(STD_INPUT_HANDLE,hOldIn);
 	SetStdHandle(STD_ERROR_HANDLE,hOldErr);
@@ -145,19 +147,18 @@ BOOL CIperfThread::InitInstance()
 int CIperfThread::ExitInstance()
 {
 	// TODO:  スレッドごとの後処理をここで実行します。
+	GetExitCodeProcess(m_ProcessInfo.hProcess, &m_exitCode);
 	CloseHandle(m_ProcessInfo.hThread);
-
-	WaitForSingleObject(m_ProcessInfo.hProcess, 200);
 	TerminateProcess(m_ProcessInfo.hProcess, 0);
-	WaitForSingleObject(m_ProcessInfo.hProcess, INFINITE);
+
+	// post exit
+	m_pMainWnd->SendMessage(WM_CONSOLE_QUIT, m_uniqid, (LPARAM)this);
+
 	CloseHandle(m_ProcessInfo.hProcess);
 	TerminateProcess(m_ProcessInfo.hProcess, 0);
 	FreeConsole();
-	
 	CWinThread::ExitInstance();
-	
-	// post exit
-	m_pMainWnd->SendMessage(WM_CONSOLE_QUIT, m_uniqid, (LPARAM)this);
+
 	delete this;
 
 	return 0; 
@@ -166,20 +167,16 @@ int CIperfThread::ExitInstance()
 int CIperfThread::OnIdle(LONG lCount)
 {
 	// TODO : ここに特定なコードを追加するか、もしくは基本クラスを呼び出してください。
-	DWORD BytesLeftThisMessage = 0;
-
-	if(WaitForSingleObject(m_ProcessInfo.hProcess, 100) != WAIT_OBJECT_0) 
+	if(WaitForSingleObject(m_ProcessInfo.hProcess, 0) != WAIT_OBJECT_0)
 	{
-		FlushFileBuffers(m_hPipeOut);
 		FlushFileBuffers(m_hPipeErr);
+		FlushFileBuffers(m_hPipeOut);
 		FlushFileBuffers(m_hPipeIn);
 
-		ReadIperfPipe(m_hPipeOut);
 		ReadIperfPipe(m_hPipeErr);
-
+		ReadIperfPipe(m_hPipeOut);
 		return 1;
 	}
-
 	return 0;
 }
 
@@ -189,18 +186,17 @@ int CIperfThread::Run()
 	ASSERT_VALID(this);
 	_AFX_THREAD_STATE* pState = AfxGetThreadState();
 
-	// for tracking the idle time state
-	BOOL bIdle = TRUE;
-	LONG lIdleCount = 0;
-
-	// check to see if we can do idle work
-	while (bIdle &&
-		!::PeekMessage(&(pState->m_msgCur), NULL, NULL, NULL, PM_NOREMOVE))
-	{
-		// call OnIdle while in bIdle state
-		if (!OnIdle(lIdleCount++))
-			bIdle = FALSE; // assume "no idle" state
-	}
+	do {
+		if(! OnIdle(1)) 
+		{
+			if(WaitForSingleObject(m_ProcessInfo.hProcess,
+				INFINITE) == WAIT_OBJECT_0)
+			{
+				break;
+			}
+		}
+	}	while(1);	
+	
 	ExitInstance();
 	return 0;
 }

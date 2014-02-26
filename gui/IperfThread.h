@@ -21,5 +21,6 @@ public:
     virtual BOOL InitInstance();
     virtual int ExitInstance();
     char m_CmdLine[1024];
+	DWORD m_exitCode;
 };
 
