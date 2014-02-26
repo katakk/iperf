@@ -433,7 +433,7 @@ void Client::Connect( )
 
 #ifdef WIN32
     // TODO: SCTP
-    //RSVP TCP �T�[�r�X�v���o�C�_�[ ��T���B
+	// RSVP プロバイダを探す。
     mSettings->mSock = WIN32Socket(mSettings, domain, type, protocol, 0);
 #else
     mSettings->mSock = socket( domain, type, protocol );
