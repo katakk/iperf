@@ -54,6 +54,7 @@ END_MESSAGE_MAP()
 
 
 // CIperfView メッセージ ハンドラ
+
 void CIperfView::PaintItems(CPaintDC &dc, CIperfViewItem *pa)
 {
 	POSITION pos;
@@ -102,23 +103,13 @@ void CIperfView::PaintItems(CPaintDC &dc, CIperfViewItem *pa)
 	dc.SelectObject(pOldPen);
 }
 
-void CIperfView::OnPaint()
+void CIperfView::PaintXMaps(CPaintDC &dc)
 {
-	double x, y, xstep, ystep, k, j;
-	CIperfViewItem *pa;
-	POSITION pos;
-	WORD key;
-
-	CPaintDC dc(this); // device context for painting
-	// TODO : ここにメッセージ ハンドラ コードを追加します。
-	// 描画メッセージで CWnd::OnPaint() を呼び出さないでください。
 	CRect rect;
 	GetClientRect(&rect);
+	double x, xstep;
 
-	dc.Rectangle(rect);
-	
 	xstep = rect.Width() / 60.0 * 2;
-	ystep =  rect.Height() / HEIGHT;
 	for(x =0.0; x < rect.Width() ; x += xstep)
 	{
 		CPen pen(PS_SOLID, 1, RGB(240,240,240));
@@ -128,7 +119,15 @@ void CIperfView::OnPaint()
 		dc.LineTo(CPoint( (int)x, (int)rect.Height() - 1));
 		dc.SelectObject(pOldPen);
 	}
+}
 
+void CIperfView::PaintYMaps(CPaintDC &dc)
+{
+	CRect rect;
+	GetClientRect(&rect);
+	double y, ystep, k, j;
+
+	ystep =  rect.Height() / HEIGHT;
 	for(j = 1; j < 10000000000; j*=10)
 	{
 		for(k = 1; k < 10; k++)
@@ -143,12 +142,32 @@ void CIperfView::OnPaint()
 		}
 	}
 over:
+	return;
+}
+
+void CIperfView::OnPaint()
+{
+	CIperfViewItem *pa;
+	POSITION pos;
+	WORD key;
+
+	CPaintDC dc(this); // device context for painting
+	// TODO : ここにメッセージ ハンドラ コードを追加します。
+	// 描画メッセージで CWnd::OnPaint() を呼び出さないでください。
+	CRect rect;
+	GetClientRect(&rect);
+
+	dc.Rectangle(rect);
+	
+	PaintXMaps(dc);
+	PaintYMaps(dc);
 
 	for( pos = m_transaction.GetStartPosition(); pos != NULL; )
 	{
 		m_transaction.GetNextAssoc( pos, key, (CObject*&)pa );
 		PaintItems(dc, pa);
 	}
+
 }
 
 CIperfViewItem * CIperfView::FindItem(WORD process)

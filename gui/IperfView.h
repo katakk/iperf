@@ -49,6 +49,8 @@ public:
 protected:
 	CMapWordToOb m_transaction;
 	DECLARE_MESSAGE_MAP()
+	void PaintXMaps(CPaintDC &dc);
+	void PaintYMaps(CPaintDC &dc);
 	void PaintItems(CPaintDC &dc, CIperfViewItem *pa);
 	afx_msg void OnPaint();
 	CIperfViewItem * AddItem(WORD process);
