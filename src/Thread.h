@@ -40,7 +40,7 @@ typedef int nthread_t;
     struct thread_Settings;
 
 #include "Condition.h"
-#include "Settings.hpp"
+#include "Settings.h"
 
     // initialize or destroy the thread subsystem
     void thread_init( );

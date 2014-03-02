@@ -7,12 +7,12 @@
 
 #include "headers.h"
 
-#include "Settings.hpp"
-#include "PerfSocket.hpp"
+#include "Settings.h"
+#include "PerfSocket.h"
 #include "Locale.h"
 #include "Condition.h"
-#include "Timestamp.hpp"
-#include "Listener.hpp"
+#include "Timestamp.h"
+#include "Listener.h"
 #include "List.h"
 #include "util.h"
 

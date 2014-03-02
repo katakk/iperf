@@ -39,8 +39,8 @@
 #include "headers.h"
 
 #ifdef WIN32
-#include "Settings.hpp"
-#include "PerfSocket.hpp"
+#include "Settings.h"
+#include "PerfSocket.h"
 #include "service.h"
 
 

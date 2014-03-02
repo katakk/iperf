@@ -9,7 +9,7 @@
 struct thread_Settings;
 struct server_hdr;
 
-#include "Settings.hpp"
+#include "Settings.h"
 
 #define NUM_REPORT_STRUCTS 700
 #define NUM_MULTI_SLOTS    5

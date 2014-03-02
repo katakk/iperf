@@ -8,7 +8,7 @@
 #define LISTENER_H
 
 #include "Thread.h"
-#include "Settings.hpp"
+#include "Settings.h"
 
 class Listener;
 

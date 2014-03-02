@@ -7,12 +7,12 @@
 
 #include "headers.h"
 
-#include "Client.hpp"
+#include "Client.h"
 #include "Thread.h"
 #include "SocketAddr.h"
-#include "PerfSocket.hpp"
+#include "PerfSocket.h"
 #include "Extractor.h"
-#include "delay.hpp"
+#include "delay.h"
 #include "util.h"
 #include "Locale.h"
 

@@ -12,7 +12,7 @@
 
 #include "headers.h"
 
-#include "Server.hpp"
+#include "Server.h"
 #include "List.h"
 #include "Extractor.h"
 #include "Reporter.h"

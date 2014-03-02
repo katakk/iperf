@@ -11,8 +11,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "Settings.hpp"
-#include "Timestamp.hpp"
+#include "Settings.h"
+#include "Timestamp.h"
 
 /* -------------------------------------------------------------------*/
 class Client {

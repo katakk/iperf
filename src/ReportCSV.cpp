@@ -2,7 +2,7 @@
 
 #include "headers.h"
 
-#include "Settings.hpp"
+#include "Settings.h"
 #include "util.h"
 #include "Reporter.h"
 #include "report_CSV.h"

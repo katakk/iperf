@@ -6,7 +6,7 @@
 #define PERFSOCKET_H
 
 #include "Mutex.h"
-#include "Settings.hpp"
+#include "Settings.h"
 
     void SetSocketOptions( thread_Settings *inSettings );
 

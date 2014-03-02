@@ -6,8 +6,8 @@
 
 #include "headers.h"
 
-#include "Timestamp.hpp"
-#include "delay.hpp"
+#include "Timestamp.h"
+#include "delay.h"
 
 #ifndef WIN32
 /* -------------------------------------------------------------------

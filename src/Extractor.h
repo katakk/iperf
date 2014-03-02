@@ -18,7 +18,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "Settings.hpp"
+#include "Settings.h"
 
     /**
      * Constructor

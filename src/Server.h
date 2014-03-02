@@ -7,9 +7,9 @@
 #define SERVER_H
 
 
-#include "Settings.hpp"
+#include "Settings.h"
 #include "util.h"
-#include "Timestamp.hpp"
+#include "Timestamp.h"
 
 /* ------------------------------------------------------------------- */
 class Server {

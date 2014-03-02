@@ -10,9 +10,9 @@
 #define HEADERS()
 
 #include "headers.h"
-#include "Listener.hpp"
+#include "Listener.h"
 #include "SocketAddr.h"
-#include "PerfSocket.hpp"
+#include "PerfSocket.h"
 #include "List.h"
 #include "util.h"
 

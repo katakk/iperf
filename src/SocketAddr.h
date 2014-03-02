@@ -2,7 +2,7 @@
 #define SOCKET_ADDR_H
 
 #include "headers.h"
-#include "Settings.hpp"
+#include "Settings.h"
 
 /* ------------------------------------------------------------------- */
     void SockAddr_localAddr( thread_Settings *inSettings );

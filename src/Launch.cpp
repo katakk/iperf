@@ -10,11 +10,11 @@
 #include "headers.h"
 
 #include "Thread.h"
-#include "Settings.hpp"
-#include "Client.hpp"
-#include "Listener.hpp"
-#include "Server.hpp"
-#include "PerfSocket.hpp"
+#include "Settings.h"
+#include "Client.h"
+#include "Listener.h"
+#include "Server.h"
+#include "PerfSocket.h"
 
 /*
  * listener_spawn is responsible for creating a Listener class

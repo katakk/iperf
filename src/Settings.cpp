@@ -7,7 +7,7 @@
 
 #include "headers.h"
 
-#include "Settings.hpp"
+#include "Settings.h"
 #include "Locale.h"
 #include "SocketAddr.h"
 

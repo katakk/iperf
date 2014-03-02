@@ -2,14 +2,14 @@
 
 #include "headers.h"
 
-#include "Settings.hpp"
+#include "Settings.h"
 #include "util.h"
 #include "Reporter.h"
 #include "Thread.h"
 #include "Locale.h"
-#include "PerfSocket.hpp"
+#include "PerfSocket.h"
 #include "SocketAddr.h"
-#include "delay.hpp"
+#include "delay.h"
 
 /*
   The following 4 functions are provided for Reporting

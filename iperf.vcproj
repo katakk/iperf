@@ -211,7 +211,7 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\src\Client.hpp">
+				RelativePath=".\src\Client.h">
 			</File>
 			<File
 				RelativePath=".\src\Condition.h">
@@ -220,7 +220,7 @@
 				RelativePath=".\config.h">
 			</File>
 			<File
-				RelativePath=".\src\delay.hpp">
+				RelativePath=".\src\delay.h">
 			</File>
 			<File
 				RelativePath=".\src\Extractor.h">
@@ -244,7 +244,7 @@
 				RelativePath=".\src\List.h">
 			</File>
 			<File
-				RelativePath=".\src\Listener.hpp">
+				RelativePath=".\src\Listener.h">
 			</File>
 			<File
 				RelativePath=".\src\Locale.h">
@@ -256,7 +256,7 @@
 				RelativePath=".\src\obsd_getopt.h">
 			</File>
 			<File
-				RelativePath=".\src\PerfSocket.hpp">
+				RelativePath=".\src\PerfSocket.h">
 			</File>
 			<File
 				RelativePath=".\src\report_CSV.h">
@@ -271,13 +271,13 @@
 				RelativePath=".\src\rc\resource.h">
 			</File>
 			<File
-				RelativePath=".\src\Server.hpp">
+				RelativePath=".\src\Server.h">
 			</File>
 			<File
 				RelativePath=".\src\service.h">
 			</File>
 			<File
-				RelativePath=".\src\Settings.hpp">
+				RelativePath=".\src\Settings.h">
 			</File>
 			<File
 				RelativePath=".\src\snprintf.h">
@@ -289,7 +289,7 @@
 				RelativePath=".\src\Thread.h">
 			</File>
 			<File
-				RelativePath=".\src\Timestamp.hpp">
+				RelativePath=".\src\Timestamp.h">
 			</File>
 			<File
 				RelativePath=".\src\util.h">
