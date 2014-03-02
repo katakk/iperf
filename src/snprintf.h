@@ -5,7 +5,6 @@
 
 #ifndef SNPRINTF_H
 #define SNPRINTF_H
-
 /*
  * Throughout the book I use snprintf() because it's safer than sprintf().
  * But as of the time of this writing, not all systems provide this
@@ -14,7 +13,6 @@
  * The function below just acts like sprintf(); it is not safe, but it
  * tries to detect overflow.
  */
-
 #ifndef HAVE_SNPRINTF
 
 int snprintf(char *buf, size_t size, const char *fmt, ...);
