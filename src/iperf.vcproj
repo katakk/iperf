@@ -113,97 +113,97 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\src\Client.cpp">
+				RelativePath=".\Client.cpp">
 			</File>
 			<File
-				RelativePath=".\src\delay.cpp">
+				RelativePath=".\delay.cpp">
 			</File>
 			<File
-				RelativePath=".\src\error.cpp">
+				RelativePath=".\error.cpp">
 			</File>
 			<File
-				RelativePath=".\src\Extractor.cpp">
+				RelativePath=".\Extractor.cpp">
 			</File>
 			<File
-				RelativePath=".\src\gettimeofday.cpp">
+				RelativePath=".\gettimeofday.cpp">
 			</File>
 			<File
-				RelativePath=".\src\inet_ntop.cpp">
+				RelativePath=".\inet_ntop.cpp">
 			</File>
 			<File
-				RelativePath=".\src\inet_pton.cpp">
+				RelativePath=".\inet_pton.cpp">
 			</File>
 			<File
-				RelativePath=".\src\Launch.cpp">
+				RelativePath=".\Launch.cpp">
 			</File>
 			<File
-				RelativePath=".\src\List.cpp">
+				RelativePath=".\List.cpp">
 			</File>
 			<File
-				RelativePath=".\src\Listener.cpp">
+				RelativePath=".\Listener.cpp">
 			</File>
 			<File
-				RelativePath=".\src\Locale.cpp">
+				RelativePath=".\Locale.cpp">
 			</File>
 			<File
-				RelativePath=".\src\main.cpp">
+				RelativePath=".\main.cpp">
 			</File>
 			<File
-				RelativePath=".\src\obsd_getopt_long.cpp">
+				RelativePath=".\obsd_getopt_long.cpp">
 			</File>
 			<File
-				RelativePath=".\src\obsd_getsubopt.cpp">
+				RelativePath=".\obsd_getsubopt.cpp">
 			</File>
 			<File
-				RelativePath=".\src\obsd_strlcat.cpp">
+				RelativePath=".\obsd_strlcat.cpp">
 			</File>
 			<File
-				RelativePath=".\src\obsd_strlcpy.cpp">
+				RelativePath=".\obsd_strlcpy.cpp">
 			</File>
 			<File
-				RelativePath=".\src\PerfSocket.cpp">
+				RelativePath=".\PerfSocket.cpp">
 			</File>
 			<File
-				RelativePath=".\src\ReportCSV.cpp">
+				RelativePath=".\ReportCSV.cpp">
 			</File>
 			<File
-				RelativePath=".\src\ReportDefault.cpp">
+				RelativePath=".\ReportDefault.cpp">
 			</File>
 			<File
-				RelativePath=".\src\Reporter.cpp">
+				RelativePath=".\Reporter.cpp">
 			</File>
 			<File
-				RelativePath=".\src\Server.cpp">
+				RelativePath=".\Server.cpp">
 			</File>
 			<File
-				RelativePath=".\src\service.cpp">
+				RelativePath=".\service.cpp">
 			</File>
 			<File
-				RelativePath=".\src\Settings.cpp">
+				RelativePath=".\Settings.cpp">
 			</File>
 			<File
-				RelativePath=".\src\signal.cpp">
+				RelativePath=".\signal.cpp">
 			</File>
 			<File
-				RelativePath=".\src\snprintf.cpp">
+				RelativePath=".\snprintf.cpp">
 			</File>
 			<File
-				RelativePath=".\src\SocketAddr.cpp">
+				RelativePath=".\SocketAddr.cpp">
 			</File>
 			<File
-				RelativePath=".\src\sockets.cpp">
+				RelativePath=".\sockets.cpp">
 			</File>
 			<File
-				RelativePath=".\src\stdio.cpp">
+				RelativePath=".\stdio.cpp">
 			</File>
 			<File
-				RelativePath=".\src\string.cpp">
+				RelativePath=".\string.cpp">
 			</File>
 			<File
-				RelativePath=".\src\tcp_window_size.cpp">
+				RelativePath=".\tcp_window_size.cpp">
 			</File>
 			<File
-				RelativePath=".\src\Thread.cpp">
+				RelativePath=".\Thread.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -211,91 +211,91 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\src\Client.h">
+				RelativePath=".\Client.h">
 			</File>
 			<File
-				RelativePath=".\src\Condition.h">
+				RelativePath=".\Condition.h">
 			</File>
 			<File
-				RelativePath=".\config.h">
+				RelativePath="..\config.h">
 			</File>
 			<File
-				RelativePath=".\src\delay.h">
+				RelativePath=".\delay.h">
 			</File>
 			<File
-				RelativePath=".\src\Extractor.h">
+				RelativePath=".\Extractor.h">
 			</File>
 			<File
-				RelativePath=".\src\gettimeofday.h">
+				RelativePath=".\gettimeofday.h">
 			</File>
 			<File
-				RelativePath=".\src\headers.h">
+				RelativePath=".\headers.h">
 			</File>
 			<File
-				RelativePath=".\src\inet_aton.h">
+				RelativePath=".\inet_aton.h">
 			</File>
 			<File
-				RelativePath=".\src\iperf-int.h">
+				RelativePath=".\iperf-int.h">
 			</File>
 			<File
-				RelativePath=".\src\kernellist.h">
+				RelativePath=".\kernellist.h">
 			</File>
 			<File
-				RelativePath=".\src\List.h">
+				RelativePath=".\List.h">
 			</File>
 			<File
-				RelativePath=".\src\Listener.h">
+				RelativePath=".\Listener.h">
 			</File>
 			<File
-				RelativePath=".\src\Locale.h">
+				RelativePath=".\Locale.h">
 			</File>
 			<File
-				RelativePath=".\src\Mutex.h">
+				RelativePath=".\Mutex.h">
 			</File>
 			<File
-				RelativePath=".\src\obsd_getopt.h">
+				RelativePath=".\obsd_getopt.h">
 			</File>
 			<File
-				RelativePath=".\src\PerfSocket.h">
+				RelativePath=".\PerfSocket.h">
 			</File>
 			<File
-				RelativePath=".\src\report_CSV.h">
+				RelativePath=".\report_CSV.h">
 			</File>
 			<File
-				RelativePath=".\src\report_default.h">
+				RelativePath=".\report_default.h">
 			</File>
 			<File
-				RelativePath=".\src\Reporter.h">
+				RelativePath=".\Reporter.h">
 			</File>
 			<File
-				RelativePath=".\src\rc\resource.h">
+				RelativePath=".\rc\resource.h">
 			</File>
 			<File
-				RelativePath=".\src\Server.h">
+				RelativePath=".\Server.h">
 			</File>
 			<File
-				RelativePath=".\src\service.h">
+				RelativePath=".\service.h">
 			</File>
 			<File
-				RelativePath=".\src\Settings.h">
+				RelativePath=".\Settings.h">
 			</File>
 			<File
-				RelativePath=".\src\snprintf.h">
+				RelativePath=".\snprintf.h">
 			</File>
 			<File
-				RelativePath=".\src\SocketAddr.h">
+				RelativePath=".\SocketAddr.h">
 			</File>
 			<File
-				RelativePath=".\src\Thread.h">
+				RelativePath=".\Thread.h">
 			</File>
 			<File
-				RelativePath=".\src\Timestamp.h">
+				RelativePath=".\Timestamp.h">
 			</File>
 			<File
-				RelativePath=".\src\util.h">
+				RelativePath=".\util.h">
 			</File>
 			<File
-				RelativePath=".\src\version.h">
+				RelativePath=".\version.h">
 			</File>
 		</Filter>
 		<Filter
@@ -303,10 +303,10 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath=".\src\rc\main.ico">
+				RelativePath=".\rc\main.ico">
 			</File>
 			<File
-				RelativePath=".\src\rc\main.rc">
+				RelativePath=".\rc\main.rc">
 			</File>
 		</Filter>
 	</Files>

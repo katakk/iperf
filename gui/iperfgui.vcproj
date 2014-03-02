@@ -125,19 +125,19 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\gui\iperfgui.cpp">
+				RelativePath=".\iperfgui.cpp">
 			</File>
 			<File
-				RelativePath=".\gui\iperfguiDlg.cpp">
+				RelativePath=".\iperfguiDlg.cpp">
 			</File>
 			<File
-				RelativePath=".\gui\IperfThread.cpp">
+				RelativePath=".\IperfThread.cpp">
 			</File>
 			<File
-				RelativePath=".\gui\IperfView.cpp">
+				RelativePath=".\IperfView.cpp">
 			</File>
 			<File
-				RelativePath=".\gui\stdafx.cpp">
+				RelativePath=".\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -157,22 +157,22 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\gui\iperfgui.h">
+				RelativePath=".\iperfgui.h">
 			</File>
 			<File
-				RelativePath=".\gui\iperfguiDlg.h">
+				RelativePath=".\iperfguiDlg.h">
 			</File>
 			<File
-				RelativePath=".\gui\IperfThread.h">
+				RelativePath=".\IperfThread.h">
 			</File>
 			<File
-				RelativePath=".\gui\IperfView.h">
+				RelativePath=".\IperfView.h">
 			</File>
 			<File
-				RelativePath=".\gui\Resource.h">
+				RelativePath=".\Resource.h">
 			</File>
 			<File
-				RelativePath=".\gui\stdafx.h">
+				RelativePath=".\stdafx.h">
 			</File>
 		</Filter>
 		<Filter
@@ -180,13 +180,13 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath=".\gui\res\iperfgui.ico">
+				RelativePath=".\res\iperfgui.ico">
 			</File>
 			<File
-				RelativePath=".\gui\iperfgui.rc">
+				RelativePath=".\iperfgui.rc">
 			</File>
 			<File
-				RelativePath=".\gui\res\iperfgui.rc2">
+				RelativePath=".\res\iperfgui.rc2">
 			</File>
 		</Filter>
 	</Files>
