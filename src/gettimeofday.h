@@ -1,5 +1,4 @@
 /*---------------------------------------------------------------
-
  * An implementation of gettimeofday for Windows.
  * ------------------------------------------------------------------- */
 
@@ -12,4 +11,3 @@ int gettimeofday( struct timeval* tv, void* timezone );
 
 #endif /* HAVE_GETTIMEOFDAY */
 #endif /* GETTIMEOFDAY_H */
-
