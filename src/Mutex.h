@@ -16,10 +16,7 @@
     typedef int Mutex;
 #endif
 
-/* -------------------------------------------------------------------*
-class Mutex {
-public:*/
-
+/* ------------------------------------------------------------------- */
     // initialize mutex
 #if   defined( HAVE_POSIX_THREAD )
     #define Mutex_Initialize( MutexPtr ) pthread_mutex_init( MutexPtr, NULL )
