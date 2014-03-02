@@ -74,10 +74,14 @@ int main( int argc, char **argv ) {
     my_signal( SIGINT,  Sig_Interupt );
 #ifndef WIN32 // SIGALRM=14, _NSIG=3...
     my_signal( SIGALRM,  Sig_Interupt );
+#endif
 
-    // Ignore broken pipes
+#ifndef WIN32
+	// Ignore broken pipes
     signal(SIGPIPE,SIG_IGN);
-#else
+#endif
+
+#ifdef WIN32 
     // Start winsock
     rc = WSAStartup( 0x202, &wsaData );
     WARN_errno( rc == SOCKET_ERROR, "WSAStartup" );
