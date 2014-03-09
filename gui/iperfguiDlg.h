@@ -3,15 +3,14 @@
 #include "IperfView.h"
 #include "afxwin.h"
 
-#define WM_CONSOLE_MESG       (WM_USER+200)
-#define WM_CONSOLE_QUIT       (WM_USER+201)
-
 class CiperfguiDlg : public CDialog
 {
 public:
     CiperfguiDlg(CWnd* pParent = NULL);
     virtual BOOL DestroyWindow();
     enum { IDD = IDD_IPERFGUI_DIALOG };
+	static UINT WM_CONSOLE_MESG;
+	static UINT WM_CONSOLE_QUIT;
 
 protected:
     virtual BOOL OnInitDialog();

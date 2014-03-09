@@ -6,7 +6,6 @@
 #include "IperfThread.h"
 #include "iperfguiDlg.h"
 
-
 // CIperfThread
 
 IMPLEMENT_DYNCREATE(CIperfThread, CWinThread)
@@ -75,7 +74,7 @@ void CIperfThread::ReadIperfPipe(HANDLE hPipe)
     {
         ReadFile(hPipe,str,BytesRead,&dwByte,NULL);
         str[dwByte] = '\0';
-        m_pMainWnd->SendMessage(WM_CONSOLE_MESG, m_uniqid, (LPARAM)str);
+		m_pMainWnd->SendMessage(CiperfguiDlg::WM_CONSOLE_MESG, m_uniqid, (LPARAM)str);
     }
 
 }
@@ -171,7 +170,7 @@ int CIperfThread::ExitInstance()
     TerminateProcess(m_ProcessInfo.hProcess, 0);
 
     // post exit
-    m_pMainWnd->SendMessage(WM_CONSOLE_QUIT, m_uniqid, (LPARAM)this);
+	m_pMainWnd->SendMessage(CiperfguiDlg::WM_CONSOLE_QUIT, m_uniqid, (LPARAM)this);
 
     CloseHandle(m_ProcessInfo.hProcess);
     TerminateProcess(m_ProcessInfo.hProcess, 0);

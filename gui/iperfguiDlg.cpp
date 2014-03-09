@@ -8,7 +8,10 @@
 #define new DEBUG_NEW
 #endif
 
-#define DEFAULT_CMDLINE _T("iperf -c 192.168.0.195 -i1 -w1m -t60")
+#define DEFAULT_CMDLINE1 _T("iperf -c 192.168.0.195 -i1 -w1m -t60")
+#define DEFAULT_CMDLINE2 _T("ping 192.168.0.195")
+UINT CiperfguiDlg::WM_CONSOLE_MESG =      (WM_USER+200);
+UINT CiperfguiDlg::WM_CONSOLE_QUIT =      (WM_USER+201);
 
 class CAboutDlg : public CDialog
 {
@@ -41,6 +44,10 @@ CiperfguiDlg::CiperfguiDlg(CWnd* pParent /*=NULL*/)
 
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+	WM_CONSOLE_MESG = RegisterWindowMessage(TEXT("ConsoleMesg"));
+	WM_CONSOLE_QUIT = RegisterWindowMessage(TEXT("ConsoleQuit"));
+
 }
 
 void CiperfguiDlg::DoDataExchange(CDataExchange* pDX)
@@ -172,7 +179,9 @@ void CiperfguiDlg::GetHistory()
 	m_combo.GetWindowText(str);
 	if( str == _T("") )
 	{
-		m_cmdline = DEFAULT_CMDLINE;
+		m_cmdline = DEFAULT_CMDLINE1;
+		m_combo.AddString(m_cmdline);
+		m_cmdline = DEFAULT_CMDLINE2;
 		m_combo.AddString(m_cmdline);
 	}
 	m_combo.SetWindowText(m_cmdline);
