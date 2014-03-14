@@ -185,17 +185,13 @@ int CIperfThread::ExitInstance()
 int CIperfThread::OnIdle(LONG lCount)
 {
     // TODO : ここに特定なコードを追加するか、もしくは基本クラスを呼び出してください。
-    if(WaitForSingleObject(m_ProcessInfo.hProcess, 0) != WAIT_OBJECT_0)
-    {
-        FlushFileBuffers(m_hPipeErr);
-        FlushFileBuffers(m_hPipeOut);
-        FlushFileBuffers(m_hPipeIn);
+    FlushFileBuffers(m_hPipeErr);
+    FlushFileBuffers(m_hPipeOut);
+    FlushFileBuffers(m_hPipeIn);
 
-        ReadIperfPipe(m_hPipeErr);
-        ReadIperfPipe(m_hPipeOut);
-        return 1;
-    }
-    return 0;
+    ReadIperfPipe(m_hPipeErr);
+    ReadIperfPipe(m_hPipeOut);
+    return 1;
 }
 
 // やっぱオーバライドしないと動きおかしい
