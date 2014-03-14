@@ -81,7 +81,11 @@ void CIperfView::PaintItems(CPaintDC &dc, CIperfViewItem *pa)
     {
 		t0 = pa->m_List.GetAt( pos ).t0;
 		t1 = pa->m_List.GetAt( pos ).t1;
-		speed = 10*log10(pa->m_List.GetAt( pos ).speed);
+		if(pa->m_List.GetAt( pos ).speed) {
+			speed = 10*log10(pa->m_List.GetAt( pos ).speed);
+		} else {
+			speed = 0;
+		}
 
 		//
 		x0 = t0 * xstep;
