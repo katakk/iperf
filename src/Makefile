@@ -3,6 +3,8 @@ include ../make.env
 
 EXE=iperf
 
+STATIC=-static
+
 OBJS=Client.o Extractor.o Launch.o List.o Listener.o Locale.o PerfSocket.o ReportCSV.o \
      ReportDefault.o Reporter.o Server.o Settings.o SocketAddr.o \
      obsd_strlcpy.o obsd_strlcat.o \
@@ -24,5 +26,5 @@ clean:
 	$(CXX) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
 $(EXE): $(OBJS)
-	$(CXX) $(CFLAGS) -o $(EXE) $(OBJS)
+	$(CXX) $(CFLAGS) $(STATIC) -o $(EXE) $(OBJS)
 
