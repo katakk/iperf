@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IperfView.h"
+#include "cpuload.h"
 #include "afxwin.h"
 
 class CiperfguiDlg : public CDialog
@@ -36,4 +37,5 @@ protected:
 	void GetThreadTitle();
 	int Split( const TCHAR *pattern, TCHAR *expr, TCHAR **param, int param_size, int limit );
     void ParseLine(WPARAM wParam, CString line);
+	CCpuLoad m_cpuload;
 };

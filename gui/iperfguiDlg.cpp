@@ -389,11 +389,15 @@ void CiperfguiDlg::ParseLine(WPARAM wParam, CString line)
 				{
 					CString log;
 					CTime timeData = CTime::GetTickCount();
-					log.Format(_T("%s(%s)%s %s\n"), 
+					double user = 0, kernel = 0;
+					m_cpuload.GetKernelPerf(&user,&kernel);
+
+					log.Format(_T("%s(%s)%s %s (user=%f sys=%f)\n"), 
 						timeData.Format(_T("[%Y/%m/%d %H:%M:%S]")),
 						item->m_colorname,
 						item->m_peer,
-						line.Mid(s4, line.GetLength() - s4 ));
+						line.Mid(s4, line.GetLength() - s4 ),
+						user,kernel);
 
 					// LOGGING
 					CString filename;
