@@ -125,6 +125,9 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
+				RelativePath=".\cpuload.cpp">
+			</File>
+			<File
 				RelativePath=".\iperfgui.cpp">
 			</File>
 			<File
@@ -156,6 +159,9 @@
 			Name="ヘッダー ファイル"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath=".\cpuload.h">
+			</File>
 			<File
 				RelativePath=".\iperfgui.h">
 			</File>
@@ -193,6 +199,6 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="gui\iperfgui.rc"/>
+			Value="iperfgui.rc"/>
 	</Globals>
 </VisualStudioProject>
