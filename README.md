@@ -1,4 +1,4 @@
-##iperf2.0.5 p27 那月ちゃんセーフティモード
+##iperf2.0.5 p27 那月ちゃんセーフティモード [![Build Status](https://travis-ci.org/katakk/iperf.svg?branch=master)](https://travis-ci.org/katakk/iperf)  [![coverity](https://scan.coverity.com/projects/11534/badge.svg)](https://scan.coverity.com/projects/katakk-iperf)
 
 * 速度測定用のツール。`iperf 2.0.5` のローカルコピー   
 
